@@ -1,5 +1,4 @@
-// src/components/Navbar.tsx
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 
 const MyNavbar = () => {
   return (
@@ -12,7 +11,7 @@ const MyNavbar = () => {
             height="40"
             className="d-inline-block align-top"
           />
-          {' IJM'}
+          {" IJM"}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

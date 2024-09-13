@@ -1,22 +1,27 @@
 // src/App.tsx
 import MyNavbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import NewsSection from "./components/NewsSection";
 import PlansSection from "./components/PlansSelector";
-import SearchSection from "./components/SearchSection";
 import Results from "./components/results.tsx";
+import NewsCarousel from "./components/NewsCard.tsx";
 
 const App = () => {
   return (
     <div>
       <MyNavbar />
-      <Hero />
-      <NewsSection />
-      <PlansSection />
-      <SearchSection />
+      <div style={{ marginBottom: '50px' }}>
+        <Hero />
+      </div>
+      <div style={{ marginBottom: '50px' }}>
+        <NewsCarousel />
+      </div>
+      <div style={{ marginBottom: '50px' }}>
+        <PlansSection />
+      </div>
       <Results />
     </div>
   );
 };
 
 export default App;
+
