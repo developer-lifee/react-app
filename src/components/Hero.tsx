@@ -5,12 +5,16 @@ const Hero: React.FC = () => {
   return (
     <div
       className="hero-section position-relative text-white"
-      style={{ paddingTop: "100px" }}
+      style={{
+        paddingTop: "100px", // Asegura espacio para el navbar
+        height: "100vh", // Ocupa toda la pantalla
+        zIndex: 1, // Asegura que no esté cubierto
+      }}
     >
       {/* Video de fondo */}
       <video
         className="position-absolute w-100 h-100"
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "cover", zIndex: -1 }}
         autoPlay
         loop
         muted
