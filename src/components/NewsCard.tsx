@@ -2,19 +2,24 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Carousel, Container, Card, Button, Row, Col } from "react-bootstrap";
 
-// Usamos la API directamente con tu API key
 const API_URL =
-  "https://newsapi.org/v2/top-headlines?country=us&apiKey=6250fea7461f424b93381ecf585e73a9";
+  "https://newsdata.io/api/1/news?apikey=pub_5373485c743e11a05f2b28b653968e3569eb4&q=pizza&language=es";
 
 interface Article {
   title: string;
   description: string;
-  url: string;
-  urlToImage: string;
-  source: {
-    name: string;
-  };
+  link: string;
+  image_url: string;
+  source_id: string;
 }
+
+// Función para truncar texto si excede una longitud determinada
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + "...";
+  }
+  return text;
+};
 
 const NewsCarousel: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -24,10 +29,14 @@ const NewsCarousel: React.FC = () => {
     const fetchNews = async () => {
       try {
         const response = await axios.get(API_URL);
-        setArticles(response.data.articles);
-        setLoading(false);
+        if (response.data.status === "success") {
+          setArticles(response.data.results);
+        } else {
+          console.error("API error:", response.data);
+        }
       } catch (error) {
         console.error("Error fetching news:", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -49,11 +58,12 @@ const NewsCarousel: React.FC = () => {
   const groupedArticles = chunkArray(articles, 3); // Agrupar en bloques de 3 noticias
 
   if (loading) {
-    return <div>Loading news...</div>;
+    return <div>Cargando noticias...</div>;
   }
+
   return (
     <Container className="py-5">
-      <h2 className="mb-4">Latest News</h2>
+      <h2 className="mb-4">Últimas Noticias</h2>
       <Carousel controls={true} indicators={false}>
         {groupedArticles.map((group, index) => (
           <Carousel.Item key={index}>
@@ -61,23 +71,29 @@ const NewsCarousel: React.FC = () => {
               {group.map((article, idx) => (
                 <Col key={idx} md={4}>
                   <Card className="h-100">
-                    {article.urlToImage && (
+                    {article.image_url && (
                       <Card.Img
                         variant="top"
-                        src={article.urlToImage}
+                        src={article.image_url}
                         alt={article.title}
                         style={{ height: "200px", objectFit: "cover" }}
                       />
                     )}
                     <Card.Body>
                       <Card.Title>{article.title}</Card.Title>
-                      <Card.Text>{article.description}</Card.Text>
+                      <Card.Text>
+                        {truncateText(
+                          article.description || "Sin descripción disponible.",
+                          100
+                        )}{" "}
+                        {/* Limita a 100 caracteres */}
+                      </Card.Text>
                       <Button
                         variant="primary"
-                        href={article.url}
+                        href={article.link}
                         target="_blank"
                       >
-                        Read More
+                        Leer más
                       </Button>
                     </Card.Body>
                   </Card>
