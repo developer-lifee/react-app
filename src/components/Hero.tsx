@@ -6,7 +6,6 @@ const Hero: React.FC = () => {
     <div
       className="hero-section position-relative text-white"
       style={{
-        paddingTop: "100px", // Asegura espacio para el navbar
         height: "100vh", // Ocupa toda la pantalla
         zIndex: 1, // Asegura que no esté cubierto
       }}
@@ -19,14 +18,7 @@ const Hero: React.FC = () => {
         loop
         muted
       >
-        <source
-          src="https://www.videvo.net/videvo_files/converted/2015_08/preview/earth_rotate_night.mp444589.webm"
-          type="video/webm"
-        />
-        <source
-          src="https://www.videvo.net/videvo_files/converted/2015_08/preview/earth_rotate_night.mp444589.mp4"
-          type="video/mp4"
-        />
+        <source src="/src/assets/banner.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 

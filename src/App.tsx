@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div>
       <MyNavbar />
-      <div style={{ marginBottom: "50px" }}>
+      <div style={{ marginBottom: "70px" }}>
         <Hero />
       </div>
       <div style={{ marginBottom: "50px" }}>
@@ -26,9 +26,7 @@ const App = () => {
       <div style={{ marginBottom: "50px" }}>
         <CoursesAndServices />
       </div>
-      <div style={{ marginBottom: "50px" }}>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };

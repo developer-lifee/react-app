@@ -6,12 +6,12 @@ const MyNavbar = () => {
       <Container>
         <Navbar.Brand href="#home">
           <img
-            src="/path/to/logo.png"
+            src="src/assets/aaipaLogo.png"
             alt="Logo"
             height="40"
             className="d-inline-block align-top"
           />
-          {" IJM"}
+          {" AAIPA Association"}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
