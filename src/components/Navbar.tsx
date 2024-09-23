@@ -6,7 +6,7 @@ const MyNavbar = () => {
       <Container>
         <Navbar.Brand href="#home">
           <img
-            src="src/assets/aaipaLogo.png"
+            src="aaipaLogo.png"
             alt="Logo"
             height="40"
             className="d-inline-block align-top"

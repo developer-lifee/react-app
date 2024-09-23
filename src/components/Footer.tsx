@@ -6,7 +6,7 @@ const Footer = () => {
       <Container>
         <Row className="align-items-center">
           <Col md={6}>
-            <img src="/path/to/logo.png" alt="IJM Logo" height="40" />
+            <img src="aaipaLogo.png" alt="AAIPA Logo" height="40" />
             <p className="mt-2">INTERNATIONAL JUSTICE MISSION</p>
           </Col>
           <Col md={6} className="text-md-end">
