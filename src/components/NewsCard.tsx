@@ -13,7 +13,6 @@ interface Article {
   source_id: string;
 }
 
-// Función para truncar texto si excede una longitud determinada
 const truncateText = (text: string, maxLength: number) => {
   if (text.length > maxLength) {
     return text.slice(0, maxLength) + "...";
@@ -44,7 +43,6 @@ const NewsCarousel: React.FC = () => {
     fetchNews();
   }, []);
 
-  // Agrupar las noticias en bloques de 3 para que se muestren 3 por vez
   const chunkArray = (arr: Article[], chunkSize: number) => {
     let index = 0;
     const tempArray = [];
@@ -55,7 +53,7 @@ const NewsCarousel: React.FC = () => {
     return tempArray;
   };
 
-  const groupedArticles = chunkArray(articles, 3); // Agrupar en bloques de 3 noticias
+  const groupedArticles = chunkArray(articles, 3);
 
   if (loading) {
     return <div>Cargando noticias...</div>;
@@ -70,24 +68,35 @@ const NewsCarousel: React.FC = () => {
             <Row>
               {group.map((article, idx) => (
                 <Col key={idx} md={4}>
-                  <Card className="h-100">
-                    {article.image_url && (
+                  <Card className="h-100" style={{ minHeight: "400px" }}>
+                    {article.image_url ? (
                       <Card.Img
                         variant="top"
                         src={article.image_url}
                         alt={article.title}
                         style={{ height: "200px", objectFit: "cover" }}
                       />
+                    ) : (
+                      <div
+                        style={{
+                          height: "200px",
+                          backgroundColor: "#f0f0f0",
+                        }}
+                      ></div>
                     )}
-                    <Card.Body>
-                      <Card.Title>{article.title}</Card.Title>
-                      <Card.Text>
-                        {truncateText(
-                          article.description || "Sin descripción disponible.",
-                          100
-                        )}{" "}
-                        {/* Limita a 100 caracteres */}
-                      </Card.Text>
+                    <Card.Body className="d-flex flex-column justify-content-between">
+                      <div>
+                        <Card.Title>
+                          {truncateText(article.title, 50)}
+                        </Card.Title>
+                        <Card.Text>
+                          {truncateText(
+                            article.description ||
+                              "Sin descripción disponible.",
+                            100
+                          )}
+                        </Card.Text>
+                      </div>
                       <Button
                         variant="primary"
                         href={article.link}
