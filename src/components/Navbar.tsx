@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import LoginModal from "./loginModal.tsx";
+import { Link } from "react-router-dom";
 
 const MyNavbar = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -23,10 +24,8 @@ const MyNavbar = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="ms-auto">
-              <Nav.Link href="#problem">The Problem</Nav.Link>
-              <Nav.Link href="#solution">Our Solution</Nav.Link>
-              <Nav.Link href="#contact">Contact Us</Nav.Link>
+          <Nav className="ms-auto">
+              <Nav.Link as={Link} to="/AboutPage">About Us</Nav.Link>
             </Nav>
           </Navbar.Collapse>
           <Button variant="primary" onClick={handleShowLogin}>
