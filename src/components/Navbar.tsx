@@ -6,7 +6,7 @@ const MyNavbar = () => {
 
   const handleGoToLogin = () => {
     // Navegar a la página de login
-    navigate('/login');
+    navigate('/login.tsx');
   };
 
   return (
@@ -25,7 +25,7 @@ const MyNavbar = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/AboutPage">About Us</Nav.Link>
+              <Nav.Link as={Link} to="/AboutPage.tsx">About Us</Nav.Link>
             </Nav>
           </Navbar.Collapse>
           {/* Cambia el evento para redirigir a la página de login */}

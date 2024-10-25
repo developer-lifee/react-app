@@ -16,7 +16,7 @@ const App = () => {
       <div>
         <MyNavbar /> {/* Barra de navegación que permanece en todas las páginas */}
         <Routes>
-          <Route path="/about-us" element={<HomePage />} />
+          <Route path="/AboutPage.tsx" element={<HomePage />} />
           <Route path="/login" element={<Login />} /> {/* Ruta de Login */}
           {/* Agrega otras rutas aquí si es necesario */}
         </Routes>
