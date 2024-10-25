@@ -7,17 +7,21 @@ import NewsCarousel from "./components/NewsCard.tsx";
 import Footer from "./components/Footer";
 import CoursesAndServices from "./components/CoursesAndServices.tsx";
 import HomePage from "./pages/AboutPage.tsx";
-
-
+import Login from "./pages/Login"; // Importa la página de Login
+import './i18n'; // Importar la configuración de i18next
 
 const App = () => {
   return (
     <Router>
       <div>
-        <MyNavbar />
+        <MyNavbar /> {/* Barra de navegación que permanece en todas las páginas */}
         <Routes>
           <Route path="/about-us" element={<HomePage />} />
+          <Route path="/login" element={<Login />} /> {/* Ruta de Login */}
+          {/* Agrega otras rutas aquí si es necesario */}
         </Routes>
+
+        {/* Asegúrate de que estos componentes solo se muestren en la página principal */}
         <div style={{ marginBottom: "70px" }}>
           <Hero />
         </div>
@@ -33,6 +37,8 @@ const App = () => {
         <div style={{ marginBottom: "50px" }}>
           <CoursesAndServices />
         </div>
+
+        {/* Pie de página */}
         <Footer />
       </div>
     </Router>
@@ -40,3 +46,4 @@ const App = () => {
 };
 
 export default App;
+

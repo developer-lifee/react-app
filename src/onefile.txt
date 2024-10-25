@@ -1,0 +1,1057 @@
+Estructura de directorios:
+├── App.tsx
+├── assets/
+│   └── react.svg
+├── components/
+│   ├── CoursesAndServices.tsx
+│   ├── Footer.tsx
+│   ├── Hero.tsx
+│   ├── loginModal.tsx
+│   ├── Navbar.tsx
+│   ├── NewsCard.tsx
+│   ├── PlansSelector.tsx
+│   └── results.tsx
+├── index.css
+├── main.tsx
+├── onefile.txt
+├── pages/
+│   └── AboutPage.tsx
+└── vite-env.d.ts
+
+Contenido de archivos:
+
+Archivo: .\src\App.tsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MyNavbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import PlansSection from "./components/PlansSelector";
+import Results from "./components/results.tsx";
+import NewsCarousel from "./components/NewsCard.tsx";
+import Footer from "./components/Footer";
+import CoursesAndServices from "./components/CoursesAndServices.tsx";
+import HomePage from "./pages/AboutPage.tsx";
+
+
+
+const App = () => {
+  return (
+    <Router>
+      <div>
+        <MyNavbar />
+        <Routes>
+          <Route path="/about-us" element={<HomePage />} />
+        </Routes>
+        <div style={{ marginBottom: "70px" }}>
+          <Hero />
+        </div>
+        <div style={{ marginBottom: "50px" }}>
+          <NewsCarousel />
+        </div>
+        <div style={{ marginBottom: "50px" }}>
+          <PlansSection />
+        </div>
+        <div style={{ marginBottom: "50px" }}>
+          <Results />
+        </div>
+        <div style={{ marginBottom: "50px" }}>
+          <CoursesAndServices />
+        </div>
+        <Footer />
+      </div>
+    </Router>
+  );
+};
+
+export default App;
+
+
+
+Archivo: .\src\index.css
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+
+Archivo: .\src\main.tsx
+// src/main.tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Importar Bootstrap CSS
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+
+
+Archivo: .\src\vite-env.d.ts
+/// <reference types="vite/client" />
+
+
+
+Archivo: .\src\assets\react.svg
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+
+
+Archivo: .\src\components\CoursesAndServices.tsx
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import CourseImage from "/course.webp"; // Asegúrate de que la ruta sea correcta
+
+const CoursesAndServices = () => {
+  return (
+    <Container className="py-5">
+      <h2 className="text-center mb-4">Courses and Services</h2>
+      <Row>
+        <Col md={4}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Img
+              variant="top"
+              src={CourseImage} // Usando la nueva imagen
+              alt="Course Image"
+            />
+            <Card.Body className="text-center">
+              <Card.Title>Immigration Law Basics</Card.Title>
+              <Card.Text>
+                Learn the fundamentals of immigration law to help you navigate
+                complex processes.
+              </Card.Text>
+              <Button variant="primary">Learn More</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Img
+              variant="top"
+              src={CourseImage} // Usando la nueva imagen
+              alt="Course Image"
+            />
+            <Card.Body className="text-center">
+              <Card.Title>Visa Application Process</Card.Title>
+              <Card.Text>
+                Get detailed guidance on how to apply for different types of
+                visas.
+              </Card.Text>
+              <Button variant="primary">Learn More</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Img
+              variant="top"
+              src={CourseImage} // Usando la nueva imagen
+              alt="Course Image"
+            />
+            <Card.Body className="text-center">
+              <Card.Title>Citizenship Preparation</Card.Title>
+              <Card.Text>
+                Prepare for the citizenship test with our comprehensive
+                resources and support.
+              </Card.Text>
+              <Button variant="primary">Learn More</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default CoursesAndServices;
+
+
+
+Archivo: .\src\components\Footer.tsx
+import { Container, Row, Col } from "react-bootstrap";
+
+const Footer = () => {
+  return (
+    <footer className="bg-light py-4">
+      <Container>
+        <Row className="align-items-center">
+          <Col md={6}>
+            <img src="aaipaLogo.png" alt="AAIPA Logo" height="40" />
+            <p className="mt-2">INTERNATIONAL JUSTICE MISSION</p>
+          </Col>
+          <Col md={6} className="text-md-end">
+            <p className="mb-1">Follow Us</p>
+            <a href="#" className="me-3">
+              <i className="fab fa-facebook"></i>
+            </a>
+            <a href="#" className="me-3">
+              <i className="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+              <i className="fab fa-youtube"></i>
+            </a>
+          </Col>
+        </Row>
+      </Container>
+    </footer>
+  );
+};
+
+export default Footer;
+
+
+
+Archivo: .\src\components\Hero.tsx
+import React from "react";
+import { Button, Container } from "react-bootstrap";
+
+const Hero: React.FC = () => {
+  return (
+    <div
+      className="hero-section position-relative text-white"
+      style={{
+        height: "100vh", // Ocupa toda la pantalla
+        zIndex: 1, // Asegura que no esté cubierto
+      }}
+    >
+      {/* Video de fondo */}
+      <video
+        className="position-absolute w-100 h-100"
+        style={{ objectFit: "cover", zIndex: -1 }}
+        autoPlay
+        loop
+        muted
+      >
+        <source src="/banner.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Contenido del Hero */}
+      <div
+        className="overlay position-absolute w-100 h-100 d-flex align-items-center"
+        style={{ background: "rgba(0, 0, 0, 0.5)" }}
+      >
+        <Container className="text-center">
+          <h1 className="display-4 font-weight-bold">
+            Welcome to AAIPA Association Immigration Services
+          </h1>
+          <p className="lead my-4">
+            AAIPA Association is dedicated to helping individuals and families
+            navigate the complex immigration process. We offer a wide range of
+            services tailored to your needs.
+          </p>
+          <Button variant="primary" size="lg">
+            Learn More
+          </Button>
+        </Container>
+      </div>
+    </div>
+  );
+};
+
+export default Hero;
+
+
+
+Archivo: .\src\components\loginModal.tsx
+import { useState } from "react";
+import { Form, Button, Modal } from "react-bootstrap";
+import { AppleLoginButton, GoogleLoginButton } from "react-social-login-buttons";
+import AppleLogin from 'react-apple-login';
+
+interface LoginModalProps {
+  show: boolean;
+  handleClose: () => void;
+}
+
+const LoginModal: React.FC<LoginModalProps> = ({ show, handleClose }) => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Aquí puedes agregar la lógica para el inicio de sesión
+    console.log("Login with:", email, password);
+    handleClose(); // Cierra el modal después del inicio de sesión
+  };
+
+  const handleAppleLoginSuccess = (response: any) => {
+    // Lógica para manejar la respuesta exitosa del inicio de sesión con Apple
+    console.log("Apple login success:", response);
+    handleClose(); // Cierra el modal después del inicio de sesión
+  };
+
+  const handleAppleLoginFailure = (error: any) => {
+    // Lógica para manejar el error del inicio de sesión con Apple
+    console.error("Apple login error:", error);
+  };
+
+  const handleGoogleLogin = () => {
+    // Lógica para el inicio de sesión con Google
+    console.log("Login with Google");
+    handleClose(); // Cierra el modal después del inicio de sesión
+  };
+
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Login</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleLogin}>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Login
+          </Button>
+        </Form>
+        <div className="social-login-buttons">
+          <AppleLogin
+            clientId="your-client-id"
+            redirectURI="your-redirect-uri"
+            responseType="code"
+            responseMode="query"
+            usePopup={true}
+            onSuccess={handleAppleLoginSuccess}
+            onError={handleAppleLoginFailure}
+            render={(renderProps: any) => (
+              <AppleLoginButton onClick={renderProps.onClick} />
+            )}
+          />
+          <GoogleLoginButton onClick={handleGoogleLogin} />
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
+export default LoginModal;
+
+
+Archivo: .\src\components\Navbar.tsx
+import { useState } from "react";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import LoginModal from "./loginModal.tsx";
+import { Link } from "react-router-dom";
+
+const MyNavbar = () => {
+  const [showLogin, setShowLogin] = useState(false);
+
+  const handleShowLogin = () => setShowLogin(true);
+  const handleCloseLogin = () => setShowLogin(false);
+
+  return (
+    <>
+      <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
+        <Container>
+          <Navbar.Brand href="#home">
+            <img
+              src="aaipaLogo.png"
+              alt="Logo"
+              height="40"
+              className="d-inline-block align-top"
+            />
+            {" AAIPA Association"}
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto">
+              <Nav.Link as={Link} to="/AboutPage">About Us</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+          <Button variant="primary" onClick={handleShowLogin}>
+            Join Us
+          </Button>
+        </Container>
+      </Navbar>
+
+      <LoginModal show={showLogin} handleClose={handleCloseLogin} />
+    </>
+  );
+};
+
+export default MyNavbar;
+
+
+
+Archivo: .\src\components\NewsCard.tsx
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Carousel, Container, Card, Button, Row, Col } from "react-bootstrap";
+
+const API_URL =
+  "https://newsdata.io/api/1/news?apikey=pub_5373485c743e11a05f2b28b653968e3569eb4&q=immigration";
+
+interface Article {
+  title: string;
+  description: string;
+  link: string;
+  image_url: string;
+  source_id: string;
+}
+
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + "...";
+  }
+  return text;
+};
+
+const NewsCarousel: React.FC = () => {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        if (response.data.status === "success") {
+          setArticles(response.data.results);
+        } else {
+          console.error("API error:", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching news:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  const chunkArray = (arr: Article[], chunkSize: number) => {
+    let index = 0;
+    const tempArray = [];
+    while (index < arr.length) {
+      tempArray.push(arr.slice(index, index + chunkSize));
+      index += chunkSize;
+    }
+    return tempArray;
+  };
+
+  const groupedArticles = chunkArray(articles, 3);
+
+  if (loading) {
+    return <div>Cargando noticias...</div>;
+  }
+
+  return (
+    <Container className="py-5">
+      <h2 className="mb-4">Últimas Noticias</h2>
+      <Carousel controls={true} indicators={false}>
+        {groupedArticles.map((group, index) => (
+          <Carousel.Item key={index}>
+            <Row>
+              {group.map((article, idx) => (
+                <Col key={idx} md={4}>
+                  <Card className="h-100" style={{ minHeight: "400px" }}>
+                    {article.image_url ? (
+                      <Card.Img
+                        variant="top"
+                        src={article.image_url}
+                        alt={article.title}
+                        style={{ height: "200px", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          height: "200px",
+                          backgroundColor: "#f0f0f0",
+                        }}
+                      ></div>
+                    )}
+                    <Card.Body className="d-flex flex-column justify-content-between">
+                      <div>
+                        <Card.Title>
+                          {truncateText(article.title, 50)}
+                        </Card.Title>
+                        <Card.Text>
+                          {truncateText(
+                            article.description ||
+                              "Sin descripción disponible.",
+                            100
+                          )}
+                        </Card.Text>
+                      </div>
+                      <Button
+                        variant="primary"
+                        href={article.link}
+                        target="_blank"
+                      >
+                        Leer más
+                      </Button>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </Container>
+  );
+};
+
+export default NewsCarousel;
+
+
+
+Archivo: .\src\components\PlansSelector.tsx
+import { useState } from "react";
+import {
+  Card,
+  Button,
+  Container,
+  Row,
+  Col,
+  ToggleButton,
+  ToggleButtonGroup,
+  Carousel,
+} from "react-bootstrap";
+import {
+  FaUsers,
+  FaBook,
+  FaLaptop,
+  FaHandshake,
+  FaCertificate,
+  FaDatabase,
+  FaCog,
+  FaVideo,
+  FaGraduationCap,
+  FaChartLine,
+} from "react-icons/fa";
+
+type Plan = {
+  title: string;
+  price: string;
+  annualPrice: string;
+  savings: string;
+  features: { icon: JSX.Element; description: string }[];
+};
+
+const PlanCard: React.FC<Plan & { isAnnual: boolean }> = ({
+  title,
+  price,
+  annualPrice,
+  savings,
+  features,
+  isAnnual,
+}) => {
+  return (
+    <Card
+      className="text-center mb-4 shadow-sm d-flex flex-column position-relative"
+      style={{
+        borderRadius: "15px",
+        height: "100%",
+        backgroundColor: "#fff",
+        minHeight: "580px",
+      }}
+    >
+      {isAnnual && (
+        <div
+          style={{
+            position: "absolute",
+            top: "15px",
+            right: "15px",
+            backgroundColor: "#00d1c1",
+            color: "#fff",
+            padding: "5px 10px",
+            borderRadius: "5px",
+            fontWeight: "bold",
+          }}
+        >
+          Ahorra {savings}
+        </div>
+      )}
+      <Card.Body
+        style={{
+          padding: "25px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <h5
+          style={{
+            color: "#333",
+            marginBottom: "10px",
+            marginTop: "60px",
+            minHeight: "30px",
+          }}
+        >
+          {title}
+        </h5>
+        <Card.Title
+          className="my-2"
+          style={{
+            fontSize: "2rem",
+            fontWeight: "bold",
+            color: "#333",
+            marginBottom: "10px",
+          }}
+        >
+          {isAnnual ? annualPrice : price}
+        </Card.Title>
+        <hr
+          style={{
+            border: "1px solid #e0e0e0",
+            width: "100%",
+            margin: "15px 0",
+            position: "relative",
+            top: "-10px",
+          }}
+        />
+        <ul
+          className="list-unstyled text-start"
+          style={{ paddingLeft: "20px", minHeight: "180px" }}
+        >
+          {features.map((feature, index) => (
+            <li
+              key={index}
+              className="mb-2"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              {feature.icon}{" "}
+              <span style={{ marginLeft: "10px" }}>{feature.description}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="d-flex justify-content-center mt-4">
+          <Button
+            variant="primary"
+            size="lg"
+            className="align-self-center"
+            style={{ padding: "10px 30px", fontSize: "1.1rem" }}
+          >
+            Elige este plan
+          </Button>
+        </div>
+      </Card.Body>
+    </Card>
+  );
+};
+
+const PlansSection: React.FC = () => {
+  const [isAnnual, setIsAnnual] = useState(true);
+
+  const plans: Plan[] = [
+    {
+      title: "Plan Individual Básico",
+      price: "$39 USD al mes",
+      annualPrice: "$399 USD al año",
+      savings: "$69",
+      features: [
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        {
+          icon: <FaGraduationCap />,
+          description: "Descuentos en cursos y certificaciones",
+        },
+        {
+          icon: <FaCog />,
+          description:
+            "Acceso a la plataforma de intakes, que genera respuestas automáticas",
+        },
+        {
+          icon: <FaDatabase />,
+          description: "Base de datos de recursos y contratos personalizables",
+        },
+        {
+          icon: <FaLaptop />,
+          description: "Capacitación continua y soporte técnico",
+        },
+        {
+          icon: <FaHandshake />,
+          description: "Aparición en el Directorio Profesional de la AAIP",
+        },
+        {
+          icon: <FaCertificate />,
+          description: "Certificado anual de miembro activo",
+        },
+      ],
+    },
+    {
+      title: "Plan Individual Premium",
+      price: "$49 USD al mes",
+      annualPrice: "$499 USD al año",
+      savings: "$89",
+      features: [
+        { icon: <FaBook />, description: "Incluye todo lo del plan básico" },
+        {
+          icon: <FaVideo />,
+          description: "Acceso a webinars exclusivos mensuales",
+        },
+        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
+        { icon: <FaCog />, description: "Soporte prioritario" },
+      ],
+    },
+    {
+      title: "Plan Empresarial Básico",
+      price: "$99 USD al mes",
+      annualPrice: "$999 USD al año",
+      savings: "$189",
+      features: [
+        {
+          icon: <FaUsers />,
+          description:
+            "Acceso multiusuario para varios miembros del equipo (hasta 5)",
+        },
+        {
+          icon: <FaBook />,
+          description: "Incluye todo lo del plan individual premium",
+        },
+        {
+          icon: <FaHandshake />,
+          description: "Consultoría personalizada para la empresa",
+        },
+        {
+          icon: <FaCog />,
+          description:
+            "Acceso a la plataforma de intakes con generación automatizada de respuestas",
+        },
+        {
+          icon: <FaDatabase />,
+          description:
+            "Base de datos de contratos y plantillas personalizables",
+        },
+        {
+          icon: <FaChartLine />,
+          description: "Aparición en el Directorio Profesional",
+        },
+        {
+          icon: <FaCertificate />,
+          description: "Certificado anual de miembro activo",
+        },
+      ],
+    },
+    {
+      title: "Plan Empresarial Premium",
+      price: "$149 USD al mes",
+      annualPrice: "$1,499 USD al año",
+      savings: "$289",
+      features: [
+        {
+          icon: <FaUsers />,
+          description: "Acceso multiusuario para hasta 10 usuarios",
+        },
+        {
+          icon: <FaBook />,
+          description: "Incluye todo lo del plan empresarial básico",
+        },
+        {
+          icon: <FaVideo />,
+          description: "Webinars de capacitación corporativa",
+        },
+        {
+          icon: <FaHandshake />,
+          description: "Seminarios exclusivos para empresas",
+        },
+        { icon: <FaCog />, description: "Soporte técnico prioritario" },
+      ],
+    },
+    {
+      title: "Plan Empresarial VIP",
+      price: "$249 USD al mes",
+      annualPrice: "$2,499 USD al año",
+      savings: "$489",
+      features: [
+        { icon: <FaUsers />, description: "Usuarios ilimitados" },
+        {
+          icon: <FaBook />,
+          description: "Incluye todo lo del plan empresarial premium",
+        },
+        {
+          icon: <FaHandshake />,
+          description: "Consultorías exclusivas con expertos",
+        },
+        {
+          icon: <FaLaptop />,
+          description: "Formación personalizada para equipos",
+        },
+        {
+          icon: <FaChartLine />,
+          description:
+            "Descuento del 10% en todas las traducciones y servicios de consultoría",
+        },
+      ],
+    },
+  ];
+
+  const chunkArray = <T,>(array: T[], size: number): T[][] => {
+    const chunkedArr = [];
+    for (let i = 0; i < array.length; i += size) {
+      chunkedArr.push(array.slice(i, i + size));
+    }
+    return chunkedArr;
+  };
+
+  const isMobile = window.innerWidth < 768;
+  const plansChunks = chunkArray(plans, isMobile ? 1 : 3);
+
+  return (
+    <section className="py-5 bg-light">
+      <Container>
+        <h2 className="mb-5 text-center">Planes de Membresía</h2>
+        <div className="d-flex justify-content-center mb-4">
+          <ToggleButtonGroup
+            type="radio"
+            name="options"
+            defaultValue={1}
+            onChange={(value) => setIsAnnual(value === 2)}
+          >
+            <ToggleButton
+              id="tbg-radio-1"
+              value={1}
+              variant={isAnnual ? "outline-primary" : "outline-secondary"}
+            >
+              Mensual
+            </ToggleButton>
+            <ToggleButton
+              id="tbg-radio-2"
+              value={2}
+              variant={!isAnnual ? "outline-primary" : "outline-secondary"}
+            >
+              Anual
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+        <Carousel
+          interval={null}
+          indicators={true}
+          nextIcon={
+            <span
+              aria-hidden="true"
+              className="carousel-control-next-icon"
+              style={{ fontSize: "2rem", color: "#000" }}
+            />
+          }
+          prevIcon={
+            <span
+              aria-hidden="true"
+              className="carousel-control-prev-icon"
+              style={{ fontSize: "2rem", color: "#000" }}
+            />
+          }
+        >
+          {plansChunks.map((chunk, index) => (
+            <Carousel.Item key={index}>
+              <Row className="justify-content-center">
+                {chunk.map((plan, idx) => (
+                  <Col key={idx} xs={12} md={4}>
+                    <PlanCard {...plan} isAnnual={isAnnual} />
+                  </Col>
+                ))}
+              </Row>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      </Container>
+    </section>
+  );
+};
+
+export default PlansSection;
+
+
+
+Archivo: .\src\components\results.tsx
+import { Card, Form, Button, Container, Row, Col } from 'react-bootstrap';
+
+// Datos simulados para los resultados de búsqueda
+const searchResults = [
+  {
+    name: "John Doe Immigration Services",
+    location: "New York, NY",
+    specialization: "Visa, Citizenship, and Asylum Services",
+    reviews: 123,
+    rating: 4.0,
+  },
+  {
+    name: "Acme Immigration Consultants",
+    location: "Los Angeles, CA",
+    specialization: "Comprehensive Immigration Services",
+    reviews: 87,
+    rating: 5.0,
+  },
+  {
+    name: "Legal Solutions Immigration Services",
+    location: "Chicago, IL",
+    specialization: "Visa, Green Card, and Asylum Cases",
+    reviews: 65,
+    rating: 4.2,
+  },
+];
+
+export default function ImmigrationSearchComponent() {
+  return (
+    <Container className="py-5">
+      {/* Buscador de servicios */}
+      <div className="mb-4">
+        <h1 className="mb-4">Find Immigration Services</h1>
+        <Form className="d-flex mb-3">
+          <Form.Control
+            type="search"
+            placeholder="Search by name, location, or specialty"
+            className="me-2"
+          />
+          <Button variant="primary">Filter</Button>
+        </Form>
+      </div>
+
+      {/* Resultados */}
+      <h2 className="mb-4">Results</h2>
+      <Row>
+        {searchResults.map((result, index) => (
+          <Col key={index} sm={12} md={6} lg={4} className="mb-4">
+            <Card className="h-100">
+              <Card.Body>
+                <Card.Title>{result.name}</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">
+                  {result.location}
+                </Card.Subtitle>
+                <Card.Text>{result.specialization}</Card.Text>
+                <div className="d-flex align-items-center mb-3">
+                  {renderStars(result.rating)}
+                  <span className="ms-2 text-muted">{`${result.rating} (${result.reviews} reviews)`}</span>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <Button variant="outline-primary">Contact</Button>
+                  <Button variant="secondary">View Profile</Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
+}
+
+function renderStars(rating: number) {
+  const stars = [];
+  for (let i = 0; i < 5; i++) {
+    stars.push(
+      <svg
+        key={i}
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill={i < Math.floor(rating) ? 'gold' : 'lightgray'}
+        className="bi bi-star"
+        viewBox="0 0 16 16"
+      >
+        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.523-3.356c.33-.314.158-.888-.283-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.067l-4.898.696c-.441.062-.613.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.893.7-3.992L1.745 6.608l4.087-.582L8 2.223l1.168 3.803 4.087.582-3.04 2.876.7 3.992-3.686-1.893z" />
+      </svg>
+    );
+  }
+  return <div className="d-flex">{stars}</div>;
+}
+
+export { ImmigrationSearchComponent as Results };
+
+
+Archivo: .\src\pages\AboutPage.tsx
+import { Container, Row, Col } from 'react-bootstrap';
+
+const AboutPage: React.FC = () => {
+  return (
+    <Container className="py-5">
+      {/* Welcome Section */}
+      <Row className="mb-4">
+        <Col>
+          <h2 className="text-center">Welcome to the American Association of Immigration Preparers (AAIP)</h2>
+          <p className="lead text-center mt-3">
+            At AAIP, our mission is to empower and professionalize the work of immigration preparers across the United States.
+            We firmly believe that access to quality, ethical, and affordable immigration services is crucial for immigrant
+            communities seeking a better life. That’s why we have created a platform for training, certification, and continuous
+            support, designed to ensure that our members are equipped with the knowledge and tools needed to make a real difference
+            in their clients’ lives.
+          </p>
+        </Col>
+      </Row>
+
+      {/* Who Are We Section */}
+      <Row className="mb-5">
+        <Col md={12}>
+          <h3>Who Are We?</h3>
+          <p>
+            We are the first organization in the United States exclusively focused on providing specialized training and certification 
+            for immigration preparers. Our vision is to create a standard of excellence in the industry, ensuring that every immigrant 
+            has access to properly trained professionals who uphold the highest standards of ethics and quality.
+          </p>
+        </Col>
+      </Row>
+
+      {/* Our Commitment Section */}
+      <Row className="mb-5">
+        <Col md={12}>
+          <h3>Our Commitment</h3>
+          <ul>
+            <li>Providing updated education and training so that our members are always up to date with immigration laws and regulations.</li>
+            <li>Promoting ethical and responsible practices, ensuring that every preparer offers reliable and accessible services.</li>
+            <li>Building a community of professionals where our members can collaborate, learn from one another, and grow together.</li>
+            <li>Offering professional development opportunities, providing tools to help our members achieve long-term success.</li>
+          </ul>
+        </Col>
+      </Row>
+
+      {/* Our Services Section */}
+      <Row className="mb-5">
+        <Col md={12}>
+          <h3>Our Services</h3>
+          <ul>
+            <li>
+              <strong>Professional Certification:</strong> The AAIP offers a rigorous certification program that ensures our members possess 
+              the necessary knowledge to handle the complex immigration processes.
+            </li>
+            <li>
+              <strong>Ongoing Training:</strong> From webinars to in-person workshops, we provide continuous training to keep members updated 
+              on the constant changes in immigration law.
+            </li>
+            <li>
+              <strong>Support and Collaboration Network:</strong> Connect with other immigration preparers, attorneys, and industry 
+              professionals through our exclusive networking platform.
+            </li>
+            <li>
+              <strong>Access to Exclusive Resources:</strong> We provide our members with practical guides, document templates, and access 
+              to experts for case-specific questions.
+            </li>
+          </ul>
+        </Col>
+      </Row>
+
+      {/* Join Us Section */}
+      <Row className="mb-5 text-center">
+        <Col>
+          <h3>Join the AAIP Community</h3>
+          <p className="lead">
+            By joining the AAIP, you become part of an organization that leads the way in professionalizing immigration preparers. 
+            Whether you are an experienced preparer or just starting your career, you will find in AAIP the support, development 
+            opportunities, and recognition you need to advance and make a significant contribution to the immigrant community.
+          </p>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default AboutPage;
+
+
