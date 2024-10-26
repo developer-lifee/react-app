@@ -1,10 +1,22 @@
 {
-  "welcome": "Bienvenido a la Asociación Americana de Preparadores de Inmigración (AAIP)",
-  "mission": "En AAIP, nuestra misión es empoderar y profesionalizar el trabajo de los preparadores de inmigración en todo Estados Unidos. Creemos firmemente que el acceso a servicios de inmigración de calidad, éticos y asequibles es crucial para las comunidades inmigrantes que buscan una vida mejor. Por eso hemos creado una plataforma para la capacitación, certificación y apoyo continuo, diseñada para garantizar que nuestros miembros estén equipados con el conocimiento y las herramientas necesarias para hacer una diferencia real en la vida de sus clientes.",
+  "welcome": "Bienvenidos a la Asociación Americana de Preparadores de Inmigración (AAIP)",
+  "mission": "En AAIP, nuestra misión es empoderar y profesionalizar el trabajo de los preparadores de inmigración en los Estados Unidos. Creemos firmemente que el acceso a servicios de inmigración de calidad, éticos y asequibles es crucial para las comunidades inmigrantes que buscan una vida mejor. Por eso hemos creado una plataforma de capacitación, certificación y apoyo continuo, diseñada para asegurar que nuestros miembros estén equipados con el conocimiento y las herramientas necesarias para marcar una verdadera diferencia en la vida de sus clientes.",
   "whoAreWe": "¿Quiénes Somos?",
-  "whoAreWeText": "Somos la primera organización en los Estados Unidos enfocada exclusivamente en proporcionar capacitación y certificación especializada para preparadores de inmigración. Nuestra visión es crear un estándar de excelencia en la industria, asegurando que cada inmigrante tenga acceso a profesionales debidamente capacitados que mantengan los más altos estándares de ética y calidad.",
+  "whoAreWeText": "Somos la primera organización en los Estados Unidos exclusivamente enfocada en ofrecer capacitación y certificación especializada para preparadores de inmigración. Nuestra visión es crear un estándar de excelencia en la industria, asegurando que cada inmigrante tenga acceso a profesionales debidamente capacitados que mantengan los más altos estándares de ética y calidad.",
   "ourCommitment": "Nuestro Compromiso",
+  "commitment1": "Brindar educación y capacitación actualizadas para que nuestros miembros estén siempre al día con las leyes y regulaciones de inmigración.",
+  "commitment2": "Promover prácticas éticas y responsables, asegurando que cada preparador ofrezca servicios confiables y accesibles.",
+  "commitment3": "Construir una comunidad de profesionales donde nuestros miembros puedan colaborar, aprender unos de otros y crecer juntos.",
+  "commitment4": "Ofrecer oportunidades de desarrollo profesional, proporcionando herramientas que ayuden a nuestros miembros a lograr el éxito a largo plazo.",
   "ourServices": "Nuestros Servicios",
-  "joinUs": "Únete a la Comunidad AAIP",
-  "joinUsText": "Al unirte a la AAIP, te conviertes en parte de una organización que lidera el camino en la profesionalización de los preparadores de inmigración. Ya sea que seas un preparador experimentado o que estés comenzando tu carrera, encontrarás en AAIP el apoyo, las oportunidades de desarrollo y el reconocimiento que necesitas para avanzar y hacer una contribución significativa a la comunidad inmigrante."
+  "service1Title": "Certificación Profesional",
+  "service1Text": "La AAIP ofrece un programa de certificación riguroso que asegura que nuestros miembros posean el conocimiento necesario para manejar los complejos procesos de inmigración.",
+  "service2Title": "Capacitación Continua",
+  "service2Text": "Desde seminarios web hasta talleres presenciales, brindamos capacitación continua para mantener a los miembros actualizados sobre los constantes cambios en la ley de inmigración.",
+  "service3Title": "Red de Apoyo y Colaboración",
+  "service3Text": "Conéctate con otros preparadores de inmigración, abogados y profesionales de la industria a través de nuestra plataforma de networking exclusiva.",
+  "service4Title": "Acceso a Recursos Exclusivos",
+  "service4Text": "Proporcionamos a nuestros miembros guías prácticas, plantillas de documentos y acceso a expertos para consultas específicas de casos.",
+  "joinUs": "Únete a la Comunidad de AAIP",
+  "joinUsText": "Al unirte a la AAIP, te conviertes en parte de una organización que lidera la profesionalización de los preparadores de inmigración. Ya seas un preparador experimentado o estés comenzando tu carrera, encontrarás en AAIP el apoyo, las oportunidades de desarrollo y el reconocimiento que necesitas para avanzar y hacer una contribución significativa a la comunidad inmigrante."
 }

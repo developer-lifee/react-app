@@ -25,11 +25,11 @@ const MyNavbar = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/AboutPage.tsx">About Us</Nav.Link>
+            <Nav.Link as={Link} to="/about-us">About Us</Nav.Link>
             </Nav>
           </Navbar.Collapse>
           {/* Cambia el evento para redirigir a la página de login */}
-          <Button variant="primary" onClick={handleGoToLogin}>
+          <Button variant="primary" onClick={() => navigate('/login')}>
             Join Us
           </Button>
         </Container>
