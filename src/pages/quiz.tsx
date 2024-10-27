@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import Question from './Question';
-import Result from './Result';
-import Timer from './Timer';
+import { useState } from "react";
+import Question from "../components/Question";  // Asegúrate de que exista "Question.tsx"
+import Result from "../components/Result";
+import Timer from "../components/timer";
 import questionsData from '../data/questions.json';
 
 const Quiz: React.FC = () => {
@@ -50,3 +50,4 @@ const Quiz: React.FC = () => {
 };
 
 export default Quiz;
+

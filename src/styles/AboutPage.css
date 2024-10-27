@@ -1,0 +1,23 @@
+.container {
+    max-width: 800px;
+  }
+  
+  .card {
+    border-radius: 10px;
+  }
+  
+  h2, h3 {
+    font-weight: 600;
+  }
+  
+  .list-unstyled li::before {
+    content: "• ";
+    color: #0d6efd; /* Azul Bootstrap */
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+  
+  .lead {
+    color: #555;
+  }
+  

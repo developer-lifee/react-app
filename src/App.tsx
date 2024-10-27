@@ -4,8 +4,8 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import Login from "./pages/login";
-import Quiz from "./pages/Quiz";  // Importa el componente de evaluación
-import './i18n'; // Importa la configuración de i18next
+import Quiz from "./pages/quiz";  // Importa el componente Quiz
+import './i18n';
 
 const App = () => {
   return (
@@ -23,4 +23,3 @@ const App = () => {
 };
 
 export default App;
-

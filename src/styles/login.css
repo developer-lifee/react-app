@@ -1,0 +1,21 @@
+/* Login.css */
+.login-page {
+    background-color: #f8f9fa; /* Fondo claro */
+  }
+  
+  .login-card {
+    background: #ffffff;
+    border-radius: 10px;
+  }
+  
+  h2 {
+    font-weight: 600;
+    color: #343a40;
+  }
+  
+  .social-login .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
