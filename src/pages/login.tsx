@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { GoogleLogin } from "react-google-login";
 import AppleLogin from 'react-apple-login';
-import '../styles/login.css';  // Importa el archivo de estilos
-
+import '../styles/login.css';
 
 const clientId = "702842350274-5d254fq60uj8d9aadr1tlm06bulrpvtl.apps.googleusercontent.com";
 
@@ -28,7 +27,7 @@ const Login = () => {
     console.log("Apple login success:", response);
   };
 
-  const handleAppleLoginFailure = (error: any) => {
+  const handleAppleLoginError = (error: any) => {
     console.error("Apple login error:", error);
   };
 
@@ -96,9 +95,13 @@ const Login = () => {
                   responseMode="query"
                   usePopup={true}
                   onSuccess={handleAppleLoginSuccess}
-                  onError={handleAppleLoginFailure}
+                  onError={handleAppleLoginError}
                   render={(renderProps) => (
-                    <Button onClick={renderProps.onClick} variant="dark" className="w-100">
+                    <Button
+                      onClick={renderProps.onClick}
+                      variant="dark"
+                      className="w-100"
+                    >
                       <i className="fab fa-apple me-2"></i> Apple
                     </Button>
                   )}

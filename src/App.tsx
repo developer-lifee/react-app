@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import Login from "./pages/login";
 import Quiz from "./pages/quiz";  // Importa el componente Quiz
+import Forms from "./pages/forms";  // Importa el componente Quiz
 import './i18n';
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/about-us" element={<AboutPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/quiz" element={<Quiz />} /> {/* Nueva ruta para el Quiz */}
+        <Route path="/forms" element={<Forms />} /> {/* Nueva ruta para el Quiz */}
       </Routes>
       <Footer />
     </Router>

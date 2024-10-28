@@ -1,0 +1,57 @@
+/* Quiz.css */
+
+.quiz-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .question-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .question-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .question-indicator.answered {
+    background-color: #283fa7; /* Verde para respondidas */
+  }
+  
+  .question-indicator.unanswered {
+    background-color: #8d8d8d; /* Rojo para no respondidas */
+  }
+  
+  .question-container {
+    max-width: 600px;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .timer-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }  
+  
+  h5 {
+    margin-bottom: 20px;
+  }
+  

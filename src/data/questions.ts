@@ -1,4 +1,5 @@
-{
+const questionsData = {
+
     "examModel1": {
       "questions": [
         {
@@ -605,3 +606,4 @@
     }
   }
   
+  export default questionsData;
