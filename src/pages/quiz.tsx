@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Question from "../components/Question";
-import Result from "../components/Result";
-import Timer from "../components/timer";
+import Question from "../components/quiz/Question";
+import Result from "../components/quiz/Result";
+import Timer from "../components/quiz/timer";
 import questionsData from '../data/questions';
 import { Button, Modal } from "react-bootstrap";
 import "../styles/quiz.css";

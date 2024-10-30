@@ -31,11 +31,12 @@ const Hero: React.FC = () => {
           <h1 className="display-4 font-weight-bold">
             Welcome to AAIPA Association Immigration Services
           </h1>
-          <p className="lead my-4">
-            AAIPA Association is dedicated to helping individuals and families
-            navigate the complex immigration process. We offer a wide range of
-            services tailored to your needs.
-          </p>
+          <p className="lead my-4" style={{ color: "#ffffff" }}>
+  AAIPA Association is dedicated to helping individuals and families
+  navigate the complex immigration process. We offer a wide range of
+  services tailored to your needs.
+</p>
+
           <Button variant="primary" size="lg">
             Learn More
           </Button>

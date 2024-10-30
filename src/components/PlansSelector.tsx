@@ -7,6 +7,7 @@ import {
   Col,
   ToggleButton,
   ToggleButtonGroup,
+  Table,
   Carousel,
 } from "react-bootstrap";
 import {
@@ -135,6 +136,7 @@ const PlanCard: React.FC<Plan & { isAnnual: boolean }> = ({
 const PlansSection: React.FC = () => {
   const [isAnnual, setIsAnnual] = useState(true);
 
+  // Definir los planes con herencia de características
   const plans: Plan[] = [
     {
       title: "Plan Individual Básico",
@@ -143,31 +145,14 @@ const PlansSection: React.FC = () => {
       savings: "$69",
       features: [
         { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
-        {
-          icon: <FaGraduationCap />,
-          description: "Descuentos en cursos y certificaciones",
-        },
-        {
-          icon: <FaCog />,
-          description:
-            "Acceso a la plataforma de intakes, que genera respuestas automáticas",
-        },
-        {
-          icon: <FaDatabase />,
-          description: "Base de datos de recursos y contratos personalizables",
-        },
-        {
-          icon: <FaLaptop />,
-          description: "Capacitación continua y soporte técnico",
-        },
-        {
-          icon: <FaHandshake />,
-          description: "Aparición en el Directorio Profesional de la AAIP",
-        },
-        {
-          icon: <FaCertificate />,
-          description: "Certificado anual de miembro activo",
-        },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
       ],
     },
     {
@@ -176,11 +161,15 @@ const PlansSection: React.FC = () => {
       annualPrice: "$499 USD al año",
       savings: "$89",
       features: [
-        { icon: <FaBook />, description: "Incluye todo lo del plan básico" },
-        {
-          icon: <FaVideo />,
-          description: "Acceso a webinars exclusivos mensuales",
-        },
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
         { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
         { icon: <FaCog />, description: "Soporte prioritario" },
       ],
@@ -191,37 +180,19 @@ const PlansSection: React.FC = () => {
       annualPrice: "$999 USD al año",
       savings: "$189",
       features: [
-        {
-          icon: <FaUsers />,
-          description:
-            "Acceso multiusuario para varios miembros del equipo (hasta 5)",
-        },
-        {
-          icon: <FaBook />,
-          description: "Incluye todo lo del plan individual premium",
-        },
-        {
-          icon: <FaHandshake />,
-          description: "Consultoría personalizada para la empresa",
-        },
-        {
-          icon: <FaCog />,
-          description:
-            "Acceso a la plataforma de intakes con generación automatizada de respuestas",
-        },
-        {
-          icon: <FaDatabase />,
-          description:
-            "Base de datos de contratos y plantillas personalizables",
-        },
-        {
-          icon: <FaChartLine />,
-          description: "Aparición en el Directorio Profesional",
-        },
-        {
-          icon: <FaCertificate />,
-          description: "Certificado anual de miembro activo",
-        },
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
+        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
+        { icon: <FaCog />, description: "Soporte prioritario" },
+        { icon: <FaUsers />, description: "Acceso multiusuario para varios miembros del equipo" },
+        { icon: <FaHandshake />, description: "Consultoría personalizada" },
       ],
     },
     {
@@ -230,63 +201,48 @@ const PlansSection: React.FC = () => {
       annualPrice: "$1,499 USD al año",
       savings: "$289",
       features: [
-        {
-          icon: <FaUsers />,
-          description: "Acceso multiusuario para hasta 10 usuarios",
-        },
-        {
-          icon: <FaBook />,
-          description: "Incluye todo lo del plan empresarial básico",
-        },
-        {
-          icon: <FaVideo />,
-          description: "Webinars de capacitación corporativa",
-        },
-        {
-          icon: <FaHandshake />,
-          description: "Seminarios exclusivos para empresas",
-        },
-        { icon: <FaCog />, description: "Soporte técnico prioritario" },
-      ],
-    },
-    {
-      title: "Plan Empresarial VIP",
-      price: "$249 USD al mes",
-      annualPrice: "$2,499 USD al año",
-      savings: "$489",
-      features: [
-        { icon: <FaUsers />, description: "Usuarios ilimitados" },
-        {
-          icon: <FaBook />,
-          description: "Incluye todo lo del plan empresarial premium",
-        },
-        {
-          icon: <FaHandshake />,
-          description: "Consultorías exclusivas con expertos",
-        },
-        {
-          icon: <FaLaptop />,
-          description: "Formación personalizada para equipos",
-        },
-        {
-          icon: <FaChartLine />,
-          description:
-            "Descuento del 10% en todas las traducciones y servicios de consultoría",
-        },
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
+        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
+        { icon: <FaCog />, description: "Soporte prioritario" },
+        { icon: <FaUsers />, description: "Acceso multiusuario para varios miembros del equipo" },
+        { icon: <FaHandshake />, description: "Consultoría personalizada" },
+        { icon: <FaUsers />, description: "Hasta 10 usuarios" },
+        { icon: <FaVideo />, description: "Seminarios exclusivos para empresas" },
       ],
     },
   ];
 
-  const chunkArray = <T,>(array: T[], size: number): T[][] => {
-    const chunkedArr = [];
-    for (let i = 0; i < array.length; i += size) {
-      chunkedArr.push(array.slice(i, i + size));
-    }
-    return chunkedArr;
-  };
+  const allFeatures = [
+    "Acceso a contenido exclusivo",
+    "Descuentos en cursos y certificaciones",
+    "Acceso a la plataforma de intakes, que genera respuestas automáticas",
+    "Base de datos de recursos y contratos personalizables",
+    "Capacitación continua y soporte técnico",
+    "Certificación anual de miembro activo",
+    "Descuentos en notarización de documentos",
+    "Descuentos en eventos",
+    "Traducciones a bajo costo",
+    "Plantillas y guías avanzadas",
+    "Soporte prioritario",
+    "Acceso multiusuario para varios miembros del equipo",
+    "Consultoría personalizada",
+    "Hasta 10 usuarios",
+    "Seminarios exclusivos para empresas",
+  ];
 
-  const isMobile = window.innerWidth < 768;
-  const plansChunks = chunkArray(plans, isMobile ? 1 : 3);
+  const featureChecks = plans.map((plan) =>
+    allFeatures.map((feature) =>
+      plan.features.some((f) => f.description === feature)
+    )
+  );
 
   return (
     <section className="py-5 bg-light">
@@ -296,7 +252,7 @@ const PlansSection: React.FC = () => {
           <ToggleButtonGroup
             type="radio"
             name="options"
-            defaultValue={1}
+            defaultValue={2} // Cambiar el valor por defecto a 2 (Anual)
             onChange={(value) => setIsAnnual(value === 2)}
           >
             <ToggleButton
@@ -315,36 +271,37 @@ const PlansSection: React.FC = () => {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-        <Carousel
-          interval={null}
-          indicators={true}
-          nextIcon={
-            <span
-              aria-hidden="true"
-              className="carousel-control-next-icon"
-              style={{ fontSize: "2rem", color: "#000" }}
-            />
-          }
-          prevIcon={
-            <span
-              aria-hidden="true"
-              className="carousel-control-prev-icon"
-              style={{ fontSize: "2rem", color: "#000" }}
-            />
-          }
-        >
-          {plansChunks.map((chunk, index) => (
+        <Carousel interval={null} indicators={true}>
+          {plans.map((plan, index) => (
             <Carousel.Item key={index}>
               <Row className="justify-content-center">
-                {chunk.map((plan, idx) => (
-                  <Col key={idx} xs={12} md={4}>
-                    <PlanCard {...plan} isAnnual={isAnnual} />
-                  </Col>
-                ))}
+                <Col xs={12}>
+                  <PlanCard {...plan} isAnnual={isAnnual} />
+                </Col>
               </Row>
             </Carousel.Item>
           ))}
         </Carousel>
+        <Table striped bordered hover className="mt-5">
+          <thead>
+            <tr>
+              <th>Características</th>
+              {plans.map((plan, index) => (
+                <th key={index}>{plan.title}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {allFeatures.map((feature, index) => (
+              <tr key={index}>
+                <td>{feature}</td>
+                {featureChecks.map((checks, planIndex) => (
+                  <td key={planIndex}>{checks[index] ? "✔️" : ""}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </Container>
     </section>
   );

@@ -21,6 +21,7 @@ const Question: React.FC<QuestionProps> = ({ question, options, onSelectAnswer, 
                 className="form-check-input"
                 checked={selectedAnswer === option}
                 onChange={() => onSelectAnswer(option)}
+                title={option}
               />
               <label className="form-check-label">{option}</label>
             </div>

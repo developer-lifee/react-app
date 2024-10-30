@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { GoogleLogin } from "react-google-login";
-import AppleLogin from 'react-apple-login';
+/* import AppleLogin from 'react-apple-login'; */
 import '../styles/login.css';
 
 const clientId = "702842350274-5d254fq60uj8d9aadr1tlm06bulrpvtl.apps.googleusercontent.com";
@@ -23,6 +23,8 @@ const Login = () => {
     console.error("Google login error:", error);
   };
 
+  // Funciones de Apple Login comentadas
+  /*
   const handleAppleLoginSuccess = (response: any) => {
     console.log("Apple login success:", response);
   };
@@ -30,6 +32,7 @@ const Login = () => {
   const handleAppleLoginError = (error: any) => {
     console.error("Apple login error:", error);
   };
+  */
 
   return (
     <div className="login-page d-flex align-items-center min-vh-100">
@@ -88,6 +91,9 @@ const Login = () => {
                     </Button>
                   )}
                 />
+                
+                {/* Comentado el botón de Apple Login */}
+                {/* 
                 <AppleLogin
                   clientId="your-client-id"
                   redirectURI="your-redirect-uri"
@@ -105,7 +111,8 @@ const Login = () => {
                       <i className="fab fa-apple me-2"></i> Apple
                     </Button>
                   )}
-                />
+                /> 
+                */}
               </div>
             </div>
           </Col>
