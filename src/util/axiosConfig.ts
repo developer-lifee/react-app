@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://147.79.75.135:3000/api',
+  baseURL: 'https://api.icegeneralcontractors.com/api',
 });
 
 export default api;

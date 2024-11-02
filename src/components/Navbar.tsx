@@ -21,6 +21,7 @@ const MyNavbar = () => {
           <Nav className="ms-auto">
             <Nav.Link as={Link} to="/about-us">About Us</Nav.Link>
             <Nav.Link as={Link} to="/quiz">Quiz</Nav.Link> {/* Enlace al quiz */}
+            <Nav.Link as={Link} to="/forms">Forms</Nav.Link> {/* Enlace al quiz */}
           </Nav>
           <Button variant="primary" onClick={() => navigate('/login')} className="ms-3">
             Join Us
