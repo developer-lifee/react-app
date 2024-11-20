@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: 'https://api.icegeneralcontractors.com/api',
 });
 
 // Interceptor para incluir el token JWT en las solicitudes

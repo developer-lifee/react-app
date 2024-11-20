@@ -4,13 +4,17 @@ import { AuthContext } from '../context/AuthContext';
 import '../styles/login.css';
 
 const Login = () => {
-  const { handleLogin } = useContext(AuthContext);
+  const { handleLogin, handleGoogleLogin, handleCreateUser } = useContext(AuthContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await handleLogin(email, password);
+    if (handleLogin) {
+      await handleLogin(email, password);
+    } else {
+      console.error("handleLogin is not defined");
+    }
   };
 
   return (
@@ -47,6 +51,12 @@ const Login = () => {
                   Login
                 </Button>
               </Form>
+              <Button variant="secondary" className="w-100 mb-3" onClick={handleCreateUser}>
+                Create User
+              </Button>
+              <Button variant="danger" className="w-100" onClick={handleGoogleLogin}>
+                Login with Google
+              </Button>
             </div>
           </Col>
         </Row>

@@ -1,13 +1,13 @@
-
 import axios from 'axios';
+// Remove the import statement for process
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = 'https://api.icegeneralcontractors.com/api';
 
 const apiService = axios.create({
   baseURL: API_URL,
 });
 
-export const login = async (email, password) => {
+export const login = async (email: string, password: string) => {
   const response = await apiService.post('/auth/login', { email, password });
   return response.data;
 };

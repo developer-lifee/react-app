@@ -1,23 +1,28 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { login as loginService } from '../services/apiService';
-import api from '../util/axiosConfig';
+import { login as loginService, googleAuth } from '../services/apiService';
 
 interface User {
   email: string;
   role: string;
-  // Agrega otros campos si los hay
+  password: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => void; 
+  handleLogin: (email: string, password: string) => Promise<void>;
+  handleGoogleLogin: () => void;
+  handleCreateUser: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   login: async () => {},
   logout: () => {},
+  handleLogin: async () => {},
+  handleGoogleLogin: () => {},
+  handleCreateUser: () => {},
 });
 
 export const AuthProvider: React.FC = ({ children }) => {
@@ -64,8 +69,25 @@ export const AuthProvider: React.FC = ({ children }) => {
     setUser(null);
   };
 
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      const data = await loginService(email, password);
+      // Handle login success (e.g., save token, redirect, etc.)
+    } catch (error) {
+      console.error('Login failed', error);
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    googleAuth();
+  };
+
+  const handleCreateUser = () => {
+    // Implement user creation logic here
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, handleLogin, handleGoogleLogin, handleCreateUser }}>
       {children}
     </AuthContext.Provider>
   );
