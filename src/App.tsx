@@ -4,21 +4,36 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import Login from "./pages/login";
-import Quiz from "./pages/quiz";  // Importa el componente Quiz
-import Forms from "./pages/forms";  // Importa el componente Quiz
+import Quiz from "./pages/quiz";
+import Forms from "./pages/forms";
+import BibliotecaPage from './pages/BibliotecaPage';
+import PrivateRoute from './components/PrivateRoute'; // Importa PrivateRoute
 import './i18n';
 
 const App = () => {
   return (
     <Router>
       <MyNavbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} /> {/* Página principal */}
-        <Route path="/about-us" element={<AboutPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/quiz" element={<Quiz />} /> {/* Nueva ruta para el Quiz */}
-        <Route path="/forms" element={<Forms />} /> {/* Nueva ruta para el Quiz */}
-      </Routes>
+      <main style={{ marginBottom: '70px' }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about-us" element={<AboutPage />} />
+          <Route path="/login" element={<Login />} />
+          {/* Rutas protegidas */}
+          <Route path="/quiz" element={
+            <PrivateRoute>
+              <Quiz />
+            </PrivateRoute>
+          } />
+          <Route path="/forms" element={
+            <PrivateRoute>
+              <Forms />
+            </PrivateRoute>
+          } />
+          {/* Rutas públicas */}
+          <Route path="/biblioteca" element={<BibliotecaPage />} />
+        </Routes>
+      </main>
       <Footer />
     </Router>
   );

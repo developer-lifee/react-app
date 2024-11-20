@@ -3,61 +3,78 @@ Estructura de directorios:
 ├── assets/
 │   └── react.svg
 ├── components/
+│   ├── Biblioteca.tsx
 │   ├── CoursesAndServices.tsx
 │   ├── Footer.tsx
+│   ├── forms/
+│   │   ├── FormComplete.tsx
+│   │   ├── FormCreate.tsx
+│   │   ├── FormDashboard.tsx
+│   │   ├── FormEdit.tsx
+│   │   └── FormView.tsx
 │   ├── Hero.tsx
-│   ├── loginModal.tsx
 │   ├── Navbar.tsx
 │   ├── NewsCard.tsx
 │   ├── PlansSelector.tsx
+│   ├── quiz/
+│   │   ├── Question.tsx
+│   │   ├── Result.tsx
+│   │   └── timer.tsx
 │   └── results.tsx
+├── context/
+│   └── AuthContext.tsx
+├── data/
+│   └── questions.ts
+├── i18n.js
 ├── index.css
 ├── main.tsx
 ├── onefile.txt
 ├── pages/
-│   └── AboutPage.tsx
+│   ├── AboutPage.tsx
+│   ├── BibliotecaPage.tsx
+│   ├── forms.tsx
+│   ├── HomePage.tsx
+│   ├── login.tsx
+│   └── quiz.tsx
+├── services/
+│   └── apiService.ts
+├── styles/
+│   ├── AboutPage.css
+│   ├── login.css
+│   └── quiz.css
+├── util/
+│   └── axiosConfig.ts
 └── vite-env.d.ts
 
 Contenido de archivos:
 
-Archivo: .\src\App.tsx
+Archivo: .\react-app\src\App.tsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MyNavbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import PlansSection from "./components/PlansSelector";
-import Results from "./components/results.tsx";
-import NewsCarousel from "./components/NewsCard.tsx";
 import Footer from "./components/Footer";
-import CoursesAndServices from "./components/CoursesAndServices.tsx";
-import HomePage from "./pages/AboutPage.tsx";
-
-
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import Login from "./pages/login";
+import Quiz from "./pages/quiz";
+import Forms from "./pages/forms";
+import BibliotecaPage from './pages/BibliotecaPage'; // Asegúrate de importar el componente BibliotecaPage
+import './i18n';
 
 const App = () => {
   return (
     <Router>
-      <div>
-        <MyNavbar />
+      <MyNavbar /> {/* Navbar persistente en todas las páginas */}
+      <main style={{ marginBottom: '70px' }}> {/* Contenedor principal para el contenido de la página */}
         <Routes>
-          <Route path="/about-us" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} /> {/* Página principal */}
+          <Route path="/about-us" element={<AboutPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/forms" element={<Forms />} />
+          <Route path="/biblioteca" element={<BibliotecaPage />} /> {/* Ruta para la Biblioteca */}
         </Routes>
-        <div style={{ marginBottom: "70px" }}>
-          <Hero />
-        </div>
-        <div style={{ marginBottom: "50px" }}>
-          <NewsCarousel />
-        </div>
-        <div style={{ marginBottom: "50px" }}>
-          <PlansSection />
-        </div>
-        <div style={{ marginBottom: "50px" }}>
-          <Results />
-        </div>
-        <div style={{ marginBottom: "50px" }}>
-          <CoursesAndServices />
-        </div>
-        <Footer />
-      </div>
+      </main>
+      <Footer /> {/* Footer persistente en todas las páginas */}
     </Router>
   );
 };
@@ -66,12 +83,35 @@ export default App;
 
 
 
-Archivo: .\src\index.css
+Archivo: .\react-app\src\i18n.js
+// src/i18n.js
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Backend from 'i18next-http-backend';
+
+i18n
+  .use(Backend) // para cargar traducciones desde archivos
+  .use(LanguageDetector) // para detectar el idioma del navegador
+  .use(initReactI18next) // pasar i18n al React-i18next
+  .init({
+    fallbackLng: 'en',
+    debug: true,
+    interpolation: {
+      escapeValue: false, // evita el escape de los caracteres de interpolación
+    },
+  });
+
+export default i18n;
+
+
+
+Archivo: .\react-app\src\index.css
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
-Archivo: .\src\main.tsx
+Archivo: .\react-app\src\main.tsx
 // src/main.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -88,16 +128,88 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
 
 
-Archivo: .\src\vite-env.d.ts
+Archivo: .\react-app\src\vite-env.d.ts
 /// <reference types="vite/client" />
 
 
 
-Archivo: .\src\assets\react.svg
+Archivo: .\react-app\src\assets\react.svg
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
 
 
-Archivo: .\src\components\CoursesAndServices.tsx
+Archivo: .\react-app\src\components\Biblioteca.tsx
+// src/components/Biblioteca.tsx
+import React, { useState } from 'react';
+import { Container, Row, InputGroup, FormControl, Card, Button } from 'react-bootstrap';
+
+type CardInfo = {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  articleUrl: string;
+};
+
+// Datos simulados para las tarjetas
+const initialCards: CardInfo[] = [
+  {
+    id: 1,
+    title: 'Guía de Formularios Migratorios',
+    description: 'Aprende a preparar formularios migratorios con esta guía detallada.',
+    imageUrl: 'https://example.com/path/to/image.jpg', // Reemplaza con la URL real de la imagen
+    articleUrl: 'https://example.com/path/to/article'
+  },
+  {
+    id: 2,
+    title: 'Normativas de Inmigración Actualizadas',
+    description: 'Consulta las últimas normativas y leyes de inmigración.',
+    imageUrl: 'https://example.com/path/to/secondimage.jpg', // Reemplaza con la URL real de la imagen
+    articleUrl: 'https://example.com/path/to/secondarticle'
+  },
+  // Agrega más tarjetas según sea necesario
+];
+
+const Biblioteca: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [cards, setCards] = useState<CardInfo[]>(initialCards);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    const filteredCards = initialCards.filter(card => card.title.toLowerCase().includes(event.target.value.toLowerCase()) || card.description.toLowerCase().includes(event.target.value.toLowerCase()));
+    setCards(filteredCards);
+  };
+
+  return (
+    <Container>
+      <InputGroup className="mb-3">
+        <FormControl
+          placeholder="Buscar..."
+          onChange={handleSearch}
+        />
+      </InputGroup>
+      <Row xs={1} md={2} lg={3}>
+        {cards.map(card => (
+          <Card key={card.id} style={{ width: '18rem', margin: '10px' }}>
+            <Card.Img variant="top" src={card.imageUrl} />
+            <Card.Body>
+              <Card.Title>{card.title}</Card.Title>
+              <Card.Text>
+                {card.description}
+              </Card.Text>
+              <Button variant="primary" href={card.articleUrl} target="_blank">Leer Artículo</Button>
+            </Card.Body>
+          </Card>
+        ))}
+      </Row>
+    </Container>
+  );
+};
+
+export default Biblioteca;
+
+
+
+Archivo: .\react-app\src\components\CoursesAndServices.tsx
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import CourseImage from "/course.webp"; // Asegúrate de que la ruta sea correcta
 
@@ -166,7 +278,7 @@ export default CoursesAndServices;
 
 
 
-Archivo: .\src\components\Footer.tsx
+Archivo: .\react-app\src\components\Footer.tsx
 import { Container, Row, Col } from "react-bootstrap";
 
 const Footer = () => {
@@ -200,7 +312,7 @@ export default Footer;
 
 
 
-Archivo: .\src\components\Hero.tsx
+Archivo: .\react-app\src\components\Hero.tsx
 import React from "react";
 import { Button, Container } from "react-bootstrap";
 
@@ -234,11 +346,12 @@ const Hero: React.FC = () => {
           <h1 className="display-4 font-weight-bold">
             Welcome to AAIPA Association Immigration Services
           </h1>
-          <p className="lead my-4">
-            AAIPA Association is dedicated to helping individuals and families
-            navigate the complex immigration process. We offer a wide range of
-            services tailored to your needs.
-          </p>
+          <p className="lead my-4" style={{ color: "#ffffff" }}>
+  AAIPA Association is dedicated to helping individuals and families
+  navigate the complex immigration process. We offer a wide range of
+  services tailored to your needs.
+</p>
+
           <Button variant="primary" size="lg">
             Learn More
           </Button>
@@ -252,138 +365,39 @@ export default Hero;
 
 
 
-Archivo: .\src\components\loginModal.tsx
-import { useState } from "react";
-import { Form, Button, Modal } from "react-bootstrap";
-import { AppleLoginButton, GoogleLoginButton } from "react-social-login-buttons";
-import AppleLogin from 'react-apple-login';
-
-interface LoginModalProps {
-  show: boolean;
-  handleClose: () => void;
-}
-
-const LoginModal: React.FC<LoginModalProps> = ({ show, handleClose }) => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Aquí puedes agregar la lógica para el inicio de sesión
-    console.log("Login with:", email, password);
-    handleClose(); // Cierra el modal después del inicio de sesión
-  };
-
-  const handleAppleLoginSuccess = (response: any) => {
-    // Lógica para manejar la respuesta exitosa del inicio de sesión con Apple
-    console.log("Apple login success:", response);
-    handleClose(); // Cierra el modal después del inicio de sesión
-  };
-
-  const handleAppleLoginFailure = (error: any) => {
-    // Lógica para manejar el error del inicio de sesión con Apple
-    console.error("Apple login error:", error);
-  };
-
-  const handleGoogleLogin = () => {
-    // Lógica para el inicio de sesión con Google
-    console.log("Login with Google");
-    handleClose(); // Cierra el modal después del inicio de sesión
-  };
-
-  return (
-    <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Login</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleLogin}>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Login
-          </Button>
-        </Form>
-        <div className="social-login-buttons">
-          <AppleLogin
-            clientId="your-client-id"
-            redirectURI="your-redirect-uri"
-            responseType="code"
-            responseMode="query"
-            usePopup={true}
-            onSuccess={handleAppleLoginSuccess}
-            onError={handleAppleLoginFailure}
-            render={(renderProps: any) => (
-              <AppleLoginButton onClick={renderProps.onClick} />
-            )}
-          />
-          <GoogleLoginButton onClick={handleGoogleLogin} />
-        </div>
-      </Modal.Body>
-    </Modal>
-  );
-};
-
-export default LoginModal;
-
-
-Archivo: .\src\components\Navbar.tsx
-import { useState } from "react";
+Archivo: .\react-app\src\components\Navbar.tsx
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import LoginModal from "./loginModal.tsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MyNavbar = () => {
-  const [showLogin, setShowLogin] = useState(false);
-
-  const handleShowLogin = () => setShowLogin(true);
-  const handleCloseLogin = () => setShowLogin(false);
+  const navigate = useNavigate();
 
   return (
-    <>
-      <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
-        <Container>
-          <Navbar.Brand href="#home">
-            <img
-              src="aaipaLogo.png"
-              alt="Logo"
-              height="40"
-              className="d-inline-block align-top"
-            />
-            {" AAIPA Association"}
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
+    <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          <img
+            src="aaipaLogo.png"
+            alt="Logo"
+            height="40"
+            className="d-inline-block align-top"
+          />
+          {" AAIPA Association"}
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-              <Nav.Link as={Link} to="/AboutPage">About Us</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-          <Button variant="primary" onClick={handleShowLogin}>
+            <Nav.Link as={Link} to="/about-us">About Us</Nav.Link>
+            <Nav.Link as={Link} to="/quiz">Quiz</Nav.Link> {/* Enlace al quiz */}
+            <Nav.Link as={Link} to="/forms">Forms</Nav.Link> {/* Enlace al quiz */}
+            <Nav.Link as={Link} to="/biblioteca">Biblioteca</Nav.Link> {/* Nuevo enlace a la biblioteca */}
+          </Nav>
+          <Button variant="primary" onClick={() => navigate('/login')} className="ms-3">
             Join Us
           </Button>
-        </Container>
-      </Navbar>
-
-      <LoginModal show={showLogin} handleClose={handleCloseLogin} />
-    </>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
@@ -391,7 +405,7 @@ export default MyNavbar;
 
 
 
-Archivo: .\src\components\NewsCard.tsx
+Archivo: .\react-app\src\components\NewsCard.tsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Carousel, Container, Card, Button, Row, Col } from "react-bootstrap";
@@ -514,7 +528,7 @@ export default NewsCarousel;
 
 
 
-Archivo: .\src\components\PlansSelector.tsx
+Archivo: .\react-app\src\components\PlansSelector.tsx
 import { useState } from "react";
 import {
   Card,
@@ -524,6 +538,7 @@ import {
   Col,
   ToggleButton,
   ToggleButtonGroup,
+  Table,
   Carousel,
 } from "react-bootstrap";
 import {
@@ -652,6 +667,7 @@ const PlanCard: React.FC<Plan & { isAnnual: boolean }> = ({
 const PlansSection: React.FC = () => {
   const [isAnnual, setIsAnnual] = useState(true);
 
+  // Definir los planes con herencia de características
   const plans: Plan[] = [
     {
       title: "Plan Individual Básico",
@@ -660,31 +676,14 @@ const PlansSection: React.FC = () => {
       savings: "$69",
       features: [
         { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
-        {
-          icon: <FaGraduationCap />,
-          description: "Descuentos en cursos y certificaciones",
-        },
-        {
-          icon: <FaCog />,
-          description:
-            "Acceso a la plataforma de intakes, que genera respuestas automáticas",
-        },
-        {
-          icon: <FaDatabase />,
-          description: "Base de datos de recursos y contratos personalizables",
-        },
-        {
-          icon: <FaLaptop />,
-          description: "Capacitación continua y soporte técnico",
-        },
-        {
-          icon: <FaHandshake />,
-          description: "Aparición en el Directorio Profesional de la AAIP",
-        },
-        {
-          icon: <FaCertificate />,
-          description: "Certificado anual de miembro activo",
-        },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
       ],
     },
     {
@@ -693,11 +692,15 @@ const PlansSection: React.FC = () => {
       annualPrice: "$499 USD al año",
       savings: "$89",
       features: [
-        { icon: <FaBook />, description: "Incluye todo lo del plan básico" },
-        {
-          icon: <FaVideo />,
-          description: "Acceso a webinars exclusivos mensuales",
-        },
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
         { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
         { icon: <FaCog />, description: "Soporte prioritario" },
       ],
@@ -708,37 +711,19 @@ const PlansSection: React.FC = () => {
       annualPrice: "$999 USD al año",
       savings: "$189",
       features: [
-        {
-          icon: <FaUsers />,
-          description:
-            "Acceso multiusuario para varios miembros del equipo (hasta 5)",
-        },
-        {
-          icon: <FaBook />,
-          description: "Incluye todo lo del plan individual premium",
-        },
-        {
-          icon: <FaHandshake />,
-          description: "Consultoría personalizada para la empresa",
-        },
-        {
-          icon: <FaCog />,
-          description:
-            "Acceso a la plataforma de intakes con generación automatizada de respuestas",
-        },
-        {
-          icon: <FaDatabase />,
-          description:
-            "Base de datos de contratos y plantillas personalizables",
-        },
-        {
-          icon: <FaChartLine />,
-          description: "Aparición en el Directorio Profesional",
-        },
-        {
-          icon: <FaCertificate />,
-          description: "Certificado anual de miembro activo",
-        },
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
+        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
+        { icon: <FaCog />, description: "Soporte prioritario" },
+        { icon: <FaUsers />, description: "Acceso multiusuario para varios miembros del equipo" },
+        { icon: <FaHandshake />, description: "Consultoría personalizada" },
       ],
     },
     {
@@ -747,63 +732,48 @@ const PlansSection: React.FC = () => {
       annualPrice: "$1,499 USD al año",
       savings: "$289",
       features: [
-        {
-          icon: <FaUsers />,
-          description: "Acceso multiusuario para hasta 10 usuarios",
-        },
-        {
-          icon: <FaBook />,
-          description: "Incluye todo lo del plan empresarial básico",
-        },
-        {
-          icon: <FaVideo />,
-          description: "Webinars de capacitación corporativa",
-        },
-        {
-          icon: <FaHandshake />,
-          description: "Seminarios exclusivos para empresas",
-        },
-        { icon: <FaCog />, description: "Soporte técnico prioritario" },
-      ],
-    },
-    {
-      title: "Plan Empresarial VIP",
-      price: "$249 USD al mes",
-      annualPrice: "$2,499 USD al año",
-      savings: "$489",
-      features: [
-        { icon: <FaUsers />, description: "Usuarios ilimitados" },
-        {
-          icon: <FaBook />,
-          description: "Incluye todo lo del plan empresarial premium",
-        },
-        {
-          icon: <FaHandshake />,
-          description: "Consultorías exclusivas con expertos",
-        },
-        {
-          icon: <FaLaptop />,
-          description: "Formación personalizada para equipos",
-        },
-        {
-          icon: <FaChartLine />,
-          description:
-            "Descuento del 10% en todas las traducciones y servicios de consultoría",
-        },
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
+        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
+        { icon: <FaCog />, description: "Soporte prioritario" },
+        { icon: <FaUsers />, description: "Acceso multiusuario para varios miembros del equipo" },
+        { icon: <FaHandshake />, description: "Consultoría personalizada" },
+        { icon: <FaUsers />, description: "Hasta 10 usuarios" },
+        { icon: <FaVideo />, description: "Seminarios exclusivos para empresas" },
       ],
     },
   ];
 
-  const chunkArray = <T,>(array: T[], size: number): T[][] => {
-    const chunkedArr = [];
-    for (let i = 0; i < array.length; i += size) {
-      chunkedArr.push(array.slice(i, i + size));
-    }
-    return chunkedArr;
-  };
+  const allFeatures = [
+    "Acceso a contenido exclusivo",
+    "Descuentos en cursos y certificaciones",
+    "Acceso a la plataforma de intakes, que genera respuestas automáticas",
+    "Base de datos de recursos y contratos personalizables",
+    "Capacitación continua y soporte técnico",
+    "Certificación anual de miembro activo",
+    "Descuentos en notarización de documentos",
+    "Descuentos en eventos",
+    "Traducciones a bajo costo",
+    "Plantillas y guías avanzadas",
+    "Soporte prioritario",
+    "Acceso multiusuario para varios miembros del equipo",
+    "Consultoría personalizada",
+    "Hasta 10 usuarios",
+    "Seminarios exclusivos para empresas",
+  ];
 
-  const isMobile = window.innerWidth < 768;
-  const plansChunks = chunkArray(plans, isMobile ? 1 : 3);
+  const featureChecks = plans.map((plan) =>
+    allFeatures.map((feature) =>
+      plan.features.some((f) => f.description === feature)
+    )
+  );
 
   return (
     <section className="py-5 bg-light">
@@ -813,7 +783,7 @@ const PlansSection: React.FC = () => {
           <ToggleButtonGroup
             type="radio"
             name="options"
-            defaultValue={1}
+            defaultValue={2} // Cambiar el valor por defecto a 2 (Anual)
             onChange={(value) => setIsAnnual(value === 2)}
           >
             <ToggleButton
@@ -832,36 +802,37 @@ const PlansSection: React.FC = () => {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-        <Carousel
-          interval={null}
-          indicators={true}
-          nextIcon={
-            <span
-              aria-hidden="true"
-              className="carousel-control-next-icon"
-              style={{ fontSize: "2rem", color: "#000" }}
-            />
-          }
-          prevIcon={
-            <span
-              aria-hidden="true"
-              className="carousel-control-prev-icon"
-              style={{ fontSize: "2rem", color: "#000" }}
-            />
-          }
-        >
-          {plansChunks.map((chunk, index) => (
+        <Carousel interval={null} indicators={true}>
+          {plans.map((plan, index) => (
             <Carousel.Item key={index}>
               <Row className="justify-content-center">
-                {chunk.map((plan, idx) => (
-                  <Col key={idx} xs={12} md={4}>
-                    <PlanCard {...plan} isAnnual={isAnnual} />
-                  </Col>
-                ))}
+                <Col xs={12}>
+                  <PlanCard {...plan} isAnnual={isAnnual} />
+                </Col>
               </Row>
             </Carousel.Item>
           ))}
         </Carousel>
+        <Table striped bordered hover className="mt-5">
+          <thead>
+            <tr>
+              <th>Características</th>
+              {plans.map((plan, index) => (
+                <th key={index}>{plan.title}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {allFeatures.map((feature, index) => (
+              <tr key={index}>
+                <td>{feature}</td>
+                {featureChecks.map((checks, planIndex) => (
+                  <td key={planIndex}>{checks[index] ? "✔️" : ""}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </Container>
     </section>
   );
@@ -871,7 +842,7 @@ export default PlansSection;
 
 
 
-Archivo: .\src\components\results.tsx
+Archivo: .\react-app\src\components\results.tsx
 import { Card, Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 // Datos simulados para los resultados de búsqueda
@@ -967,22 +938,1110 @@ function renderStars(rating: number) {
 export { ImmigrationSearchComponent as Results };
 
 
-Archivo: .\src\pages\AboutPage.tsx
-import { Container, Row, Col } from 'react-bootstrap';
+Archivo: .\react-app\src\components\forms\FormComplete.tsx
+import React, { useState, useEffect } from 'react';
+import api from '../../util/axiosConfig';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
+
+interface FormCompleteProps {
+  formId: string;
+  onComplete: () => void;
+}
+
+const FormComplete: React.FC<FormCompleteProps> = ({ formId, onComplete }) => {
+  const [form, setForm] = useState<any>(null);
+  const [answers, setAnswers] = useState<{ [questionId: number]: string }>({});
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchForm = async () => {
+      try {
+        const response = await api.get(`/forms/${formId}`);
+        setForm(response.data);
+      } catch (err) {
+        setError('Error loading form');
+      }
+    };
+
+    fetchForm();
+  }, [formId]);
+
+  const handleSubmit = async () => {
+    try {
+      await api.post(`/forms/submit/${formId}`, { answers });
+      onComplete();
+    } catch (err) {
+      setError('Error submitting form');
+    }
+  };
+
+  if (!form) return <div>Loading...</div>;
+
+  return (
+    <Container>
+      <h2>{form.title}</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form>
+        {form.questions.map((question: any) => (
+          <Form.Group key={question.id} className="mb-3">
+            <Form.Label>{question.questionText}</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Your answer"
+              value={answers[question.id] || ""}
+              onChange={(e) =>
+                setAnswers({ ...answers, [question.id]: e.target.value })
+              }
+            />
+          </Form.Group>
+        ))}
+        <Button variant="success" onClick={handleSubmit}>
+          Submit Answers
+        </Button>
+      </Form>
+    </Container>
+  );
+};
+
+export default FormComplete;
+
+
+
+Archivo: .\react-app\src\components\forms\FormCreate.tsx
+import React, { useState } from 'react';
+import api from '../../util/axiosConfig';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
+
+interface FormCreateProps {
+  onFormCreated: () => void;
+}
+
+const FormCreate: React.FC<FormCreateProps> = ({ onFormCreated }) => {
+  const [formDetails, setFormDetails] = useState({
+    name: '',
+    title: '',
+    description: '',
+    questions: [{ questionText: '', questionType: 'text' }],
+  });
+  const [error, setError] = useState<string | null>(null);
+
+  const handleCreate = async () => {
+    try {
+      await api.post('/forms', formDetails);
+      onFormCreated();
+    } catch (err) {
+      setError('Error creating form');
+    }
+  };
+
+  return (
+    <Container>
+      <h2>Create Form</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label>Form Name</Form.Label>
+          <Form.Control
+            type="text"
+            value={formDetails.name}
+            onChange={(e) => setFormDetails({ ...formDetails, name: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            value={formDetails.title}
+            onChange={(e) => setFormDetails({ ...formDetails, title: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            value={formDetails.description}
+            onChange={(e) => setFormDetails({ ...formDetails, description: e.target.value })}
+          />
+        </Form.Group>
+        <Button variant="primary" onClick={handleCreate}>
+          Create Form
+        </Button>
+      </Form>
+    </Container>
+  );
+};
+
+export default FormCreate;
+
+
+
+Archivo: .\react-app\src\components\forms\FormDashboard.tsx
+import React from 'react';
+import { ListGroup, Button } from 'react-bootstrap';
+
+interface FormDashboardProps {
+  forms: any[];
+  onDelete: (id: string) => void;
+  onView: (form: any) => void;
+  onEdit: (form: any) => void;
+  onComplete: (form: any) => void;
+  onCreate: () => void;
+}
+
+const FormDashboard: React.FC<FormDashboardProps> = ({ forms, onDelete, onView, onEdit, onComplete, onCreate }) => {
+  return (
+    <div>
+      <div className="text-end mb-3">
+        <Button variant="primary" onClick={onCreate}>Create New Form</Button>
+      </div>
+      <ListGroup>
+        {forms.map((form) => (
+          <ListGroup.Item key={form.id} className="d-flex justify-content-between align-items-center">
+            <div>
+              <h5>{form.title}</h5>
+              <p className="mb-1">{form.description}</p>
+              <small>Created At: {new Date(form.createdAt).toLocaleDateString()}</small>
+            </div>
+            <div>
+              <Button variant="info" onClick={() => onView(form)}>View</Button>{' '}
+              <Button variant="secondary" onClick={() => onEdit(form)}>Edit</Button>{' '}
+              <Button variant="success" onClick={() => onComplete(form)}>Complete</Button>{' '}
+              <Button variant="danger" onClick={() => onDelete(form.id)}>Delete</Button>
+            </div>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    </div>
+  );
+};
+
+export default FormDashboard;
+
+
+
+Archivo: .\react-app\src\components\forms\FormEdit.tsx
+import React, { useState, useEffect } from 'react';
+import api from '../../util/axiosConfig'; // Usar la instancia de Axios configurada
+import { Form, Button, Container, Alert } from 'react-bootstrap';
+
+interface FormEditProps {
+  formId: string;
+  onEditComplete: () => void;
+}
+
+const FormEdit: React.FC<FormEditProps> = ({ formId, onEditComplete }) => {
+  const [form, setForm] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchForm = async () => {
+      try {
+        const response = await api.get(`/forms/${formId}`);
+        setForm(response.data);
+      } catch (err) {
+        setError('Error loading form');
+      }
+    };
+
+    fetchForm();
+  }, [formId]);
+
+  const handleUpdate = async () => {
+    try {
+      await api.patch(`/forms/update/${formId}`, form);
+      onEditComplete();
+    } catch (err) {
+      setError('Error updating form');
+    }
+  };
+
+  if (!form) return <div>Loading...</div>;
+
+  return (
+    <Container className="my-5">
+      <h1>Edit Form</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label>Form Name</Form.Label>
+          <Form.Control
+            type="text"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+        </Form.Group>
+        <Button variant="primary" onClick={handleUpdate}>
+          Update Form
+        </Button>
+      </Form>
+    </Container>
+  );
+};
+
+export default FormEdit;
+
+
+
+Archivo: .\react-app\src\components\forms\FormView.tsx
+import React, { useState, useEffect } from 'react';
+import api from '../../util/axiosConfig';
+import { Container, Alert } from 'react-bootstrap';
+
+interface FormViewProps {
+  formId: string;
+}
+
+const FormView: React.FC<FormViewProps> = ({ formId }) => {
+  const [form, setForm] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchForm = async () => {
+      try {
+        const response = await api.get(`/forms/${formId}`);
+        setForm(response.data);
+      } catch (err) {
+        setError('Error loading form details');
+      }
+    };
+
+    fetchForm();
+  }, [formId]);
+
+  if (error) return <Alert variant="danger">{error}</Alert>;
+  if (!form) return <div>Loading...</div>;
+
+  return (
+    <Container>
+      <h2>{form.title}</h2>
+      <p>{form.description}</p>
+      <h5>Questions:</h5>
+      <ul>
+        {form.questions.map((question: any) => (
+          <li key={question.id}>
+            {question.questionText} - Type: {question.questionType}
+          </li>
+        ))}
+      </ul>
+    </Container>
+  );
+};
+
+export default FormView;
+
+
+
+Archivo: .\react-app\src\components\quiz\Question.tsx
+import React from 'react';
+
+interface QuestionProps {
+  question: string;
+  options: string[];
+  onSelectAnswer: (answer: string) => void;
+  selectedAnswer: string;
+}
+
+const Question: React.FC<QuestionProps> = ({ question, options, onSelectAnswer, selectedAnswer }) => {
+  return (
+    <div className="card mb-4">
+      <div className="card-body">
+        <h5 className="card-title">{question}</h5>
+        <div className="options-list">
+          {options.map((option, index) => (
+            <div key={index} className="form-check">
+              <input
+                type="radio"
+                name="answer"
+                className="form-check-input"
+                checked={selectedAnswer === option}
+                onChange={() => onSelectAnswer(option)}
+                title={option}
+              />
+              <label className="form-check-label">{option}</label>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Question;
+
+
+
+Archivo: .\react-app\src\components\quiz\Result.tsx
+import React from 'react';
+
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+}
+
+interface ResultProps {
+  selectedAnswers: { [key: number]: string };
+  questions: Question[];
+}
+
+const Result: React.FC<ResultProps> = ({ selectedAnswers, questions }) => {
+  const score = questions.reduce((total, question) => {
+    const userAnswer = selectedAnswers[question.id - 1];
+    return userAnswer === question.correctAnswer ? total + 1 : total;
+  }, 0);
+
+  return (
+    <div className="result-container text-center">
+      <h3>Resultados</h3>
+      <p>Tu puntaje final es: {score} de {questions.length}</p>
+      <div className="list-group mt-4">
+        {questions.map((question, index) => (
+          <div
+            key={index}
+            className={`list-group-item ${selectedAnswers[index] === question.correctAnswer ? 'list-group-item-success' : 'list-group-item-danger'}`}
+          >
+            <strong>Pregunta {index + 1}:</strong> {question.question}
+            <br />
+            <strong>Tu respuesta:</strong> {selectedAnswers[index]}
+            <br />
+            <strong>Respuesta correcta:</strong> {question.correctAnswer}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Result;
+
+
+
+Archivo: .\react-app\src\components\quiz\timer.tsx
+import React, { useState, useEffect } from 'react';
+
+interface TimerProps {
+  totalMinutes: number;
+  onTimeUp: () => void;
+}
+
+const Timer: React.FC<TimerProps> = ({ totalMinutes, onTimeUp }) => {
+  const [timeLeft, setTimeLeft] = useState(totalMinutes * 60); // convertir minutos a segundos
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    if (timeLeft === 0) {
+      onTimeUp();
+      return;
+    }
+
+    const timer = setInterval(() => setTimeLeft(timeLeft - 1), 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft, isPaused, onTimeUp]);
+
+  const handlePause = () => {
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 600000); // 10 minutos de pausa opcional
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  return (
+    <div className="d-flex align-items-center mb-3">
+      <h5>Tiempo restante: {formatTime(timeLeft)}</h5>
+      {!isPaused && (
+        <button className="btn btn-warning btn-sm ms-3" onClick={handlePause}>
+          Pausa de 10 minutos
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default Timer;
+
+
+
+Archivo: .\react-app\src\context\AuthContext.tsx
+
+import React, { createContext, useState, useEffect } from 'react';
+import { login } from '../services/apiService';
+
+export const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+
+  const handleLogin = async (email, password) => {
+    const data = await login(email, password);
+    setUser(data);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, handleLogin, handleLogout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+
+Archivo: .\react-app\src\data\questions.ts
+const questionsData = {
+
+    "examModel1": {
+      "questions": [
+        {
+          "id": 1,
+          "question": "¿Cuántas cámaras componen el Congreso de los Estados Unidos?",
+          "options": ["1", "2", "3", "4"],
+          "correctAnswer": "2"
+        },
+        {
+          "id": 2,
+          "question": "¿Cuál de las siguientes ramas es responsable de crear leyes de inmigración?",
+          "options": ["Poder Ejecutivo", "Poder Legislativo", "Poder Judicial", "Departamento de Justicia"],
+          "correctAnswer": "Poder Legislativo"
+        },
+        {
+          "id": 3,
+          "question": "¿Qué papel juega el Poder Ejecutivo en la implementación de las leyes de inmigración?",
+          "options": ["Proponer cambios legislativos", "Implementar y hacer cumplir las leyes de inmigración", "Revisar leyes y declararlas inconstitucionales", "Interpretar las leyes"],
+          "correctAnswer": "Implementar y hacer cumplir las leyes de inmigración"
+        },
+        {
+          "id": 4,
+          "question": "¿Qué agencia del gobierno federal se encarga de supervisar la inmigración y la protección de las fronteras?",
+          "options": ["Departamento de Estado", "DHS (Departamento de Seguridad Nacional)", "FBI", "Departamento de Justicia"],
+          "correctAnswer": "DHS (Departamento de Seguridad Nacional)"
+        },
+        {
+          "id": 5,
+          "question": "El Departamento de Justicia está a cargo de una oficina que maneja los tribunales de inmigración. ¿Cuál es?",
+          "options": ["ICE", "EOIR", "USCIS", "CBP"],
+          "correctAnswer": "EOIR"
+        },
+        {
+          "id": 6,
+          "question": "¿Qué rama del gobierno puede bloquear órdenes ejecutivas relacionadas con inmigración si las considera inconstitucionales?",
+          "options": ["Poder Legislativo", "Poder Ejecutivo", "Poder Judicial", "Departamento de Estado"],
+          "correctAnswer": "Poder Judicial"
+        },
+        {
+          "id": 7,
+          "question": "¿Qué enmienda de la Constitución de los EE. UU. garantiza derechos básicos a todas las personas en EE. UU., independientemente de su estatus migratorio?",
+          "options": ["Primera Enmienda", "Cuarta Enmienda", "Quinta Enmienda", "Decimocuarta Enmienda"],
+          "correctAnswer": "Decimocuarta Enmienda"
+        },
+        {
+          "id": 8,
+          "question": "¿Qué formulario debe utilizarse para solicitar el ajuste de estatus a residente permanente?",
+          "options": ["I-765", "I-485", "I-130", "I-94"],
+          "correctAnswer": "I-485"
+        },
+        {
+          "id": 9,
+          "question": "¿Qué organización establece las regulaciones de las visas de trabajo y estudios para extranjeros en los EE. UU.?",
+          "options": ["Departamento de Seguridad Nacional (DHS)", "Departamento de Justicia", "Departamento de Estado", "Corte Suprema"],
+          "correctAnswer": "Departamento de Seguridad Nacional (DHS)"
+        },
+        {
+          "id": 10,
+          "question": "¿Cuál de las siguientes NO es una función del Poder Judicial en asuntos de inmigración?",
+          "options": ["Resolver disputas de inmigración", "Declarar inconstitucionales las leyes migratorias", "Proponer cambios a las leyes de inmigración", "Evaluar apelaciones en casos de inmigración"],
+          "correctAnswer": "Proponer cambios a las leyes de inmigración"
+        },
+        {
+          "id": 11,
+          "question": "¿Cuál es el papel del Congreso en la creación de leyes de inmigración?",
+          "options": ["Implementar leyes", "Proponer y aprobar nuevas leyes de inmigración", "Revisar las decisiones de USCIS", "Expedir visas y permisos"],
+          "correctAnswer": "Proponer y aprobar nuevas leyes de inmigración"
+        },
+        {
+          "id": 12,
+          "question": "¿Qué agencia dentro del DHS se encarga de proteger las fronteras?",
+          "options": ["ICE", "CBP", "USCIS", "EOIR"],
+          "correctAnswer": "CBP"
+        },
+        {
+          "id": 13,
+          "question": "¿Qué autoridad tiene el Congreso en relación con la inmigración?",
+          "options": ["Implementar las leyes directamente", "Crear y aprobar legislación de inmigración", "Proponer cambios sin la aprobación del presidente", "Supervisar las audiencias de deportación"],
+          "correctAnswer": "Crear y aprobar legislación de inmigración"
+        },
+        {
+          "id": 14,
+          "question": "¿Quién tiene la última palabra sobre la interpretación de las leyes migratorias en los Estados Unidos?",
+          "options": ["USCIS", "El presidente", "El Tribunal Supremo", "El Congreso"],
+          "correctAnswer": "El Tribunal Supremo"
+        },
+        {
+          "id": 15,
+          "question": "¿Cuál de las siguientes NO es una función de CBP (Customs and Border Protection)?",
+          "options": ["Supervisar las fronteras", "Emitir permisos de trabajo", "Inspeccionar personas y bienes en los puertos de entrada", "Aplicar las leyes aduaneras"],
+          "correctAnswer": "Emitir permisos de trabajo"
+        },
+        {
+          "id": 16,
+          "question": "¿Qué formulario utiliza un empleador para verificar el estatus legal de un trabajador en EE. UU.?",
+          "options": ["I-485", "I-94", "I-9", "N-400"],
+          "correctAnswer": "I-9"
+        },
+        {
+          "id": 17,
+          "question": "¿Qué organismo judicial tiene la facultad de manejar casos de deportación y otras decisiones migratorias?",
+          "options": ["USCIS", "EOIR", "ICE", "FBI"],
+          "correctAnswer": "EOIR"
+        },
+        {
+          "id": 18,
+          "question": "¿Cuál es la función principal de la Oficina de Apelaciones Administrativas (AAO)?",
+          "options": ["Revisar y decidir apelaciones en ciertos casos de inmigración", "Procesar solicitudes de asilo", "Emitir permisos de trabajo", "Supervisar audiencias de deportación"],
+          "correctAnswer": "Revisar y decidir apelaciones en ciertos casos de inmigración"
+        },
+        {
+          "id": 19,
+          "question": "¿Quién tiene la autoridad de emitir visas para extranjeros que deseen ingresar a EE. UU.?",
+          "options": ["CBP", "USCIS", "Embajadas y consulados de EE. UU. en el extranjero", "ICE"],
+          "correctAnswer": "Embajadas y consulados de EE. UU. en el extranjero"
+        },
+        {
+          "id": 20,
+          "question": "¿Qué agencia gubernamental tiene la responsabilidad de supervisar las políticas de seguridad nacional, incluyendo inmigración?",
+          "options": ["DHS", "Departamento de Estado", "Departamento de Justicia", "FBI"],
+          "correctAnswer": "DHS"
+        },
+        {
+          "id": 21,
+          "question": "¿Qué agencia es responsable de manejar las solicitudes de asilo dentro de EE. UU.?",
+          "options": ["CBP", "ICE", "USCIS", "EOIR"],
+          "correctAnswer": "USCIS"
+        },
+        {
+          "id": 22,
+          "question": "¿Cuál es la función principal de ICE (Immigration and Customs Enforcement)?",
+          "options": ["Emitir visas y permisos", "Aplicar las leyes de inmigración dentro de EE. UU.", "Supervisar las fronteras terrestres", "Revisar apelaciones de inmigración"],
+          "correctAnswer": "Aplicar las leyes de inmigración dentro de EE. UU."
+        },
+        {
+          "id": 23,
+          "question": "¿Qué agencia del DHS es responsable de revisar la entrada de personas y bienes en los puntos de entrada a EE. UU.?",
+          "options": ["ICE", "EOIR", "CBP", "USCIS"],
+          "correctAnswer": "CBP"
+        },
+        {
+          "id": 24,
+          "question": "¿Qué agencia es responsable de manejar las solicitudes de ciudadanía para inmigrantes?",
+          "options": ["EOIR", "USCIS", "ICE", "CBP"],
+          "correctAnswer": "USCIS"
+        },
+        {
+          "id": 25,
+          "question": "¿Qué organismo dentro del Departamento de Justicia maneja los tribunales de inmigración?",
+          "options": ["USCIS", "ICE", "EOIR", "CBP"],
+          "correctAnswer": "EOIR"
+        },
+        {
+          "id": 26,
+          "question": "¿Cuál de las siguientes agencias NO es parte del Departamento de Seguridad Nacional (DHS)?",
+          "options": ["USCIS", "ICE", "CBP", "EOIR"],
+          "correctAnswer": "EOIR"
+        },
+        {
+          "id": 27,
+          "question": "¿Qué significa el acrónimo 'USCIS'?",
+          "options": ["United States Citizenship and Immigration Service", "United States Custom Immigration Services", "United States Citizenship and Immigration Services", "Universal Service for Citizenship and Immigration"],
+          "correctAnswer": "United States Citizenship and Immigration Services"
+        },
+        {
+          "id": 28,
+          "question": "¿Cuál es la función del Tribunal de Apelaciones de Inmigración (BIA)?",
+          "options": ["Revisar y decidir apelaciones de casos de inmigración", "Emitir decisiones judiciales sobre casos criminales", "Revisar las solicitudes de permisos de trabajo", "Asistir en la emisión de visas de inmigración"],
+          "correctAnswer": "Revisar y decidir apelaciones de casos de inmigración"
+        },
+        {
+          "id": 29,
+          "question": "¿Qué oficina es responsable de la detención y deportación de inmigrantes que están en EE.UU. sin permiso legal?",
+          "options": ["USCIS", "ICE", "CBP", "EOIR"],
+          "correctAnswer": "ICE"
+        },
+        {
+          "id": 30,
+          "question": "¿Cuál de las siguientes agencias maneja las apelaciones de decisiones tomadas por USCIS?",
+          "options": ["CBP", "ICE", "AAO (Administrative Appeals Office)", "EOIR"],
+          "correctAnswer": "AAO (Administrative Appeals Office)"
+        },
+        {
+          "id": 31,
+          "question": "¿Qué función cumple el Departamento de Estado en el proceso de inmigración?",
+          "options": ["Revisar solicitudes de asilo dentro de EE. UU.", "Emitir visas en embajadas y consulados en el extranjero", "Procesar apelaciones de inmigración", "Supervisar la entrada y salida de personas a través de las fronteras"],
+          "correctAnswer": "Emitir visas en embajadas y consulados en el extranjero"
+        },
+        {
+          "id": 32,
+          "question": "¿Qué documento es necesario para que un residente permanente solicite la ciudadanía?",
+          "options": ["I-765", "N-400", "I-485", "I-9"],
+          "correctAnswer": "N-400"
+        },
+        {
+          "id": 33,
+          "question": "¿Qué agencia supervisa los casos en los que los extranjeros solicitan la ciudadanía estadounidense?",
+          "options": ["ICE", "USCIS", "CBP", "EOIR"],
+          "correctAnswer": "USCIS"
+        },
+        {
+          "id": 34,
+          "question": "¿Cuál es la función de la Oficina de Audiencias de Remoción dentro de EOIR?",
+          "options": ["Revisar apelaciones de solicitudes de visa denegadas", "Conducir audiencias de deportación", "Procesar solicitudes de permiso de trabajo", "Revisar peticiones de ajuste de estatus"],
+          "correctAnswer": "Conducir audiencias de deportación"
+        },
+        {
+          "id": 35,
+          "question": "¿Qué agencia es responsable de emitir permisos de trabajo a inmigrantes dentro de EE. UU.?",
+          "options": ["USCIS", "ICE", "CBP", "EOIR"],
+          "correctAnswer": "USCIS"
+        },
+        {
+          "id": 36,
+          "question": "¿Qué formulario se utiliza para solicitar la Acción Diferida para los Llegados en la Infancia (DACA)?",
+          "options": ["I-821D", "I-765", "I-485", "N-400"],
+          "correctAnswer": "I-821D"
+        },
+        {
+          "id": 37,
+          "question": "¿Qué significa el acrónimo 'EOIR'?",
+          "options": ["Executive Office for Immigration Reform", "Executive Office for Immigration Review", "Employment Office of Immigration Review", "Executive Office for Immigration Resources"],
+          "correctAnswer": "Executive Office for Immigration Review"
+        },
+        {
+          "id": 38,
+          "question": "¿Qué agencia es responsable de realizar inspecciones en los puertos de entrada a EE. UU.?",
+          "options": ["ICE", "EOIR", "CBP", "USCIS"],
+          "correctAnswer": "CBP"
+        },
+        {
+          "id": 39,
+          "question": "¿Qué agencia maneja las solicitudes de visas de inmigrantes fuera de los EE. UU.?",
+          "options": ["CBP", "EOIR", "Embajadas y consulados de EE. UU.", "USCIS"],
+          "correctAnswer": "Embajadas y consulados de EE. UU."
+        },
+        {
+          "id": 40,
+          "question": "¿Qué formulario se utiliza para solicitar un permiso de viaje en EE. UU. si el solicitante tiene un estatus de ajuste pendiente?",
+          "options": ["I-765", "I-131", "I-485", "N-400"],
+          "correctAnswer": "I-131"
+        },
+        {
+          "id": 41,
+          "question": "¿Qué agencia maneja las solicitudes de asilo para inmigrantes ya presentes en los EE. UU.?",
+          "options": ["ICE", "EOIR", "CBP", "USCIS"],
+          "correctAnswer": "USCIS"
+        },
+        {
+          "id": 42,
+          "question": "¿Qué agencia tiene la responsabilidad de manejar las solicitudes de inmigrantes para el ajuste de estatus?",
+          "options": ["ICE", "USCIS", "CBP", "EOIR"],
+          "correctAnswer": "USCIS"
+        },
+        {
+          "id": 43,
+          "question": "¿Cuál de las siguientes NO es una visa de inmigrante?",
+          "options": ["H-1B", "EB-3", "IR-1", "EB-5"],
+          "correctAnswer": "H-1B"
+        },
+        {
+          "id": 44,
+          "question": "¿Qué agencia supervisa los casos de deportación que llegan a los tribunales de inmigración?",
+          "options": ["USCIS", "ICE", "EOIR", "CBP"],
+          "correctAnswer": "EOIR"
+        },
+        {
+          "id": 45,
+          "question": "¿Qué tipo de visa se emite para inversores que desean residir permanentemente en EE.UU. a través de una inversión significativa?",
+          "options": ["F-1", "J-1", "EB-5", "O-1"],
+          "correctAnswer": "EB-5"
+        },
+        {
+          "id": 46,
+          "question": "¿Qué agencia maneja las apelaciones en los casos de inmigración cuando una solicitud ha sido denegada?",
+          "options": ["USCIS", "ICE", "EOIR", "AAO (Administrative Appeals Office)"],
+          "correctAnswer": "AAO (Administrative Appeals Office)"
+        },
+        {
+          "id": 47,
+          "question": "¿Qué significa el acrónimo 'DHS'?",
+          "options": ["Department of Human Services", "Department of Homeland Security", "Department of Human Security", "Department of Homeland Services"],
+          "correctAnswer": "Department of Homeland Security"
+        },
+        {
+          "id": 48,
+          "question": "¿Qué agencia tiene la responsabilidad de deportar a los inmigrantes que están presentes en los EE. UU. de manera ilegal?",
+          "options": ["USCIS", "EOIR", "ICE", "CBP"],
+          "correctAnswer": "ICE"
+        },
+        {
+          "id": 49,
+          "question": "¿Cuál de las siguientes NO es una agencia bajo el Departamento de Seguridad Nacional (DHS)?",
+          "options": ["USCIS", "ICE", "CBP", "IRS"],
+          "correctAnswer": "IRS"
+        },
+        {
+          "id": 50,
+          "question": "¿Qué agencia es responsable de revisar las solicitudes de visas en embajadas y consulados fuera de los EE. UU.?",
+          "options": ["USCIS", "Departamento de Estado (DoS)", "CBP", "ICE"],
+          "correctAnswer": "Departamento de Estado (DoS)"
+        },
+        {
+          "id": 51,
+          "question": "¿Cuál de las siguientes es una visa de no inmigrante que permite a los extranjeros estudiar en los EE. UU.?",
+          "options": ["H-1B", "F-1", "EB-3", "K-1"],
+          "correctAnswer": "F-1"
+        },
+        {
+          "id": 52,
+          "question": "¿Cuál es la visa que se otorga a los trabajadores temporales especializados en EE. UU.?",
+          "options": ["F-1", "J-1", "H-1B", "B-2"],
+          "correctAnswer": "H-1B"
+        },
+        {
+          "id": 53,
+          "question": "¿Qué tipo de visa permite la entrada de empresarios o inversores extranjeros que buscan establecer una empresa en EE. UU.?",
+          "options": ["EB-5", "L-1", "H-2A", "E-2"],
+          "correctAnswer": "E-2"
+        },
+        {
+          "id": 54,
+          "question": "¿Cuál de las siguientes visas es utilizada por los trabajadores agrícolas temporales?",
+          "options": ["L-1", "H-2A", "F-1", "O-1"],
+          "correctAnswer": "H-2A"
+        },
+        {
+          "id": 55,
+          "question": "¿Qué visa permite la reunificación familiar para los cónyuges de ciudadanos estadounidenses?",
+          "options": ["IR-1", "B-2", "F-2A", "H-1B"],
+          "correctAnswer": "IR-1"
+        },
+        {
+          "id": 56,
+          "question": "¿Qué visa se otorga a los estudiantes de intercambio que participan en programas educativos en EE.UU.?",
+          "options": ["F-1", "B-1", "J-1", "L-1"],
+          "correctAnswer": "J-1"
+        },
+        {
+          "id": 57,
+          "question": "¿Cuál es la visa diseñada para artistas, atletas y personas con habilidades extraordinarias?",
+          "options": ["O-1", "P-1", "Q-1", "F-1"],
+          "correctAnswer": "O-1"
+        },
+        {
+          "id": 58,
+          "question": "¿Cuál de las siguientes NO es una visa de inmigrante?",
+          "options": ["EB-5", "F-1", "IR-1", "EB-3"],
+          "correctAnswer": "F-1"
+        },
+        {
+          "id": 59,
+          "question": "¿Qué tipo de visa permite la entrada de visitantes por razones de turismo o negocios por corto plazo?",
+          "options": ["B-2", "J-1", "L-1", "O-1"],
+          "correctAnswer": "B-2"
+        },
+        {
+          "id": 60,
+          "question": "¿Cuál es el propósito de la visa K-1?",
+          "options": ["Permitir que el prometido(a) de un ciudadano estadounidense ingrese a EE. UU. para casarse", "Permitir a un inversor establecer una empresa en EE. UU.", "Otorgar residencia permanente a cónyuges de residentes permanentes", "Permitir la entrada a trabajadores temporales"],
+          "correctAnswer": "Permitir que el prometido(a) de un ciudadano estadounidense ingrese a EE. UU. para casarse"
+        },
+        {
+          "id": 61,
+          "question": "¿Qué visa se otorga a personas que desean participar en programas culturales de intercambio en EE. UU.?",
+          "options": ["B-2", "J-1", "H-2B", "F-1"],
+          "correctAnswer": "J-1"
+        },
+        {
+          "id": 62,
+          "question": "¿Qué visa permite a los trabajadores especializados transferidos dentro de una misma empresa ingresar a EE. UU.?",
+          "options": ["L-1", "E-2", "H-1B", "F-1"],
+          "correctAnswer": "L-1"
+        },
+        {
+          "id": 63,
+          "question": "¿Qué visa permite la entrada de trabajadores temporales no especializados para trabajos agrícolas?",
+          "options": ["H-2A", "H-1B", "L-1", "F-1"],
+          "correctAnswer": "H-2A"
+        },
+        {
+          "id": 64,
+          "question": "¿Qué visa permite a un ciudadano estadounidense traer a su cónyuge que aún reside en el extranjero?",
+          "options": ["IR-1", "F-2A", "K-3", "H-1B"],
+          "correctAnswer": "K-3"
+        },
+        {
+          "id": 65,
+          "question": "¿Cuál es la visa utilizada por turistas que desean visitar EE.UU. por placer?",
+          "options": ["B-2", "L-1", "F-1", "J-1"],
+          "correctAnswer": "B-2"
+        },
+        {
+          "id": 66,
+          "question": "¿Qué visa es utilizada por las empresas para traer a profesionales que trabajen temporalmente en EE. UU.?",
+          "options": ["H-1B", "B-2", "O-1", "K-1"],
+          "correctAnswer": "H-1B"
+        },
+        {
+          "id": 67,
+          "question": "¿Qué visa se utiliza para permitir la entrada temporal de visitantes de negocios a EE. UU.?",
+          "options": ["F-1", "B-1", "O-1", "H-2B"],
+          "correctAnswer": "B-1"
+        },
+        {
+          "id": 68,
+          "question": "¿Qué visa de no inmigrante permite la entrada de empleados transferidos dentro de una empresa multinacional?",
+          "options": ["L-1", "E-2", "F-1", "K-1"],
+          "correctAnswer": "L-1"
+        },
+        {
+          "id": 69,
+          "question": "¿Qué visa de inmigrante permite a los familiares inmediatos de ciudadanos estadounidenses obtener la residencia permanente?",
+          "options": ["EB-3", "IR-1", "F-1", "H-1B"],
+          "correctAnswer": "IR-1"
+        },
+        {
+          "id": 70,
+          "question": "¿Qué visa permite la entrada de trabajadores especializados en el área de cultura y deportes a los EE. UU.?",
+          "options": ["Q-1", "P-1", "O-1", "J-1"],
+          "correctAnswer": "P-1"
+        },
+        {
+          "id": 71,
+          "question": "¿Cuál de las siguientes acciones está prohibida para un preparador de formularios de inmigración?",
+          "options": ["Ayudar en la organización de los documentos", "Explicar los términos básicos del formulario", "Proporcionar asesoría legal", "Cobrar una tarifa por los servicios prestados"],
+          "correctAnswer": "Proporcionar asesoría legal"
+        },
+        {
+          "id": 72,
+          "question": "¿Qué debe hacer un preparador si descubre que un cliente ha proporcionado información incorrecta en un formulario?",
+          "options": ["Proseguir con la presentación", "Informar al cliente que debe corregir la información", "Modificar la información incorrecta", "Ignorar la discrepancia"],
+          "correctAnswer": "Informar al cliente que debe corregir la información"
+        },
+        {
+          "id": 73,
+          "question": "¿Qué límite ético tiene un preparador de formularios de inmigración?",
+          "options": ["Ayudar a completar los formularios", "Proporcionar asesoría sobre cómo presentar documentos", "Explicar los términos básicos del formulario", "Proporcionar asesoría legal al cliente"],
+          "correctAnswer": "Proporcionar asesoría legal al cliente"
+        },
+        {
+          "id": 74,
+          "question": "¿Qué debe hacer un preparador si el cliente solicita que se omita información importante en un formulario?",
+          "options": ["Seguir las instrucciones del cliente", "Informar al cliente de las consecuencias legales y negarse a completar el formulario", "Continuar con el formulario sin cambios", "Llamar a USCIS para denunciar al cliente"],
+          "correctAnswer": "Informar al cliente de las consecuencias legales y negarse a completar el formulario"
+        },
+        {
+          "id": 75,
+          "question": "¿Qué acción está permitida para un preparador de formularios de inmigración?",
+          "options": ["Asesorar sobre las opciones de inmigración del cliente", "Proporcionar asistencia en la preparación de formularios", "Ofrecer servicios legales", "Ayudar al cliente a elaborar un plan legal"],
+          "correctAnswer": "Proporcionar asistencia en la preparación de formularios"
+        },
+        {
+          "id": 76,
+          "question": "¿Cuál es la responsabilidad de un preparador de formularios de inmigración al recibir documentación incompleta de un cliente?",
+          "options": ["Completar el formulario con la información disponible", "Aconsejar al cliente que presente el formulario incompleto", "Informar al cliente que debe reunir toda la documentación correcta antes de proceder", "Proseguir con el caso sin más preguntas"],
+          "correctAnswer": "Informar al cliente que debe reunir toda la documentación correcta antes de proceder"
+        },
+        {
+          "id": 77,
+          "question": "¿Qué acción está prohibida para un preparador de formularios en relación con el manejo de los fondos del cliente?",
+          "options": ["Cobrar una tarifa por servicios de preparación de formularios", "Recaudar y distribuir fondos para cubrir tarifas de inmigración", "Proporcionar recibos por servicios prestados", "Ayudar al cliente a llenar formularios relacionados con tarifas de inmigración"],
+          "correctAnswer": "Recaudar y distribuir fondos para cubrir tarifas de inmigración"
+        },
+        {
+          "id": 78,
+          "question": "¿Qué debe hacer un preparador de formularios si el cliente solicita asesoría legal en medio del proceso?",
+          "options": ["Proporcionar la asesoría legal necesaria", "Referir al cliente a un abogado de inmigración", "Continuar con la preparación del formulario", "Dar su opinión sobre el caso"],
+          "correctAnswer": "Referir al cliente a un abogado de inmigración"
+        },
+        {
+          "id": 79,
+          "question": "¿Qué debe hacer un preparador si el cliente proporciona información falsa para un formulario de inmigración?",
+          "options": ["Proseguir como si no hubiera ocurrido", "Informar al cliente de las consecuencias legales y negarse a continuar", "Completar el formulario con la información proporcionada", "Ignorar la situación si no afecta el caso"],
+          "correctAnswer": "Informar al cliente de las consecuencias legales y negarse a continuar"
+        },
+        {
+          "id": 80,
+          "question": "¿Cuál es la prioridad de un preparador de formularios de inmigración al representar a un cliente?",
+          "options": ["Completar el caso lo más rápido posible", "Cobrar la tarifa completa antes de empezar", "Asegurarse de que el caso se presente de manera ética y legal", "Evitar problemas con las autoridades"],
+          "correctAnswer": "Asegurarse de que el caso se presente de manera ética y legal"
+        },
+        {
+          "id": 81,
+          "question": "¿Qué debe hacer un preparador si el cliente quiere cambiar la información proporcionada en un formulario después de que se ha enviado a USCIS?",
+          "options": ["Ignorar la solicitud del cliente", "Aconsejar al cliente que se comunique con USCIS para hacer el cambio", "Cambiar la información y enviar una nueva solicitud", "Llamar directamente a USCIS para modificar el formulario"],
+          "correctAnswer": "Aconsejar al cliente que se comunique con USCIS para hacer el cambio"
+        },
+        {
+          "id": 82,
+          "question": "¿Qué debe hacer un preparador si un cliente solicita asesoría sobre la elegibilidad de su solicitud de inmigración?",
+          "options": ["Proporcionar asesoría basada en su experiencia", "Referir al cliente a un abogado o especialista legal", "Dar una opinión general sin comprometerse", "Modificar el formulario para ajustarlo a la situación del cliente"],
+          "correctAnswer": "Referir al cliente a un abogado o especialista legal"
+        },
+        {
+          "id": 83,
+          "question": "¿Qué acción está permitida para un preparador de formularios de inmigración en relación con el asesoramiento de casos de deportación?",
+          "options": ["Proporcionar detalles legales sobre la deportación", "Ayudar al cliente a redactar documentos relacionados con la deportación", "Representar al cliente en la corte de inmigración", "Proporcionar asesoría legal sobre las leyes de deportación"],
+          "correctAnswer": "Ayudar al cliente a redactar documentos relacionados con la deportación"
+        },
+        {
+          "id": 84,
+          "question": "¿Qué debe hacer un preparador si un cliente le solicita que incluya información no verificada en un formulario?",
+          "options": ["Incluir la información según las instrucciones del cliente", "Informar al cliente que solo se debe incluir información verificada", "Modificar el formulario y dejar constancia de que la información es incierta", "Continuar sin cambios, ya que es responsabilidad del cliente"],
+          "correctAnswer": "Informar al cliente que solo se debe incluir información verificada"
+        },
+        {
+          "id": 85,
+          "question": "¿Cuál es la función principal de un preparador de formularios de inmigración?",
+          "options": ["Asesorar legalmente al cliente en todos los aspectos del proceso", "Ayudar al cliente a completar correctamente los formularios de inmigración", "Interpretar las leyes de inmigración para el cliente", "Representar al cliente ante USCIS"],
+          "correctAnswer": "Ayudar al cliente a completar correctamente los formularios de inmigración"
+        },
+        {
+          "id": 86,
+          "question": "¿Qué debe hacer un preparador si descubre que ha cometido un error en la preparación de un formulario de inmigración?",
+          "options": ["Ignorar el error si no afecta el proceso", "Informar al cliente y corregir el error antes de presentarlo", "Esperar a que USCIS lo detecte", "Modificar el formulario sin notificar al cliente"],
+          "correctAnswer": "Informar al cliente y corregir el error antes de presentarlo"
+        },
+        {
+          "id": 87,
+          "question": "¿Qué es lo que un preparador de formularios de inmigración debe evitar hacer para no violar los códigos de ética?",
+          "options": ["Cobrar tarifas por servicios", "Ayudar al cliente a organizar los documentos", "Ofrecer asesoría legal a los clientes", "Explicar los formularios al cliente"],
+          "correctAnswer": "Ofrecer asesoría legal a los clientes"
+        },
+        {
+          "id": 88,
+          "question": "¿Qué debe hacer un preparador si el cliente le pide que modifique un formulario para que USCIS no detecte un detalle importante?",
+          "options": ["Seguir las instrucciones del cliente", "Modificar el formulario solo si el cliente lo pide por escrito", "Negarse a modificar el formulario e informar al cliente de las consecuencias legales", "Consultar a un abogado de inmigración sobre cómo proceder"],
+          "correctAnswer": "Negarse a modificar el formulario e informar al cliente de las consecuencias legales"
+        },
+        {
+          "id": 89,
+          "question": "¿Qué documento debe recibir el cliente después de que un preparador complete un formulario de inmigración?",
+          "options": ["Una copia del formulario completado", "Una carta de recomendación del preparador", "Un recibo detallado de los servicios", "Un certificado de aprobación del formulario"],
+          "correctAnswer": "Una copia del formulario completado"
+        },
+        {
+          "id": 90,
+          "question": "¿Qué debe hacer un preparador si el cliente tiene dudas sobre las consecuencias legales de su solicitud de inmigración?",
+          "options": ["Proporcionar su opinión personal sobre el caso", "Explicar las posibles consecuencias basadas en su experiencia", "Remitir al cliente a un abogado de inmigración para que reciba asesoría legal adecuada", "Ayudar al cliente a investigar el tema en línea"],
+          "correctAnswer": "Remitir al cliente a un abogado de inmigración para que reciba asesoría legal adecuada"
+        },
+        {
+          "id": 91,
+          "question": "¿Qué oficina revisa y procesa las solicitudes de ciudadanía en los Estados Unidos?",
+          "options": ["EOIR", "ICE", "USCIS", "CBP"],
+          "correctAnswer": "USCIS"
+        },
+        {
+          "id": 92,
+          "question": "¿Qué formulario debe presentar un solicitante para obtener un permiso de trabajo si tiene un estatus de asilo pendiente?",
+          "options": ["I-485", "I-765", "I-131", "N-400"],
+          "correctAnswer": "I-765"
+        },
+        {
+          "id": 93,
+          "question": "¿Qué agencia del gobierno de EE. UU. maneja la emisión de visas temporales para no inmigrantes?",
+          "options": ["USCIS", "CBP", "ICE", "Embajadas y consulados de EE. UU. en el extranjero"],
+          "correctAnswer": "Embajadas y consulados de EE. UU. en el extranjero"
+        },
+        {
+          "id": 94,
+          "question": "¿Qué formulario debe completar un solicitante para pedir la reunificación familiar si es residente permanente?",
+          "options": ["I-130", "I-485", "I-765", "N-600"],
+          "correctAnswer": "I-130"
+        },
+        {
+          "id": 95,
+          "question": "¿Qué visa es necesaria para que un empleador estadounidense traiga a un trabajador temporalmente calificado a los EE. UU.?",
+          "options": ["H-2A", "H-1B", "F-1", "J-1"],
+          "correctAnswer": "H-1B"
+        },
+        {
+          "id": 96,
+          "question": "¿Qué documento es necesario para un residente permanente que quiere solicitar la ciudadanía estadounidense?",
+          "options": ["I-131", "I-485", "N-400", "I-765"],
+          "correctAnswer": "N-400"
+        },
+        {
+          "id": 97,
+          "question": "¿Qué visa es utilizada para los cónyuges de ciudadanos estadounidenses que buscan residencia permanente?",
+          "options": ["K-1", "F-1", "IR-1", "H-1B"],
+          "correctAnswer": "IR-1"
+        },
+        {
+          "id": 98,
+          "question": "¿Qué agencia se encarga de manejar las audiencias de deportación?",
+          "options": ["EOIR", "ICE", "USCIS", "CBP"],
+          "correctAnswer": "EOIR"
+        },
+        {
+          "id": 99,
+          "question": "¿Qué documento se necesita para solicitar la residencia permanente por motivos de empleo en los EE. UU.?",
+          "options": ["I-130", "I-765", "I-485", "N-400"],
+          "correctAnswer": "I-485"
+        },
+        {
+          "id": 100,
+          "question": "¿Qué agencia tiene la autoridad para emitir tarjetas verdes (Green Cards) a inmigrantes que solicitan la residencia permanente en los EE. UU.?",
+          "options": ["USCIS", "CBP", "EOIR", "ICE"],
+          "correctAnswer": "USCIS"
+        }
+      ]
+    }
+  }
+  
+  export default questionsData;
+
+
+Archivo: .\react-app\src\pages\AboutPage.tsx
+import React from 'react';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import '../styles/AboutPage.css';  // Importa el archivo de estilos
 
 const AboutPage: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Container className="py-5">
       {/* Welcome Section */}
-      <Row className="mb-4">
+      <Row className="mb-4 text-center">
         <Col>
-          <h2 className="text-center">Welcome to the American Association of Immigration Preparers (AAIP)</h2>
-          <p className="lead text-center mt-3">
-            At AAIP, our mission is to empower and professionalize the work of immigration preparers across the United States.
-            We firmly believe that access to quality, ethical, and affordable immigration services is crucial for immigrant
-            communities seeking a better life. That’s why we have created a platform for training, certification, and continuous
-            support, designed to ensure that our members are equipped with the knowledge and tools needed to make a real difference
-            in their clients’ lives.
+          <h2 className="display-4 mb-3">{t('welcome')}</h2>
+          <p className="lead">
+            {t('mission')}
           </p>
         </Col>
       </Row>
@@ -990,62 +2049,59 @@ const AboutPage: React.FC = () => {
       {/* Who Are We Section */}
       <Row className="mb-5">
         <Col md={12}>
-          <h3>Who Are We?</h3>
-          <p>
-            We are the first organization in the United States exclusively focused on providing specialized training and certification 
-            for immigration preparers. Our vision is to create a standard of excellence in the industry, ensuring that every immigrant 
-            has access to properly trained professionals who uphold the highest standards of ethics and quality.
-          </p>
+          <Card className="shadow-sm border-0 p-4">
+            <h3 className="mb-3 text-primary">{t('whoAreWe')}</h3>
+            <p>{t('whoAreWeText')}</p>
+          </Card>
         </Col>
       </Row>
 
       {/* Our Commitment Section */}
       <Row className="mb-5">
         <Col md={12}>
-          <h3>Our Commitment</h3>
-          <ul>
-            <li>Providing updated education and training so that our members are always up to date with immigration laws and regulations.</li>
-            <li>Promoting ethical and responsible practices, ensuring that every preparer offers reliable and accessible services.</li>
-            <li>Building a community of professionals where our members can collaborate, learn from one another, and grow together.</li>
-            <li>Offering professional development opportunities, providing tools to help our members achieve long-term success.</li>
-          </ul>
+          <Card className="shadow-sm border-0 p-4">
+            <h3 className="mb-3 text-primary">{t('ourCommitment')}</h3>
+            <ul className="list-unstyled">
+              <li className="mb-2">{t('commitment1')}</li>
+              <li className="mb-2">{t('commitment2')}</li>
+              <li className="mb-2">{t('commitment3')}</li>
+              <li className="mb-2">{t('commitment4')}</li>
+            </ul>
+          </Card>
         </Col>
       </Row>
 
       {/* Our Services Section */}
       <Row className="mb-5">
         <Col md={12}>
-          <h3>Our Services</h3>
-          <ul>
-            <li>
-              <strong>Professional Certification:</strong> The AAIP offers a rigorous certification program that ensures our members possess 
-              the necessary knowledge to handle the complex immigration processes.
-            </li>
-            <li>
-              <strong>Ongoing Training:</strong> From webinars to in-person workshops, we provide continuous training to keep members updated 
-              on the constant changes in immigration law.
-            </li>
-            <li>
-              <strong>Support and Collaboration Network:</strong> Connect with other immigration preparers, attorneys, and industry 
-              professionals through our exclusive networking platform.
-            </li>
-            <li>
-              <strong>Access to Exclusive Resources:</strong> We provide our members with practical guides, document templates, and access 
-              to experts for case-specific questions.
-            </li>
-          </ul>
+          <Card className="shadow-sm border-0 p-4">
+            <h3 className="mb-3 text-primary">{t('ourServices')}</h3>
+            <ul className="list-unstyled">
+              <li className="mb-3">
+                <strong>{t('service1Title')}</strong>: {t('service1Text')}
+              </li>
+              <li className="mb-3">
+                <strong>{t('service2Title')}</strong>: {t('service2Text')}
+              </li>
+              <li className="mb-3">
+                <strong>{t('service3Title')}</strong>: {t('service3Text')}
+              </li>
+              <li className="mb-3">
+                <strong>{t('service4Title')}</strong>: {t('service4Text')}
+              </li>
+            </ul>
+          </Card>
         </Col>
       </Row>
 
       {/* Join Us Section */}
-      <Row className="mb-5 text-center">
+      <Row className="text-center">
         <Col>
-          <h3>Join the AAIP Community</h3>
-          <p className="lead">
-            By joining the AAIP, you become part of an organization that leads the way in professionalizing immigration preparers. 
-            Whether you are an experienced preparer or just starting your career, you will find in AAIP the support, development 
-            opportunities, and recognition you need to advance and make a significant contribution to the immigrant community.
-          </p>
+          <h3 className="mb-3 text-primary">{t('joinUs')}</h3>
+          <p className="lead mb-4">{t('joinUsText')}</p>
+          <Button variant="success" size="lg" onClick={() => window.location.href='/login'}>
+            {t('joinNow')}
+          </Button>
         </Col>
       </Row>
     </Container>
@@ -1053,5 +2109,484 @@ const AboutPage: React.FC = () => {
 };
 
 export default AboutPage;
+
+
+
+Archivo: .\react-app\src\pages\BibliotecaPage.tsx
+// src/pages/BibliotecaPage.tsx
+import React from 'react';
+import Biblioteca from '../components/Biblioteca'; // Asegúrate de que el path sea correcto
+
+const BibliotecaPage: React.FC = () => {
+  return (
+    <div>
+      <Biblioteca />
+    </div>
+  );
+};
+
+export default BibliotecaPage;
+
+
+
+Archivo: .\react-app\src\pages\forms.tsx
+import React, { useState, useEffect } from 'react';
+import api from '../util/axiosConfig'; // Importa la instancia de Axios configurada
+import { Container, Modal, Spinner, Alert } from 'react-bootstrap';
+import FormCreate from '../components/forms/FormCreate';
+import FormEdit from '../components/forms/FormEdit';
+import FormComplete from '../components/forms/FormComplete';
+import FormDashboard from '../components/forms/FormDashboard';
+import FormView from '../components/forms/FormView';
+
+const FormsPage: React.FC = () => {
+    const [forms, setForms] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedForm, setSelectedForm] = useState<any>(null);
+    const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
+    const [showCompleteModal, setShowCompleteModal] = useState<boolean>(false);
+    const [showViewModal, setShowViewModal] = useState<boolean>(false);
+
+    useEffect(() => {
+        fetchForms();
+    }, []);
+
+    const fetchForms = async () => {
+        try {
+            const response = await api.get('/forms');
+            setForms(response.data);
+        } catch (err) {
+            setError('Error fetching forms');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        try {
+            await api.delete(`/forms/${id}`);
+            setForms(forms.filter(form => form.id !== id));
+        } catch (err) {
+            setError('Error deleting form');
+        }
+    };
+
+    const handleCreateSuccess = () => {
+        setShowCreateModal(false);
+        fetchForms();
+    };
+
+    const handleEditSuccess = () => {
+        setShowEditModal(false);
+        fetchForms();
+    };
+
+    const handleCompleteSuccess = () => {
+        setShowCompleteModal(false);
+    };
+
+    const handleView = (form: any) => {
+        setSelectedForm(form);
+        setShowViewModal(true);
+    };
+
+    if (loading) return (
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+            <Spinner animation="border" variant="primary" />
+        </div>
+    );
+
+    return (
+        <Container className="my-5">
+            <h1 className="text-center">Forms Dashboard</h1>
+            {error && (
+                <Alert variant="danger" onClose={() => setError(null)} dismissible>
+                    {error}
+                </Alert>
+            )}
+            <FormDashboard
+                forms={forms}
+                onDelete={handleDelete}
+                onView={handleView}
+                onEdit={(form) => { setSelectedForm(form); setShowEditModal(true); }}
+                onComplete={(form) => { setSelectedForm(form); setShowCompleteModal(true); }}
+                onCreate={() => setShowCreateModal(true)}
+            />
+
+            <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create New Form</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <FormCreate onFormCreated={handleCreateSuccess} />
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Form</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedForm && (
+                        <FormEdit formId={selectedForm.id} onEditComplete={handleEditSuccess} />
+                    )}
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showCompleteModal} onHide={() => setShowCompleteModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Complete Form</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedForm && (
+                        <FormComplete formId={selectedForm.id} onComplete={handleCompleteSuccess} />
+                    )}
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showViewModal} onHide={() => setShowViewModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Form Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedForm && <FormView formId={selectedForm.id} />}
+                </Modal.Body>
+            </Modal>
+        </Container>
+    );
+};
+
+export default FormsPage;
+
+
+
+Archivo: .\react-app\src\pages\HomePage.tsx
+// HomePage.tsx
+import Hero from "../components/Hero";
+import NewsCarousel from "../components/NewsCard";
+import PlansSection from "../components/PlansSelector";
+import Results from "../components/results";
+import CoursesAndServices from "../components/CoursesAndServices";
+
+const HomePage = () => (
+  <div>
+    <Hero />
+    <NewsCarousel />
+    <PlansSection />
+    <Results />
+    <CoursesAndServices />
+  </div>
+);
+
+export default HomePage;
+
+
+
+Archivo: .\react-app\src\pages\login.tsx
+import React, { useContext, useState } from 'react';
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { AuthContext } from '../context/AuthContext';
+import '../styles/login.css';
+
+const Login = () => {
+  const { handleLogin } = useContext(AuthContext);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await handleLogin(email, password);
+  };
+
+  return (
+    <div className="login-page d-flex align-items-center min-vh-100">
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={6} lg={5}>
+            <div className="login-card p-4 rounded shadow-sm">
+              <h2 className="text-center mb-4">Login</h2>
+              <Form onSubmit={onSubmit}>
+                <Form.Group controlId="formBasicEmail" className="mb-3">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicPassword" className="mb-4">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Button variant="primary" type="submit" className="w-100 mb-3">
+                  Login
+                </Button>
+              </Form>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default Login;
+
+
+
+Archivo: .\react-app\src\pages\quiz.tsx
+import { useState } from "react";
+import Question from "../components/quiz/Question";
+import Result from "../components/quiz/Result";
+import Timer from "../components/quiz/timer";
+import questionsData from '../data/questions';
+import { Button, Modal } from "react-bootstrap";
+import "../styles/quiz.css";
+
+const Quiz: React.FC = () => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
+  const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [showQuestionPanel, setShowQuestionPanel] = useState(false);
+
+  const handleAnswerSelect = (answer: string) => {
+    setSelectedAnswers({ ...selectedAnswers, [currentQuestionIndex]: answer });
+  };
+
+  const nextQuestion = () => {
+    if (currentQuestionIndex < questionsData.examModel1.questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      setIsQuizFinished(true);
+    }
+  };
+
+  const previousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  const handleTimeUp = () => {
+    setIsQuizFinished(true);
+  };
+
+  const toggleQuestionPanel = () => {
+    setShowQuestionPanel(!showQuestionPanel);
+  };
+
+  const currentQuestion = questionsData.examModel1.questions[currentQuestionIndex];
+
+  return (
+    <div className="quiz-page d-flex flex-column align-items-center p-4">
+      <Timer totalMinutes={120} onTimeUp={handleTimeUp} />
+      <Button variant="secondary" className="my-3" onClick={toggleQuestionPanel}>
+        Ver Estado de Preguntas
+      </Button>
+      <Modal show={showQuestionPanel} onHide={toggleQuestionPanel} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Estado de las Preguntas</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="question-grid">
+            {questionsData.examModel1.questions.map((_, index) => (
+              <div
+                key={index}
+                className={`question-indicator ${selectedAnswers[index] ? 'answered' : 'unanswered'}`}
+                onClick={() => {
+                  setCurrentQuestionIndex(index);
+                  toggleQuestionPanel();
+                }}
+              >
+                {index + 1}
+              </div>
+            ))}
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {!isQuizFinished ? (
+        <div className="question-container">
+          <Question
+            question={currentQuestion.question}
+            options={currentQuestion.options}
+            onSelectAnswer={handleAnswerSelect}
+            selectedAnswer={selectedAnswers[currentQuestionIndex]}
+          />
+          <div className="d-flex justify-content-between mt-3">
+            <button className="btn btn-secondary" onClick={previousQuestion} disabled={currentQuestionIndex === 0}>
+              Atrás
+            </button>
+            <button className="btn btn-primary" onClick={nextQuestion}>
+              {currentQuestionIndex < questionsData.examModel1.questions.length - 1 ? 'Siguiente' : 'Finalizar'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <Result selectedAnswers={selectedAnswers} questions={questionsData.examModel1.questions} />
+      )}
+    </div>
+  );
+};
+
+export default Quiz;
+
+
+
+Archivo: .\react-app\src\services\apiService.ts
+
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+const apiService = axios.create({
+  baseURL: API_URL,
+});
+
+export const login = async (email, password) => {
+  const response = await apiService.post('/auth/login', { email, password });
+  return response.data;
+};
+
+export const googleAuth = async () => {
+  window.location.href = `${API_URL}/auth/google`;
+};
+
+export const appleAuth = async () => {
+  window.location.href = `${API_URL}/auth/apple`;
+};
+
+
+Archivo: .\react-app\src\styles\AboutPage.css
+.container {
+    max-width: 800px;
+  }
+  
+  .card {
+    border-radius: 10px;
+  }
+  
+  h2, h3 {
+    font-weight: 600;
+  }
+  
+  .list-unstyled li::before {
+    content: "• ";
+    color: #0d6efd; /* Azul Bootstrap */
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+  
+  .lead {
+    color: #555;
+  }
+  
+
+
+Archivo: .\react-app\src\styles\login.css
+/* Login.css */
+.login-page {
+    background-color: #f8f9fa; /* Fondo claro */
+  }
+  
+  .login-card {
+    background: #ffffff;
+    border-radius: 10px;
+  }
+  
+  h2 {
+    font-weight: 600;
+    color: #343a40;
+  }
+  
+  .social-login .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+
+
+Archivo: .\react-app\src\styles\quiz.css
+/* Quiz.css */
+
+.quiz-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .question-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .question-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .question-indicator.answered {
+    background-color: #283fa7; /* Verde para respondidas */
+  }
+  
+  .question-indicator.unanswered {
+    background-color: #8d8d8d; /* Rojo para no respondidas */
+  }
+  
+  .question-container {
+    max-width: 600px;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .timer-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }  
+  
+  h5 {
+    margin-bottom: 20px;
+  }
+  
+
+
+Archivo: .\react-app\src\util\axiosConfig.ts
+Remove the existing code
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'https://api.icegeneralcontractors.com/api',
+});
+
+export default api;
 
 
