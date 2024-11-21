@@ -1,5 +1,4 @@
 import axios from 'axios';
-// Remove the import statement for process
 
 const API_URL = 'https://api.icegeneralcontractors.com/api';
 
@@ -8,8 +7,20 @@ const apiService = axios.create({
 });
 
 export const login = async (email: string, password: string) => {
-  const response = await apiService.post('/auth/login', { email, password });
-  return response.data;
+  try {
+    const response = await apiService.get(`/users/email/${email}`);
+    const user = response.data;
+    // Validate the password (assuming the server returns the hashed password)
+    const isPasswordValid = password === user.password; // Replace with actual validation logic
+    if (isPasswordValid) {
+      return user;
+    } else {
+      throw new Error('Invalid password');
+    }
+  } catch (error) {
+    console.error('Login failed', error.response ? error.response.data : error.message);
+    throw new Error('Login failed');
+  }
 };
 
 export const googleAuth = async () => {

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { login as loginService, googleAuth } from '../services/apiService';
+import { login as loginService, googleAuth, appleAuth } from '../services/apiService';
 
 interface User {
   email: string;
@@ -13,6 +13,7 @@ interface AuthContextType {
   logout: () => void; 
   handleLogin: (email: string, password: string) => Promise<void>;
   handleGoogleLogin: () => void;
+  handleAppleLogin: () => void;
   handleCreateUser: () => void;
 }
 
@@ -22,6 +23,7 @@ export const AuthContext = createContext<AuthContextType>({
   logout: () => {},
   handleLogin: async () => {},
   handleGoogleLogin: () => {},
+  handleAppleLogin: () => {},
   handleCreateUser: () => {},
 });
 
@@ -40,23 +42,10 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await loginService(email, password);
-      const { access_token } = response;
-
-      // Decodificar el token para obtener los datos del usuario
-      const decodedToken: any = parseJwt(access_token);
-
-      const userData: User = {
-        email: decodedToken.email,
-        role: decodedToken.role,
-        // Agrega otros campos si los hay
-      };
-
+      const user = await loginService(email, password);
       // Guardar token y usuario en localStorage
-      localStorage.setItem('token', access_token);
-      localStorage.setItem('user', JSON.stringify(userData));
-
-      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(user);
     } catch (error) {
       console.error('Error during login:', error);
       throw error;
@@ -71,10 +60,11 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const data = await loginService(email, password);
+      await login(email, password);
       // Handle login success (e.g., save token, redirect, etc.)
     } catch (error) {
       console.error('Login failed', error);
+      console.error('Error details:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -82,12 +72,16 @@ export const AuthProvider: React.FC = ({ children }) => {
     googleAuth();
   };
 
+  const handleAppleLogin = () => {
+    appleAuth();
+  };
+
   const handleCreateUser = () => {
     // Implement user creation logic here
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, handleLogin, handleGoogleLogin, handleCreateUser }}>
+    <AuthContext.Provider value={{ user, login, logout, handleLogin, handleGoogleLogin, handleAppleLogin, handleCreateUser }}>
       {children}
     </AuthContext.Provider>
   );

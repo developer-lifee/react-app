@@ -1,12 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { AuthContext } from '../context/AuthContext';
-import { FaGoogle, FaApple } from 'react-icons/fa'; // Import icons
-import '../styles/login.css';
+import axios from 'axios';
 
-const Login = () => {
-  const { handleLogin, handleGoogleLogin, handleAppleLogin } = useContext(AuthContext);
+const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -15,27 +12,30 @@ const Login = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+    const payload = {
+      email,
+      password,
+      role: 'subscriber'
+    };
+    console.log('Sending payload:', payload); // Log the payload
     try {
-      await handleLogin(email, password);
-      // Redirect based on user role
-      navigate('/');
+      const response = await axios.post('https://api.icegeneralcontractors.com/api/users', payload);
+      const userId = response.data.id;
+      // Redirect to homepage with welcome message and user ID
+      navigate(`/?welcome=true&userId=${userId}`);
     } catch (error) {
-      setError('Login failed. Please try again.');
-      console.error('Login failed', error);
+      setError('Registration failed. Please try again.');
+      console.error('Registration failed', error);
     }
   };
 
-  const goToRegister = () => {
-    navigate('/register'); // Navigate to the register page
-  };
-
   return (
-    <div className="login-page d-flex align-items-center min-vh-100">
+    <div className="register-page d-flex align-items-center min-vh-100">
       <Container>
         <Row className="justify-content-center">
           <Col md={6} lg={5}>
-            <div className="login-card p-4 rounded shadow-sm">
-              <h2 className="text-center mb-4">Login</h2>
+            <div className="register-card p-4 rounded shadow-sm">
+              <h2 className="text-center mb-4">Register</h2>
               {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={onSubmit}>
                 <Form.Group controlId="formBasicEmail" className="mb-3">
@@ -61,24 +61,9 @@ const Login = () => {
                 </Form.Group>
 
                 <Button variant="primary" type="submit" className="w-100 mb-3">
-                  Login
+                  Register
                 </Button>
               </Form>
-              <Button variant="secondary" className="w-100 mb-3" onClick={goToRegister}>
-                Create User
-              </Button>
-              <Row>
-                <Col>
-                  <Button variant="danger" className="w-100 mb-3 d-flex align-items-center justify-content-center" onClick={handleGoogleLogin}>
-                    <FaGoogle className="me-2" /> Login with Google
-                  </Button>
-                </Col>
-                <Col>
-                  <Button variant="dark" className="w-100 mb-3 d-flex align-items-center justify-content-center" onClick={handleAppleLogin}>
-                    <FaApple className="me-2" /> Login with Apple
-                  </Button>
-                </Col>
-              </Row>
             </div>
           </Col>
         </Row>
@@ -87,4 +72,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
