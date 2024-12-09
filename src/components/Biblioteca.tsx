@@ -30,11 +30,11 @@ const initialCards: CardInfo[] = [
 ];
 
 const Biblioteca: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  // const [searchTerm, setSearchTerm] = useState('');
   const [cards, setCards] = useState<CardInfo[]>(initialCards);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+    // setSearchTerm(event.target.value);
     const filteredCards = initialCards.filter(card => card.title.toLowerCase().includes(event.target.value.toLowerCase()) || card.description.toLowerCase().includes(event.target.value.toLowerCase()));
     setCards(filteredCards);
   };

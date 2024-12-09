@@ -1,5 +1,4 @@
 // HomePage.tsx
-import React from 'react';
 import { useLocation } from 'react-router-dom'; // Import useLocation
 import Hero from "../components/Hero";
 import NewsCarousel from "../components/NewsCard";

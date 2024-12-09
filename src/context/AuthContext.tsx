@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { login as loginService, googleAuth, appleAuth } from '../services/apiService';
 
 interface User {
@@ -27,7 +27,11 @@ export const AuthContext = createContext<AuthContextType>({
   handleCreateUser: () => {},
 });
 
-export const AuthProvider: React.FC = ({ children }) => {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
   // Cargar el usuario y token desde localStorage al inicio
@@ -64,7 +68,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       // Handle login success (e.g., save token, redirect, etc.)
     } catch (error) {
       console.error('Login failed', error);
-      console.error('Error details:', error.response ? error.response.data : error.message);
+      handleError(error);
     }
   };
 
@@ -80,16 +84,14 @@ export const AuthProvider: React.FC = ({ children }) => {
     // Implement user creation logic here
   };
 
+  const handleError = (error: unknown) => {
+    const err = error as { response?: { data: any }; message: string };
+    console.error('Error details:', err.response ? err.response.data : err.message);
+  };
+
   return (
     <AuthContext.Provider value={{ user, login, logout, handleLogin, handleGoogleLogin, handleAppleLogin, handleCreateUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-// Función para decodificar el token JWT
-function parseJwt(token: string) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace('-', '+').replace('_', '/');
-  return JSON.parse(window.atob(base64));
-}

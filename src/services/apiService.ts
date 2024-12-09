@@ -18,7 +18,8 @@ export const login = async (email: string, password: string) => {
       throw new Error('Invalid password');
     }
   } catch (error) {
-    console.error('Login failed', error.response ? error.response.data : error.message);
+    const err = error as { response?: { data: any }; message: string };
+    console.error('Login failed', err.response ? err.response.data : err.message);
     throw new Error('Login failed');
   }
 };
