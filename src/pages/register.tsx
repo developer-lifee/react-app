@@ -48,7 +48,7 @@ const Register = () => {
     const data = new FormData();
     data.append('email', formData.email);
     data.append('password', formData.password);
-    data.append('role', 'user'); // Añadir el rol directamente
+    // data.append('role', 'user'); // Removed role assignment from frontend
     data.append('firstName', formData.nombre);
     data.append('middleName', formData.segundoNombre);
     data.append('lastName', formData.apellidos);

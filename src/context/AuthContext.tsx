@@ -1,17 +1,14 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { login as loginService, googleAuth, appleAuth } from '../services/apiService';
+import api from '../util/axiosConfig'; // Asegúrate de importar la instancia de Axios
 
 interface User {
   email: string;
   role: string;
-  password: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void; 
-  handleLogin: (email: string, password: string) => Promise<void>;
+  handleLogin: (email: string, password: string) => Promise<User>;
   handleGoogleLogin: () => void;
   handleAppleLogin: () => void;
   handleCreateUser: () => void;
@@ -19,9 +16,7 @@ interface AuthContextType {
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
-  login: async () => {},
-  logout: () => {},
-  handleLogin: async () => {},
+  handleLogin: async () => { return { email: '', role: '' }; },
   handleGoogleLogin: () => {},
   handleAppleLogin: () => {},
   handleCreateUser: () => {},
@@ -44,53 +39,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string) => {
     try {
-      const user = await loginService(email, password);
+      const response = await api.post('/login', { email, password });
+      const { token, user } = response.data;
       // Guardar token y usuario en localStorage
+      localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setUser(user);
+      return user;
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('Login failed', error);
       throw error;
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-  };
-
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      await login(email, password);
-      // Handle login success (e.g., save token, redirect, etc.)
-    } catch (error) {
-      console.error('Login failed', error);
-      handleError(error);
-    }
-  };
-
   const handleGoogleLogin = () => {
-    googleAuth();
+    // Implementa la lógica de inicio de sesión con Google
   };
 
   const handleAppleLogin = () => {
-    appleAuth();
+    // Implementa la lógica de inicio de sesión con Apple
   };
 
   const handleCreateUser = () => {
-    // Implement user creation logic here
-  };
-
-  const handleError = (error: unknown) => {
-    const err = error as { response?: { data: any }; message: string };
-    console.error('Error details:', err.response ? err.response.data : err.message);
+    // Implementa la lógica de creación de usuario
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, handleLogin, handleGoogleLogin, handleAppleLogin, handleCreateUser }}>
+    <AuthContext.Provider value={{ user, handleLogin, handleGoogleLogin, handleAppleLogin, handleCreateUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,0 +1,2089 @@
+=== Estructura de Directorios ===
+├── App.tsx
+├── assets
+│   └── react.svg
+├── components
+│   ├── Biblioteca.tsx
+│   ├── CoursesAndServices.tsx
+│   ├── Footer.tsx
+│   ├── Hero.tsx
+│   ├── Navbar.tsx
+│   ├── NewsCard.tsx
+│   ├── PlansSelector.tsx
+│   ├── PrivateRoute.tsx
+│   ├── forms
+│   │   ├── FormComplete.tsx
+│   │   ├── FormCreate.tsx
+│   │   ├── FormDashboard.tsx
+│   │   ├── FormEdit.tsx
+│   │   └── FormView.tsx
+│   ├── quiz
+│   │   ├── Question.tsx
+│   │   ├── Result.tsx
+│   │   └── timer.tsx
+│   └── results.tsx
+├── context
+│   └── AuthContext.tsx
+├── data
+│   └── questions.ts
+├── i18n.js
+├── index.css
+├── main.tsx
+├── onefile.txt
+├── pages
+│   ├── AboutPage.tsx
+│   ├── BibliotecaPage.tsx
+│   ├── GoogleCallback.tsx
+│   ├── HomePage.tsx
+│   ├── Unauthorized.tsx
+│   ├── forms.tsx
+│   ├── login.tsx
+│   ├── quiz.tsx
+│   └── register.tsx
+├── services
+│   └── apiService.ts
+├── styles
+│   ├── AboutPage.css
+│   ├── login.css
+│   └── quiz.css
+├── util
+│   └── axiosConfig.ts
+└── vite-env.d.ts
+
+
+=== Contenido de los Archivos Concatenados ===
+
+--- Contenido de PrivateRoute.tsx ---
+import React, { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+
+interface PrivateRouteProps {
+  children: JSX.Element;
+  roles?: string[]; // Añadir prop para roles permitidos
+}
+
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, roles }) => {
+  const { user } = useContext(AuthContext);
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (roles && !roles.includes(user.role)) {
+    return <Navigate to="/unauthorized" />; // Redirigir si el rol no está permitido
+  }
+
+  return children;
+};
+
+export default PrivateRoute;
+
+--- Contenido de NewsCard.tsx ---
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Carousel, Container, Card, Button, Row, Col } from "react-bootstrap";
+
+const API_URL =
+  "https://newsdata.io/api/1/news?apikey=pub_5373485c743e11a05f2b28b653968e3569eb4&q=immigration";
+
+interface Article {
+  title: string;
+  description: string;
+  link: string;
+  image_url: string;
+  source_id: string;
+}
+
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + "...";
+  }
+  return text;
+};
+
+const NewsCarousel: React.FC = () => {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        if (response.data.status === "success") {
+          setArticles(response.data.results);
+        } else {
+          console.error("API error:", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching news:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  const chunkArray = (arr: Article[], chunkSize: number) => {
+    let index = 0;
+    const tempArray = [];
+    while (index < arr.length) {
+      tempArray.push(arr.slice(index, index + chunkSize));
+      index += chunkSize;
+    }
+    return tempArray;
+  };
+
+  const groupedArticles = chunkArray(articles, 3);
+
+  if (loading) {
+    return <div>Cargando noticias...</div>;
+  }
+
+  return (
+    <Container className="py-5">
+      <h2 className="mb-4">Últimas Noticias</h2>
+      <Carousel controls={true} indicators={false}>
+        {groupedArticles.map((group, index) => (
+          <Carousel.Item key={index}>
+            <Row>
+              {group.map((article, idx) => (
+                <Col key={idx} md={4}>
+                  <Card className="h-100" style={{ minHeight: "400px" }}>
+                    {article.image_url ? (
+                      <Card.Img
+                        variant="top"
+                        src={article.image_url}
+                        alt={article.title}
+                        style={{ height: "200px", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          height: "200px",
+                          backgroundColor: "#f0f0f0",
+                        }}
+                      ></div>
+                    )}
+                    <Card.Body className="d-flex flex-column justify-content-between">
+                      <div>
+                        <Card.Title>
+                          {truncateText(article.title, 50)}
+                        </Card.Title>
+                        <Card.Text>
+                          {truncateText(
+                            article.description ||
+                              "Sin descripción disponible.",
+                            100
+                          )}
+                        </Card.Text>
+                      </div>
+                      <Button
+                        variant="primary"
+                        href={article.link}
+                        target="_blank"
+                      >
+                        Leer más
+                      </Button>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </Container>
+  );
+};
+
+export default NewsCarousel;
+
+--- Contenido de Footer.tsx ---
+import { Container, Row, Col } from "react-bootstrap";
+
+const Footer = () => {
+  return (
+    <footer className="bg-light py-4">
+      <Container>
+        <Row className="align-items-center">
+          <Col md={6}>
+            <img src="aaipaLogo.png" alt="AAIPA Logo" height="40" />
+            <p className="mt-2">INTERNATIONAL JUSTICE MISSION</p>
+          </Col>
+          <Col md={6} className="text-md-end">
+            <p className="mb-1">Follow Us</p>
+            <a href="#" className="me-3">
+              <i className="fab fa-facebook"></i>
+            </a>
+            <a href="#" className="me-3">
+              <i className="fab fa-instagram"></i>
+            </a>
+            <a href="#">
+              <i className="fab fa-youtube"></i>
+            </a>
+          </Col>
+        </Row>
+      </Container>
+    </footer>
+  );
+};
+
+export default Footer;
+
+--- Contenido de CoursesAndServices.tsx ---
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import CourseImage from "/course.webp"; // Asegúrate de que la ruta sea correcta
+
+const CoursesAndServices = () => {
+  return (
+    <Container className="py-5">
+      <h2 className="text-center mb-4">Courses and Services</h2>
+      <Row>
+        <Col md={4}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Img
+              variant="top"
+              src={CourseImage} // Usando la nueva imagen
+              alt="Course Image"
+            />
+            <Card.Body className="text-center">
+              <Card.Title>Immigration Law Basics</Card.Title>
+              <Card.Text>
+                Learn the fundamentals of immigration law to help you navigate
+                complex processes.
+              </Card.Text>
+              <Button variant="primary">Learn More</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Img
+              variant="top"
+              src={CourseImage} // Usando la nueva imagen
+              alt="Course Image"
+            />
+            <Card.Body className="text-center">
+              <Card.Title>Visa Application Process</Card.Title>
+              <Card.Text>
+                Get detailed guidance on how to apply for different types of
+                visas.
+              </Card.Text>
+              <Button variant="primary">Learn More</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4}>
+          <Card className="mb-4 shadow-sm">
+            <Card.Img
+              variant="top"
+              src={CourseImage} // Usando la nueva imagen
+              alt="Course Image"
+            />
+            <Card.Body className="text-center">
+              <Card.Title>Citizenship Preparation</Card.Title>
+              <Card.Text>
+                Prepare for the citizenship test with our comprehensive
+                resources and support.
+              </Card.Text>
+              <Button variant="primary">Learn More</Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default CoursesAndServices;
+
+--- Contenido de results.tsx ---
+import { Card, Form, Button, Container, Row, Col } from 'react-bootstrap';
+
+// Datos simulados para los resultados de búsqueda
+const searchResults = [
+  {
+    name: "John Doe Immigration Services",
+    location: "New York, NY",
+    specialization: "Visa, Citizenship, and Asylum Services",
+    reviews: 123,
+    rating: 4.0,
+  },
+  {
+    name: "Acme Immigration Consultants",
+    location: "Los Angeles, CA",
+    specialization: "Comprehensive Immigration Services",
+    reviews: 87,
+    rating: 5.0,
+  },
+  {
+    name: "Legal Solutions Immigration Services",
+    location: "Chicago, IL",
+    specialization: "Visa, Green Card, and Asylum Cases",
+    reviews: 65,
+    rating: 4.2,
+  },
+];
+
+export default function ImmigrationSearchComponent() {
+  return (
+    <Container className="py-5">
+      {/* Buscador de servicios */}
+      <div className="mb-4">
+        <h1 className="mb-4">Find Immigration Services</h1>
+        <Form className="d-flex mb-3">
+          <Form.Control
+            type="search"
+            placeholder="Search by name, location, or specialty"
+            className="me-2"
+          />
+          <Button variant="primary">Filter</Button>
+        </Form>
+      </div>
+
+      {/* Resultados */}
+      <h2 className="mb-4">Results</h2>
+      <Row>
+        {searchResults.map((result, index) => (
+          <Col key={index} sm={12} md={6} lg={4} className="mb-4">
+            <Card className="h-100">
+              <Card.Body>
+                <Card.Title>{result.name}</Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">
+                  {result.location}
+                </Card.Subtitle>
+                <Card.Text>{result.specialization}</Card.Text>
+                <div className="d-flex align-items-center mb-3">
+                  {renderStars(result.rating)}
+                  <span className="ms-2 text-muted">{`${result.rating} (${result.reviews} reviews)`}</span>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <Button variant="outline-primary">Contact</Button>
+                  <Button variant="secondary">View Profile</Button>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
+}
+
+function renderStars(rating: number) {
+  const stars = [];
+  for (let i = 0; i < 5; i++) {
+    stars.push(
+      <svg
+        key={i}
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill={i < Math.floor(rating) ? 'gold' : 'lightgray'}
+        className="bi bi-star"
+        viewBox="0 0 16 16"
+      >
+        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.523-3.356c.33-.314.158-.888-.283-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.067l-4.898.696c-.441.062-.613.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.893.7-3.992L1.745 6.608l4.087-.582L8 2.223l1.168 3.803 4.087.582-3.04 2.876.7 3.992-3.686-1.893z" />
+      </svg>
+    );
+  }
+  return <div className="d-flex">{stars}</div>;
+}
+
+export { ImmigrationSearchComponent as Results };
+--- Contenido de Biblioteca.tsx ---
+// src/components/Biblioteca.tsx
+import React, { useState } from 'react';
+import { Container, Row, InputGroup, FormControl, Card, Button } from 'react-bootstrap';
+
+type CardInfo = {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  articleUrl: string;
+};
+
+// Datos simulados para las tarjetas
+const initialCards: CardInfo[] = [
+  {
+    id: 1,
+    title: 'Guía de Formularios Migratorios',
+    description: 'Aprende a preparar formularios migratorios con esta guía detallada.',
+    imageUrl: 'https://example.com/path/to/image.jpg', // Reemplaza con la URL real de la imagen
+    articleUrl: 'https://example.com/path/to/article'
+  },
+  {
+    id: 2,
+    title: 'Normativas de Inmigración Actualizadas',
+    description: 'Consulta las últimas normativas y leyes de inmigración.',
+    imageUrl: 'https://example.com/path/to/secondimage.jpg', // Reemplaza con la URL real de la imagen
+    articleUrl: 'https://example.com/path/to/secondarticle'
+  },
+  // Agrega más tarjetas según sea necesario
+];
+
+const Biblioteca: React.FC = () => {
+  // const [searchTerm, setSearchTerm] = useState('');
+  const [cards, setCards] = useState<CardInfo[]>(initialCards);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // setSearchTerm(event.target.value);
+    const filteredCards = initialCards.filter(card => card.title.toLowerCase().includes(event.target.value.toLowerCase()) || card.description.toLowerCase().includes(event.target.value.toLowerCase()));
+    setCards(filteredCards);
+  };
+
+  return (
+    <Container>
+      <InputGroup className="mb-3">
+        <FormControl
+          placeholder="Buscar..."
+          onChange={handleSearch}
+        />
+      </InputGroup>
+      <Row xs={1} md={2} lg={3}>
+        {cards.map(card => (
+          <Card key={card.id} style={{ width: '18rem', margin: '10px' }}>
+            <Card.Img variant="top" src={card.imageUrl} />
+            <Card.Body>
+              <Card.Title>{card.title}</Card.Title>
+              <Card.Text>
+                {card.description}
+              </Card.Text>
+              <Button variant="primary" href={card.articleUrl} target="_blank">Leer Artículo</Button>
+            </Card.Body>
+          </Card>
+        ))}
+      </Row>
+    </Container>
+  );
+};
+
+export default Biblioteca;
+
+--- Contenido de PlansSelector.tsx ---
+import { useState } from "react";
+import {
+  Card,
+  Button,
+  Container,
+  Row,
+  Col,
+  ToggleButton,
+  ToggleButtonGroup,
+  Table,
+  Carousel,
+} from "react-bootstrap";
+import {
+  FaUsers,
+  FaBook,
+  FaLaptop,
+  FaHandshake,
+  FaCertificate,
+  FaDatabase,
+  FaCog,
+  FaVideo,
+  FaGraduationCap,
+  FaChartLine,
+} from "react-icons/fa";
+
+type Plan = {
+  title: string;
+  price: string;
+  annualPrice: string;
+  savings: string;
+  features: { icon: JSX.Element; description: string }[];
+};
+
+const PlanCard: React.FC<Plan & { isAnnual: boolean }> = ({
+  title,
+  price,
+  annualPrice,
+  savings,
+  features,
+  isAnnual,
+}) => {
+  return (
+    <Card
+      className="text-center mb-4 shadow-sm d-flex flex-column position-relative"
+      style={{
+        borderRadius: "15px",
+        height: "100%",
+        backgroundColor: "#fff",
+        minHeight: "580px",
+      }}
+    >
+      {isAnnual && (
+        <div
+          style={{
+            position: "absolute",
+            top: "15px",
+            right: "15px",
+            backgroundColor: "#00d1c1",
+            color: "#fff",
+            padding: "5px 10px",
+            borderRadius: "5px",
+            fontWeight: "bold",
+          }}
+        >
+          Ahorra {savings}
+        </div>
+      )}
+      <Card.Body
+        style={{
+          padding: "25px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <h5
+          style={{
+            color: "#333",
+            marginBottom: "10px",
+            marginTop: "60px",
+            minHeight: "30px",
+          }}
+        >
+          {title}
+        </h5>
+        <Card.Title
+          className="my-2"
+          style={{
+            fontSize: "2rem",
+            fontWeight: "bold",
+            color: "#333",
+            marginBottom: "10px",
+          }}
+        >
+          {isAnnual ? annualPrice : price}
+        </Card.Title>
+        <hr
+          style={{
+            border: "1px solid #e0e0e0",
+            width: "100%",
+            margin: "15px 0",
+            position: "relative",
+            top: "-10px",
+          }}
+        />
+        <ul
+          className="list-unstyled text-start"
+          style={{ paddingLeft: "20px", minHeight: "180px" }}
+        >
+          {features.map((feature, index) => (
+            <li
+              key={index}
+              className="mb-2"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              {feature.icon}{" "}
+              <span style={{ marginLeft: "10px" }}>{feature.description}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="d-flex justify-content-center mt-4">
+          <Button
+            variant="primary"
+            size="lg"
+            className="align-self-center"
+            style={{ padding: "10px 30px", fontSize: "1.1rem" }}
+          >
+            Elige este plan
+          </Button>
+        </div>
+      </Card.Body>
+    </Card>
+  );
+};
+
+const PlansSection: React.FC = () => {
+  const [isAnnual, setIsAnnual] = useState(true);
+
+  // Definir los planes con herencia de características
+  const plans: Plan[] = [
+    {
+      title: "Plan Individual Básico",
+      price: "$39 USD al mes",
+      annualPrice: "$399 USD al año",
+      savings: "$69",
+      features: [
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
+      ],
+    },
+    {
+      title: "Plan Individual Premium",
+      price: "$49 USD al mes",
+      annualPrice: "$499 USD al año",
+      savings: "$89",
+      features: [
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
+        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
+        { icon: <FaCog />, description: "Soporte prioritario" },
+      ],
+    },
+    {
+      title: "Plan Empresarial Básico",
+      price: "$99 USD al mes",
+      annualPrice: "$999 USD al año",
+      savings: "$189",
+      features: [
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
+        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
+        { icon: <FaCog />, description: "Soporte prioritario" },
+        { icon: <FaUsers />, description: "Acceso multiusuario para varios miembros del equipo" },
+        { icon: <FaHandshake />, description: "Consultoría personalizada" },
+      ],
+    },
+    {
+      title: "Plan Empresarial Premium",
+      price: "$149 USD al mes",
+      annualPrice: "$1,499 USD al año",
+      savings: "$289",
+      features: [
+        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
+        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
+        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
+        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
+        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
+        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
+        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
+        { icon: <FaChartLine />, description: "Descuentos en eventos" },
+        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
+        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
+        { icon: <FaCog />, description: "Soporte prioritario" },
+        { icon: <FaUsers />, description: "Acceso multiusuario para varios miembros del equipo" },
+        { icon: <FaHandshake />, description: "Consultoría personalizada" },
+        { icon: <FaUsers />, description: "Hasta 10 usuarios" },
+        { icon: <FaVideo />, description: "Seminarios exclusivos para empresas" },
+      ],
+    },
+  ];
+
+  const allFeatures = [
+    "Acceso a contenido exclusivo",
+    "Descuentos en cursos y certificaciones",
+    "Acceso a la plataforma de intakes, que genera respuestas automáticas",
+    "Base de datos de recursos y contratos personalizables",
+    "Capacitación continua y soporte técnico",
+    "Certificación anual de miembro activo",
+    "Descuentos en notarización de documentos",
+    "Descuentos en eventos",
+    "Traducciones a bajo costo",
+    "Plantillas y guías avanzadas",
+    "Soporte prioritario",
+    "Acceso multiusuario para varios miembros del equipo",
+    "Consultoría personalizada",
+    "Hasta 10 usuarios",
+    "Seminarios exclusivos para empresas",
+  ];
+
+  const featureChecks = plans.map((plan) =>
+    allFeatures.map((feature) =>
+      plan.features.some((f) => f.description === feature)
+    )
+  );
+
+  return (
+    <section className="py-5 bg-light">
+      <Container>
+        <h2 className="mb-5 text-center">Planes de Membresía</h2>
+        <div className="d-flex justify-content-center mb-4">
+          <ToggleButtonGroup
+            type="radio"
+            name="options"
+            defaultValue={2} // Cambiar el valor por defecto a 2 (Anual)
+            onChange={(value) => setIsAnnual(value === 2)}
+          >
+            <ToggleButton
+              id="tbg-radio-1"
+              value={1}
+              variant={isAnnual ? "outline-primary" : "outline-secondary"}
+            >
+              Mensual
+            </ToggleButton>
+            <ToggleButton
+              id="tbg-radio-2"
+              value={2}
+              variant={!isAnnual ? "outline-primary" : "outline-secondary"}
+            >
+              Anual
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+        <Carousel interval={null} indicators={true}>
+          {plans.map((plan, index) => (
+            <Carousel.Item key={index}>
+              <Row className="justify-content-center">
+                <Col xs={12}>
+                  <PlanCard {...plan} isAnnual={isAnnual} />
+                </Col>
+              </Row>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+        <Table striped bordered hover className="mt-5">
+          <thead>
+            <tr>
+              <th>Características</th>
+              {plans.map((plan, index) => (
+                <th key={index}>{plan.title}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {allFeatures.map((feature, index) => (
+              <tr key={index}>
+                <td>{feature}</td>
+                {featureChecks.map((checks, planIndex) => (
+                  <td key={planIndex}>{checks[index] ? "✔️" : ""}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Container>
+    </section>
+  );
+};
+
+export default PlansSection;
+
+--- Contenido de Navbar.tsx ---
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+
+const MyNavbar = () => {
+  const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  return (
+    <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          <img
+            src="aaipaLogo.png"
+            alt="Logo"
+            height="40"
+            className="d-inline-block align-top"
+          />
+          {" AAIPA Association"}
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto">
+            <Nav.Link as={Link} to="/about-us">About Us</Nav.Link>
+            <Nav.Link as={Link} to="/biblioteca">Biblioteca</Nav.Link>
+            {user && (
+              <>
+                <Nav.Link as={Link} to="/quiz">Quiz</Nav.Link>
+                <Nav.Link as={Link} to="/forms">Forms</Nav.Link>
+              </>
+            )}
+          </Nav>
+          {user ? (
+            <Button variant="outline-light" onClick={handleLogout} className="ms-3">
+              Logout
+            </Button>
+          ) : (
+            <Button variant="primary" onClick={() => navigate('/login')} className="ms-3">
+              Join Us
+            </Button>
+          )}
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
+};
+
+export default MyNavbar;
+
+--- Contenido de Hero.tsx ---
+import React from "react";
+import { Button, Container } from "react-bootstrap";
+
+const Hero: React.FC = () => {
+  return (
+    <div
+      className="hero-section position-relative text-white"
+      style={{
+        height: "100vh", // Ocupa toda la pantalla
+        zIndex: 1, // Asegura que no esté cubierto
+      }}
+    >
+      {/* Video de fondo */}
+      <video
+        className="position-absolute w-100 h-100"
+        style={{ objectFit: "cover", zIndex: -1 }}
+        autoPlay
+        loop
+        muted
+      >
+        <source src="/banner.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Contenido del Hero */}
+      <div
+        className="overlay position-absolute w-100 h-100 d-flex align-items-center"
+        style={{ background: "rgba(0, 0, 0, 0.5)" }}
+      >
+        <Container className="text-center">
+          <h1 className="display-4 font-weight-bold">
+            Welcome to AAIPA Association Immigration Services
+          </h1>
+          <p className="lead my-4" style={{ color: "#ffffff" }}>
+  AAIPA Association is dedicated to helping individuals and families
+  navigate the complex immigration process. We offer a wide range of
+  services tailored to your needs.
+</p>
+
+          <Button variant="primary" size="lg">
+            Learn More
+          </Button>
+        </Container>
+      </div>
+    </div>
+  );
+};
+
+export default Hero;
+
+--- Contenido de timer.tsx ---
+import React, { useState, useEffect } from 'react';
+
+interface TimerProps {
+  totalMinutes: number;
+  onTimeUp: () => void;
+}
+
+const Timer: React.FC<TimerProps> = ({ totalMinutes, onTimeUp }) => {
+  const [timeLeft, setTimeLeft] = useState(totalMinutes * 60); // convertir minutos a segundos
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    if (timeLeft === 0) {
+      onTimeUp();
+      return;
+    }
+
+    const timer = setInterval(() => setTimeLeft(timeLeft - 1), 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft, isPaused, onTimeUp]);
+
+  const handlePause = () => {
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 600000); // 10 minutos de pausa opcional
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  return (
+    <div className="d-flex align-items-center mb-3">
+      <h5>Tiempo restante: {formatTime(timeLeft)}</h5>
+      {!isPaused && (
+        <button className="btn btn-warning btn-sm ms-3" onClick={handlePause}>
+          Pausa de 10 minutos
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default Timer;
+
+--- Contenido de Result.tsx ---
+import React from 'react';
+
+interface Question {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+}
+
+interface ResultProps {
+  selectedAnswers: { [key: number]: string };
+  questions: Question[];
+}
+
+const Result: React.FC<ResultProps> = ({ selectedAnswers, questions }) => {
+  const score = questions.reduce((total, question) => {
+    const userAnswer = selectedAnswers[question.id - 1];
+    return userAnswer === question.correctAnswer ? total + 1 : total;
+  }, 0);
+
+  return (
+    <div className="result-container text-center">
+      <h3>Resultados</h3>
+      <p>Tu puntaje final es: {score} de {questions.length}</p>
+      <div className="list-group mt-4">
+        {questions.map((question, index) => (
+          <div
+            key={index}
+            className={`list-group-item ${selectedAnswers[index] === question.correctAnswer ? 'list-group-item-success' : 'list-group-item-danger'}`}
+          >
+            <strong>Pregunta {index + 1}:</strong> {question.question}
+            <br />
+            <strong>Tu respuesta:</strong> {selectedAnswers[index]}
+            <br />
+            <strong>Respuesta correcta:</strong> {question.correctAnswer}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Result;
+
+--- Contenido de Question.tsx ---
+import React from 'react';
+
+interface QuestionProps {
+  question: string;
+  options: string[];
+  onSelectAnswer: (answer: string) => void;
+  selectedAnswer: string;
+}
+
+const Question: React.FC<QuestionProps> = ({ question, options, onSelectAnswer, selectedAnswer }) => {
+  return (
+    <div className="card mb-4">
+      <div className="card-body">
+        <h5 className="card-title">{question}</h5>
+        <div className="options-list">
+          {options.map((option, index) => (
+            <div key={index} className="form-check">
+              <input
+                type="radio"
+                name="answer"
+                className="form-check-input"
+                checked={selectedAnswer === option}
+                onChange={() => onSelectAnswer(option)}
+                title={option}
+              />
+              <label className="form-check-label">{option}</label>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Question;
+
+--- Contenido de FormCreate.tsx ---
+import React, { useState } from 'react';
+import api from '../../util/axiosConfig';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
+
+interface FormCreateProps {
+  onFormCreated: () => void;
+}
+
+const FormCreate: React.FC<FormCreateProps> = ({ onFormCreated }) => {
+  const [formDetails, setFormDetails] = useState({
+    name: '',
+    title: '',
+    description: '',
+    questions: [{ questionText: '', questionType: 'text' }],
+  });
+  const [error, setError] = useState<string | null>(null);
+
+  const handleCreate = async () => {
+    try {
+      await api.post('/forms', formDetails);
+      onFormCreated();
+    } catch (err) {
+      setError('Error creating form');
+    }
+  };
+
+  return (
+    <Container>
+      <h2>Create Form</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label>Form Name</Form.Label>
+          <Form.Control
+            type="text"
+            value={formDetails.name}
+            onChange={(e) => setFormDetails({ ...formDetails, name: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            value={formDetails.title}
+            onChange={(e) => setFormDetails({ ...formDetails, title: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            value={formDetails.description}
+            onChange={(e) => setFormDetails({ ...formDetails, description: e.target.value })}
+          />
+        </Form.Group>
+        <Button variant="primary" onClick={handleCreate}>
+          Create Form
+        </Button>
+      </Form>
+    </Container>
+  );
+};
+
+export default FormCreate;
+
+--- Contenido de FormView.tsx ---
+import React, { useState, useEffect } from 'react';
+import api from '../../util/axiosConfig';
+import { Container, Alert } from 'react-bootstrap';
+
+interface FormViewProps {
+  formId: string;
+}
+
+const FormView: React.FC<FormViewProps> = ({ formId }) => {
+  const [form, setForm] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchForm = async () => {
+      try {
+        const response = await api.get(`/forms/${formId}`);
+        setForm(response.data);
+      } catch (err) {
+        setError('Error loading form details');
+      }
+    };
+
+    fetchForm();
+  }, [formId]);
+
+  if (error) return <Alert variant="danger">{error}</Alert>;
+  if (!form) return <div>Loading...</div>;
+
+  return (
+    <Container>
+      <h2>{form.title}</h2>
+      <p>{form.description}</p>
+      <h5>Questions:</h5>
+      <ul>
+        {form.questions.map((question: any) => (
+          <li key={question.id}>
+            {question.questionText} - Type: {question.questionType}
+          </li>
+        ))}
+      </ul>
+    </Container>
+  );
+};
+
+export default FormView;
+
+--- Contenido de FormDashboard.tsx ---
+import React from 'react';
+import { ListGroup, Button } from 'react-bootstrap';
+
+interface FormDashboardProps {
+  forms: any[];
+  onDelete: (id: string) => void;
+  onView: (form: any) => void;
+  onEdit: (form: any) => void;
+  onComplete: (form: any) => void;
+  onCreate: () => void;
+}
+
+const FormDashboard: React.FC<FormDashboardProps> = ({ forms, onDelete, onView, onEdit, onComplete, onCreate }) => {
+  return (
+    <div>
+      <div className="text-end mb-3">
+        <Button variant="primary" onClick={onCreate}>Create New Form</Button>
+      </div>
+      <ListGroup>
+        {forms.map((form) => (
+          <ListGroup.Item key={form.id} className="d-flex justify-content-between align-items-center">
+            <div>
+              <h5>{form.title}</h5>
+              <p className="mb-1">{form.description}</p>
+              <small>Created At: {new Date(form.createdAt).toLocaleDateString()}</small>
+            </div>
+            <div>
+              <Button variant="info" onClick={() => onView(form)}>View</Button>{' '}
+              <Button variant="secondary" onClick={() => onEdit(form)}>Edit</Button>{' '}
+              <Button variant="success" onClick={() => onComplete(form)}>Complete</Button>{' '}
+              <Button variant="danger" onClick={() => onDelete(form.id)}>Delete</Button>
+            </div>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    </div>
+  );
+};
+
+export default FormDashboard;
+
+--- Contenido de FormEdit.tsx ---
+import React, { useState, useEffect } from 'react';
+import api from '../../util/axiosConfig'; // Usar la instancia de Axios configurada
+import { Form, Button, Container, Alert } from 'react-bootstrap';
+
+interface FormEditProps {
+  formId: string;
+  onEditComplete: () => void;
+}
+
+const FormEdit: React.FC<FormEditProps> = ({ formId, onEditComplete }) => {
+  const [form, setForm] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchForm = async () => {
+      try {
+        const response = await api.get(`/forms/${formId}`);
+        setForm(response.data);
+      } catch (err) {
+        setError('Error loading form');
+      }
+    };
+
+    fetchForm();
+  }, [formId]);
+
+  const handleUpdate = async () => {
+    try {
+      await api.patch(`/forms/update/${formId}`, form);
+      onEditComplete();
+    } catch (err) {
+      setError('Error updating form');
+    }
+  };
+
+  if (!form) return <div>Loading...</div>;
+
+  return (
+    <Container className="my-5">
+      <h1>Edit Form</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form>
+        <Form.Group className="mb-3">
+          <Form.Label>Form Name</Form.Label>
+          <Form.Control
+            type="text"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+        </Form.Group>
+        <Button variant="primary" onClick={handleUpdate}>
+          Update Form
+        </Button>
+      </Form>
+    </Container>
+  );
+};
+
+export default FormEdit;
+
+--- Contenido de FormComplete.tsx ---
+import React, { useState, useEffect } from 'react';
+import api from '../../util/axiosConfig';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
+
+interface FormCompleteProps {
+  formId: string;
+  onComplete: () => void;
+}
+
+const FormComplete: React.FC<FormCompleteProps> = ({ formId, onComplete }) => {
+  const [form, setForm] = useState<any>(null);
+  const [answers, setAnswers] = useState<{ [questionId: number]: string }>({});
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchForm = async () => {
+      try {
+        const response = await api.get(`/forms/${formId}`);
+        setForm(response.data);
+      } catch (err) {
+        setError('Error loading form');
+      }
+    };
+
+    fetchForm();
+  }, [formId]);
+
+  const handleSubmit = async () => {
+    try {
+      await api.post(`/forms/submit/${formId}`, { answers });
+      onComplete();
+    } catch (err) {
+      setError('Error submitting form');
+    }
+  };
+
+  if (!form) return <div>Loading...</div>;
+
+  return (
+    <Container>
+      <h2>{form.title}</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form>
+        {form.questions.map((question: any) => (
+          <Form.Group key={question.id} className="mb-3">
+            <Form.Label>{question.questionText}</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Your answer"
+              value={answers[question.id] || ""}
+              onChange={(e) =>
+                setAnswers({ ...answers, [question.id]: e.target.value })
+              }
+            />
+          </Form.Group>
+        ))}
+        <Button variant="success" onClick={handleSubmit}>
+          Submit Answers
+        </Button>
+      </Form>
+    </Container>
+  );
+};
+
+export default FormComplete;
+
+--- Contenido de react.svg ---
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+--- Contenido de axiosConfig.ts ---
+// src/util/axiosConfig.ts
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'https://api.icegeneralcontractors.com/api',
+});
+
+// Interceptor para incluir el token JWT en las solicitudes
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token'); // O sessionStorage, según prefieras
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+
+--- Contenido de quiz.tsx ---
+import React from 'react';
+import PrivateRoute from '../components/PrivateRoute';
+import { useState } from "react";
+import Question from "../components/quiz/Question";
+import Result from "../components/quiz/Result";
+import Timer from "../components/quiz/timer";
+import questionsData from '../data/questions';
+import { Button, Modal } from "react-bootstrap";
+import "../styles/quiz.css";
+
+const Quiz: React.FC = () => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({});
+  const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [showQuestionPanel, setShowQuestionPanel] = useState(false);
+
+  const handleAnswerSelect = (answer: string) => {
+    setSelectedAnswers({ ...selectedAnswers, [currentQuestionIndex]: answer });
+  };
+
+  const nextQuestion = () => {
+    if (currentQuestionIndex < questionsData.examModel1.questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      setIsQuizFinished(true);
+    }
+  };
+
+  const previousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  const handleTimeUp = () => {
+    setIsQuizFinished(true);
+  };
+
+  const toggleQuestionPanel = () => {
+    setShowQuestionPanel(!showQuestionPanel);
+  };
+
+  const currentQuestion = questionsData.examModel1.questions[currentQuestionIndex];
+
+  return (
+    <div className="quiz-page d-flex flex-column align-items-center p-4">
+      <Timer totalMinutes={120} onTimeUp={handleTimeUp} />
+      <Button variant="secondary" className="my-3" onClick={toggleQuestionPanel}>
+        Ver Estado de Preguntas
+      </Button>
+      <Modal show={showQuestionPanel} onHide={toggleQuestionPanel} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Estado de las Preguntas</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="question-grid">
+            {questionsData.examModel1.questions.map((_, index) => (
+              <div
+                key={index}
+                className={`question-indicator ${selectedAnswers[index] ? 'answered' : 'unanswered'}`}
+                onClick={() => {
+                  setCurrentQuestionIndex(index);
+                  toggleQuestionPanel();
+                }}
+              >
+                {index + 1}
+              </div>
+            ))}
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      {!isQuizFinished ? (
+        <div className="question-container">
+          <Question
+            question={currentQuestion.question}
+            options={currentQuestion.options}
+            onSelectAnswer={handleAnswerSelect}
+            selectedAnswer={selectedAnswers[currentQuestionIndex]}
+          />
+          <div className="d-flex justify-content-between mt-3">
+            <button className="btn btn-secondary" onClick={previousQuestion} disabled={currentQuestionIndex === 0}>
+              Atrás
+            </button>
+            <button className="btn btn-primary" onClick={nextQuestion}>
+              {currentQuestionIndex < questionsData.examModel1.questions.length - 1 ? 'Siguiente' : 'Finalizar'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <Result selectedAnswers={selectedAnswers} questions={questionsData.examModel1.questions} />
+      )}
+    </div>
+  );
+};
+
+export default () => (
+  <PrivateRoute roles={['admin', 'user']}>
+    <Quiz />
+  </PrivateRoute>
+);
+
+--- Contenido de login.tsx ---
+import React, { useContext, useState } from 'react';
+import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { AuthContext } from '../context/AuthContext';
+import { FaGoogle, FaApple } from 'react-icons/fa'; // Import icons
+import '../styles/login.css';
+
+const Login = () => {
+  const { handleLogin, handleGoogleLogin, handleAppleLogin } = useContext(AuthContext);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      const user = await handleLogin(email, password);
+      // Redirigir basado en el rol del usuario
+      if (user.role === 'admin') {
+        navigate('/forms');
+      } else {
+        navigate('/quiz');
+      }
+    } catch (error) {
+      setError('Login failed. Please try again.');
+      console.error('Login failed', error);
+    }
+  };
+
+  const goToRegister = () => {
+    navigate('/register'); // Navigate to the register page
+  };
+
+  return (
+    <div className="login-page d-flex align-items-center min-vh-100">
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={6} lg={5}>
+            <div className="login-card p-4 rounded shadow-sm">
+              <h2 className="text-center mb-4">Login</h2>
+              {error && <Alert variant="danger">{error}</Alert>}
+              <Form onSubmit={onSubmit}>
+                <Form.Group controlId="formBasicEmail" className="mb-3">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicPassword" className="mb-4">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Button variant="primary" type="submit" className="w-100 mb-3">
+                  Login
+                </Button>
+              </Form>
+              <Button variant="secondary" className="w-100 mb-3" onClick={goToRegister}>
+                Create User
+              </Button>
+              <Row>
+                <Col>
+                  <Button variant="danger" className="w-100 mb-3 d-flex align-items-center justify-content-center" onClick={handleGoogleLogin}>
+                    <FaGoogle className="me-2" /> Login with Google
+                  </Button>
+                </Col>
+                <Col>
+                  <Button variant="dark" className="w-100 mb-3 d-flex align-items-center justify-content-center" onClick={handleAppleLogin}>
+                    <FaApple className="me-2" /> Login with Apple
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+
+};
+
+export default Login;
+
+--- Contenido de Unauthorized.tsx ---
+
+import React from 'react';
+
+const Unauthorized: React.FC = () => {
+  return (
+    <div className="d-flex justify-content-center align-items-center min-vh-100">
+      <h2>No tienes permiso para acceder a esta página.</h2>
+    </div>
+  );
+};
+
+export default Unauthorized;
+--- Contenido de forms.tsx ---
+import React, { useState, useEffect } from 'react';
+import PrivateRoute from '../components/PrivateRoute';
+import api from '../util/axiosConfig'; // Importa la instancia de Axios configurada
+import { Container, Modal, Spinner, Alert } from 'react-bootstrap';
+import FormCreate from '../components/forms/FormCreate';
+import FormEdit from '../components/forms/FormEdit';
+import FormComplete from '../components/forms/FormComplete';
+import FormDashboard from '../components/forms/FormDashboard';
+import FormView from '../components/forms/FormView';
+
+const FormsPage: React.FC = () => {
+    const [forms, setForms] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedForm, setSelectedForm] = useState<any>(null);
+    const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
+    const [showCompleteModal, setShowCompleteModal] = useState<boolean>(false);
+    const [showViewModal, setShowViewModal] = useState<boolean>(false);
+
+    useEffect(() => {
+        fetchForms();
+    }, []);
+
+    const fetchForms = async () => {
+        try {
+            const response = await api.get('/forms');
+            setForms(response.data);
+        } catch (err) {
+            setError('Error fetching forms');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        try {
+            await api.delete(`/forms/${id}`);
+            setForms(forms.filter(form => form.id !== id));
+        } catch (err) {
+            setError('Error deleting form');
+        }
+    };
+
+    const handleCreateSuccess = () => {
+        setShowCreateModal(false);
+        fetchForms();
+    };
+
+    const handleEditSuccess = () => {
+        setShowEditModal(false);
+        fetchForms();
+    };
+
+    const handleCompleteSuccess = () => {
+        setShowCompleteModal(false);
+    };
+
+    const handleView = (form: any) => {
+        setSelectedForm(form);
+        setShowViewModal(true);
+    };
+
+    if (loading) return (
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+            <Spinner animation="border" variant="primary" />
+        </div>
+    );
+
+    return (
+        <Container className="my-5">
+            <h1 className="text-center">Forms Dashboard</h1>
+            {error && (
+                <Alert variant="danger" onClose={() => setError(null)} dismissible>
+                    {error}
+                </Alert>
+            )}
+            <FormDashboard
+                forms={forms}
+                onDelete={handleDelete}
+                onView={handleView}
+                onEdit={(form) => { setSelectedForm(form); setShowEditModal(true); }}
+                onComplete={(form) => { setSelectedForm(form); setShowCompleteModal(true); }}
+                onCreate={() => setShowCreateModal(true)}
+            />
+
+            <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create New Form</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <FormCreate onFormCreated={handleCreateSuccess} />
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Form</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedForm && (
+                        <FormEdit formId={selectedForm.id} onEditComplete={handleEditSuccess} />
+                    )}
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showCompleteModal} onHide={() => setShowCompleteModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Complete Form</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedForm && (
+                        <FormComplete formId={selectedForm.id} onComplete={handleCompleteSuccess} />
+                    )}
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showViewModal} onHide={() => setShowViewModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Form Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedForm && <FormView formId={selectedForm.id} />}
+                </Modal.Body>
+            </Modal>
+        </Container>
+    );
+};
+
+export default () => (
+    <PrivateRoute roles={['admin']}>
+        <FormsPage />
+    </PrivateRoute>
+);
+
+--- Contenido de GoogleCallback.tsx ---
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const GoogleCallback = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const token = query.get('token');
+
+    if (token) {
+      // Guardar el token en localStorage
+      localStorage.setItem('token', token);
+
+      // Decodificar el token y guardar el usuario
+      const decodedToken: any = parseJwt(token);
+
+      const userData = {
+        email: decodedToken.email,
+        role: decodedToken.role,
+        // Agrega otros campos si los hay
+      };
+
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      // Redirigir al usuario
+      navigate('/');
+    } else {
+      // Manejar error de autenticación
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  return <div>Cargando...</div>;
+};
+
+// Función para decodificar el token JWT
+function parseJwt(token: string) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace('-', '+').replace('_', '/');
+  return JSON.parse(window.atob(base64));
+}
+
+export default GoogleCallback;
+
+--- Contenido de BibliotecaPage.tsx ---
+// src/pages/BibliotecaPage.tsx
+import React from 'react';
+import Biblioteca from '../components/Biblioteca'; // Asegúrate de que el path sea correcto
+import PrivateRoute from '../components/PrivateRoute';
+
+const BibliotecaPage: React.FC = () => {
+  return (
+    <div>
+      <Biblioteca />
+    </div>
+  );
+};
+
+export default () => (
+  <PrivateRoute roles={['admin', 'user']}>
+    <BibliotecaPage />
+  </PrivateRoute>
+);
+
+--- Contenido de HomePage.tsx ---
+// HomePage.tsx
+import { useLocation } from 'react-router-dom'; // Import useLocation
+import Hero from "../components/Hero";
+import NewsCarousel from "../components/NewsCard";
+import PlansSection from "../components/PlansSelector";
+import Results from "../components/results";
+import CoursesAndServices from "../components/CoursesAndServices";
+
+const HomePage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const welcome = queryParams.get('welcome');
+  const userId = queryParams.get('userId');
+
+  return (
+    <div>
+      {welcome && userId && (
+        <div className="alert alert-success">
+          Welcome! Your user ID is {userId}.
+        </div>
+      )}
+      <Hero />
+      <NewsCarousel />
+      <PlansSection />
+      <Results />
+      <CoursesAndServices />
+    </div>
+  );
+};
+
+export default HomePage;
+
+--- Contenido de AboutPage.tsx ---
+import React from 'react';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import '../styles/AboutPage.css';  // Importa el archivo de estilos
+
+const AboutPage: React.FC = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Container className="py-5">
+      {/* Welcome Section */}
+      <Row className="mb-4 text-center">
+        <Col>
+          <h2 className="display-4 mb-3">{t('welcome')}</h2>
+          <p className="lead">
+            {t('mission')}
+          </p>
+        </Col>
+      </Row>
+
+      {/* Who Are We Section */}
+      <Row className="mb-5">
+        <Col md={12}>
+          <Card className="shadow-sm border-0 p-4">
+            <h3 className="mb-3 text-primary">{t('whoAreWe')}</h3>
+            <p>{t('whoAreWeText')}</p>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Our Commitment Section */}
+      <Row className="mb-5">
+        <Col md={12}>
+          <Card className="shadow-sm border-0 p-4">
+            <h3 className="mb-3 text-primary">{t('ourCommitment')}</h3>
+            <ul className="list-unstyled">
+              <li className="mb-2">{t('commitment1')}</li>
+              <li className="mb-2">{t('commitment2')}</li>
+              <li className="mb-2">{t('commitment3')}</li>
+              <li className="mb-2">{t('commitment4')}</li>
+            </ul>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Our Services Section */}
+      <Row className="mb-5">
+        <Col md={12}>
+          <Card className="shadow-sm border-0 p-4">
+            <h3 className="mb-3 text-primary">{t('ourServices')}</h3>
+            <ul className="list-unstyled">
+              <li className="mb-3">
+                <strong>{t('service1Title')}</strong>: {t('service1Text')}
+              </li>
+              <li className="mb-3">
+                <strong>{t('service2Title')}</strong>: {t('service2Text')}
+              </li>
+              <li className="mb-3">
+                <strong>{t('service3Title')}</strong>: {t('service3Text')}
+              </li>
+              <li className="mb-3">
+                <strong>{t('service4Title')}</strong>: {t('service4Text')}
+              </li>
+            </ul>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Join Us Section */}
+      <Row className="text-center">
+        <Col>
+          <h3 className="mb-3 text-primary">{t('joinUs')}</h3>
+          <p className="lead mb-4">{t('joinUsText')}</p>
+          <Button variant="success" size="lg" onClick={() => window.location.href='/login'}>
+            {t('joinNow')}
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
+
+export default AboutPage;
+
+--- Contenido de register.tsx ---
+import React, { useState } from 'react';
+import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
+
+axios.defaults.baseURL = 'https://api.icegeneralcontractors.com/api';
+
+const Register = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    nombre: '',
+    segundoNombre: '',
+    apellidos: '',
+    fechaNacimiento: '',
+    telefono: '',
+    direccion: '',
+    ssn: '',
+    paisNacimiento: '',
+    nacionalidad: '',
+    genero: '',
+    idioma: '',
+    documento: null as File | null,
+    documentoTipo: '',
+  });
+  const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false); // Add state for password visibility
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, documento: e.target.files ? e.target.files[0] : null });
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+
+    const data = new FormData();
+    data.append('email', formData.email);
+    data.append('password', formData.password);
+    // data.append('role', 'user'); // Removed role assignment from frontend
+    data.append('firstName', formData.nombre);
+    data.append('middleName', formData.segundoNombre);
+    data.append('lastName', formData.apellidos);
+    data.append('dateOfBirth', formData.fechaNacimiento);
+    data.append('phoneNumber', formData.telefono);
+    data.append('address', formData.direccion);
+    data.append('ssn', formData.ssn);
+    data.append('countryOfBirth', formData.paisNacimiento);
+    data.append('nationality', formData.nacionalidad);
+    data.append('gender', formData.genero);
+    data.append('preferredLanguage', formData.idioma);
+    data.append('documentType', formData.documentoTipo);
+    if (formData.documento) {
+      data.append('documento', formData.documento, formData.documento.name);
+    }
+
+    try {
+      // Enviar los datos al backend, incluyendo el archivo
+      const response = await axios.post('/users', data);
+
+      const userId = response.data.id;
+      navigate(`/?welcome=true&userId=${userId}`);
+    } catch (error) {
+      setError('Registration failed. Please try again.');
+      console.error('Registration failed', error);
+    }
+  };
+
+  return (
+    <div className="register-page d-flex align-items-center min-vh-100">
+      <Container>
+        <Row className="justify-content-center">
+          <Col md={6} lg={5}>
+            <div className="register-card p-4 rounded shadow-sm">
+              <h2 className="text-center mb-4">Register</h2>
+              {error && <Alert variant="danger">{error}</Alert>}
+              <Form onSubmit={onSubmit}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Nombre</Form.Label>
+                  <Form.Control type="text" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Segundo Nombre (si aplica)</Form.Label>
+                  <Form.Control type="text" name="segundoNombre" id="segundoNombre" value={formData.segundoNombre} onChange={handleChange} />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Apellidos</Form.Label>
+                  <Form.Control type="text" name="apellidos" id="apellidos" value={formData.apellidos} onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Fecha de Nacimiento</Form.Label>
+                  <Form.Control type="date" name="fechaNacimiento" id="fechaNacimiento" value={formData.fechaNacimiento} onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Número de Teléfono</Form.Label>
+                  <Form.Control type="text" name="telefono" id="telefono" value={formData.telefono} onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Dirección</Form.Label>
+                  <Form.Control type="text" name="direccion" id="direccion" value={formData.direccion} onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Número de Seguro Social (SSN) (Opcional)</Form.Label>
+                  <Form.Control type="text" name="ssn" id="ssn" value={formData.ssn} onChange={handleChange} />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>País de Nacimiento</Form.Label>
+                  <Form.Control type="text" name="paisNacimiento" id="paisNacimiento" value={formData.paisNacimiento} onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Nacionalidad</Form.Label>
+                  <Form.Control type="text" name="nacionalidad" id="nacionalidad" value={formData.nacionalidad} onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Seleccione una opción</Form.Label>
+                  <Form.Control as="select" name="genero" id="genero" value={formData.genero} onChange={handleChange} required>
+                    <option value="">Seleccione</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Seleccione su idioma preferido para la comunicación</Form.Label>
+                  <Form.Control as="select" name="idioma" id="idioma" value={formData.idioma} onChange={handleChange} required>
+                    <option value="">Seleccione</option>
+                    <option value="English">English</option>
+                    <option value="Español">Español</option>
+                    <option value="Otro">Otro</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    name="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-4">
+                  <Form.Label>Password</Form.Label>
+                  <div style={{ position: 'relative' }}>
+                    <Form.Control
+                      type={showPassword ? 'text' : 'password'} // Toggle input type
+                      placeholder="Password"
+                      name="password"
+                      id="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+                    <span
+                      onClick={togglePasswordVisibility}
+                      style={{
+                        position: 'absolute',
+                        right: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle icon */}
+                    </span>
+                  </div>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Por favor, suba uno de los documentos siguientes</Form.Label>
+                  <Form.Control as="select" name="documentoTipo" id="documentoTipo" value={formData.documentoTipo} onChange={handleChange} required>
+                    <option value="">Seleccione</option>
+                    <option value="Licencia de Conducir">Licencia de Conducir</option>
+                    <option value="Tarjeta verde">Tarjeta verde</option>
+                    <option value="Otro Documento de Identificación Gubernamental">Otro Documento de Identificación Gubernamental</option>
+                  </Form.Control>
+                </Form.Group>
+                <Form.Group className="mb-4">
+                  <Form.Label>Subir Documento</Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="documento"
+                    id="documento"
+                    accept=".pdf,.jpg,.png"
+                    onChange={handleFileChange}
+                    required
+                  />
+                </Form.Group>
+                <Button variant="primary" type="submit" className="w-100 mb-3">
+                  Register
+                </Button>
+              </Form>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default Register;

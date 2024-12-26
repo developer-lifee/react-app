@@ -16,9 +16,13 @@ const Login = () => {
     e.preventDefault();
     setError(null);
     try {
-      await handleLogin(email, password);
-      // Redirect based on user role
-      navigate('/');
+      const user = await handleLogin(email, password);
+      // Redirigir basado en el rol del usuario
+      if (user.role === 'admin') {
+        navigate('/forms');
+      } else {
+        navigate('/quiz');
+      }
     } catch (error) {
       setError('Login failed. Please try again.');
       console.error('Login failed', error);
@@ -85,6 +89,7 @@ const Login = () => {
       </Container>
     </div>
   );
+
 };
 
 export default Login;

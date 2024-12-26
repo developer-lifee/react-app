@@ -1,3 +1,5 @@
+import React from 'react';
+import PrivateRoute from '../components/PrivateRoute';
 import { useState } from "react";
 import Question from "../components/quiz/Question";
 import Result from "../components/quiz/Result";
@@ -92,4 +94,8 @@ const Quiz: React.FC = () => {
   );
 };
 
-export default Quiz;
+export default () => (
+  <PrivateRoute roles={['admin', 'user']}>
+    <Quiz />
+  </PrivateRoute>
+);

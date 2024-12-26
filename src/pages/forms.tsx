@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PrivateRoute from '../components/PrivateRoute';
 import api from '../util/axiosConfig'; // Importa la instancia de Axios configurada
 import { Container, Modal, Spinner, Alert } from 'react-bootstrap';
 import FormCreate from '../components/forms/FormCreate';
@@ -126,4 +127,8 @@ const FormsPage: React.FC = () => {
     );
 };
 
-export default FormsPage;
+export default () => (
+    <PrivateRoute roles={['admin']}>
+        <FormsPage />
+    </PrivateRoute>
+);
