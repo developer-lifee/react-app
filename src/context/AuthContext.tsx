@@ -1,9 +1,16 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import api from '../util/axiosConfig'; // Asegúrate de importar la instancia de Axios
+import { jwtDecode, JwtPayload as DefaultJwtPayload } from 'jwt-decode';
+
+interface JwtPayload extends DefaultJwtPayload {
+  email: string;
+  role: string;
+}
 
 interface User {
   email: string;
   role: string;
+  // Agrega cualquier otra propiedad necesaria
 }
 
 interface AuthContextType {
@@ -41,13 +48,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const handleLogin = async (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string): Promise<User> => {
     try {
       const response = await api.post('/auth/login', { email, password });
       const token = response.data.access_token;
+
       localStorage.setItem('token', token); // Guarda el token
-      setUser(jwtDecode(token)); // Decodifica y guarda el usuario
-      return jwtDecode(token);
+      const decodedToken: JwtPayload = jwtDecode(token); // Decodifica el token
+
+      // Mapear JwtPayload a User
+      const user: User = {
+        email: decodedToken.email as string, // Asegúrate de que el campo existe
+        role: decodedToken.role as string,   // Asegúrate de que el campo existe
+        // Agrega otros campos necesarios
+      };
+
+      setUser(user);
+      return user;
     } catch (error) {
       console.error('Login failed', error);
       throw error;
