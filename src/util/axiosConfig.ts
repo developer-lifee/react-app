@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Crear una instancia de Axios
 const api = axios.create({
-  baseURL: 'https://tu-api.com/api', // Reemplaza con la URL de tu API
+  baseURL: 'https://api.icegeneralcontractors.com/api/', // Reemplaza con la URL de tu API
 });
 
 // Interceptor para agregar el token a las solicitudes

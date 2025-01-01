@@ -12,6 +12,7 @@ interface AuthContextType {
   handleGoogleLogin: () => void;
   handleAppleLogin: () => void;
   handleCreateUser: () => void;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -20,6 +21,7 @@ export const AuthContext = createContext<AuthContextType>({
   handleGoogleLogin: () => {},
   handleAppleLogin: () => {},
   handleCreateUser: () => {},
+  logout: () => {},
 });
 
 interface AuthProviderProps {
@@ -41,13 +43,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const response = await api.post('/login', { email, password });
-      const { token, user } = response.data;
-      // Guardar token y usuario en localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-      setUser(user);
-      return user;
+      const response = await api.post('/auth/login', { email, password });
+      const token = response.data.access_token;
+      localStorage.setItem('token', token); // Guarda el token
+      setUser(jwtDecode(token)); // Decodifica y guarda el usuario
+      return jwtDecode(token);
     } catch (error) {
       console.error('Login failed', error);
       throw error;
@@ -66,8 +66,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Implementa la lógica de creación de usuario
   };
 
+  const logout = () => {
+    // Implement logout functionality, e.g., clearing user data and tokens
+  };
+
   return (
-    <AuthContext.Provider value={{ user, handleLogin, handleGoogleLogin, handleAppleLogin, handleCreateUser }}>
+    <AuthContext.Provider value={{ user, handleLogin, handleGoogleLogin, handleAppleLogin, handleCreateUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
