@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import api from '../../util/axiosConfig';
 import { Form, Button, Container, Alert, Row, Col } from 'react-bootstrap';
 
@@ -8,7 +8,7 @@ interface FormCreateProps {
 
 const questionTypes = [
   { value: 'text', label: 'Text' },
-  { value: 'textarea', label: 'Textarea' },
+  { value: 'textarea', label: 'Long Text' },
 ];
 
 const FormCreate: React.FC<FormCreateProps> = ({ onFormCreated }) => {
@@ -102,7 +102,8 @@ const FormCreate: React.FC<FormCreateProps> = ({ onFormCreated }) => {
               <Form.Group>
                 <Form.Label>Question Text</Form.Label>
                 <Form.Control
-                  type="text"
+                  as={question.questionType === 'textarea' ? 'textarea' : 'input'}
+                  {...(question.questionType === 'textarea' && { rows: 4 })}
                   value={question.questionText}
                   onChange={(e) => handleQuestionChange(index, 'questionText', e.target.value)}
                 />
@@ -124,18 +125,24 @@ const FormCreate: React.FC<FormCreateProps> = ({ onFormCreated }) => {
               </Form.Group>
             </Col>
             <Col md={2} className="d-flex align-items-end">
-              <Button variant="danger" onClick={() => handleRemoveQuestion(index)}>
+              <Button variant="outline-danger" size="sm" className="me-2" onClick={() => handleRemoveQuestion(index)}>
                 Remove
               </Button>
             </Col>
           </Row>
         ))}
-        <Button variant="secondary" className="mb-3" onClick={handleAddQuestion}>
-          Add Question
-        </Button>
-        <Button variant="primary" onClick={handleCreate} className="mt-3">
-          Create Form
-        </Button>
+        <Row className="d-flex justify-content-between mb-3">
+          <Col md={6}>
+            <Button variant="secondary" size="sm" className="me-2" onClick={handleAddQuestion}>
+              Add Question
+            </Button>
+          </Col>
+          <Col md={6} className="text-end">
+            <Button variant="primary" size="sm" onClick={handleCreate} className="w-100">
+              Create Form
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </Container>
   );

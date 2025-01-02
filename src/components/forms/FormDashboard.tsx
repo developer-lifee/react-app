@@ -8,9 +8,10 @@ interface FormDashboardProps {
   onEdit: (form: any) => void;
   onComplete: (form: any) => void;
   onCreate: () => void;
+  onSend: (form: any) => void;
 }
 
-const FormDashboard: React.FC<FormDashboardProps> = ({ forms, onDelete, onView, onEdit, onComplete, onCreate }) => {
+const FormDashboard: React.FC<FormDashboardProps> = ({ forms, onDelete, onView, onEdit, onComplete, onCreate, onSend }) => {
   return (
     <div>
       <div className="text-end mb-3">
@@ -28,7 +29,8 @@ const FormDashboard: React.FC<FormDashboardProps> = ({ forms, onDelete, onView, 
               <Button variant="info" onClick={() => onView(form)}>View</Button>{' '}
               <Button variant="secondary" onClick={() => onEdit(form)}>Edit</Button>{' '}
               <Button variant="success" onClick={() => onComplete(form)}>Complete</Button>{' '}
-              <Button variant="danger" onClick={() => onDelete(form.id)}>Delete</Button>
+              <Button variant="danger" onClick={() => onDelete(form.id)}>Delete</Button>{' '}
+              <Button variant="primary" onClick={() => onSend(form)}>Send</Button>
             </div>
           </ListGroup.Item>
         ))}
@@ -38,3 +40,4 @@ const FormDashboard: React.FC<FormDashboardProps> = ({ forms, onDelete, onView, 
 };
 
 export default FormDashboard;
+
