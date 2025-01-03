@@ -18,7 +18,7 @@ interface AuthContextType {
   handleLogin: (email: string, password: string) => Promise<User>;
   handleGoogleLogin: () => void;
   handleAppleLogin: () => void;
-  handleCreateUser: () => void;
+  handleCreateUser: (formData: any) => Promise<User>;
   logout: () => void;
 }
 
@@ -27,7 +27,7 @@ export const AuthContext = createContext<AuthContextType>({
   handleLogin: async () => { return { email: '', role: '' }; },
   handleGoogleLogin: () => {},
   handleAppleLogin: () => {},
-  handleCreateUser: () => {},
+  handleCreateUser: async () => { return { email: '', role: '' }; },
   logout: () => {},
 });
 
@@ -71,20 +71,49 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    // Implementa la lógica de inicio de sesión con Google
+  const handleGoogleLogin = async () => {
+    try {
+      // Example flow: request a redirect URL from backend or handle callback
+      const response = await api.get('/auth/google');
+      window.location.href = response.data.url; 
+    } catch (error) {
+      console.error('Google login failed', error);
+    }
   };
 
-  const handleAppleLogin = () => {
-    // Implementa la lógica de inicio de sesión con Apple
+  const handleAppleLogin = async () => {
+    try {
+      const response = await api.get('/auth/apple');
+      window.location.href = response.data.url;
+    } catch (error) {
+      console.error('Apple login failed', error);
+    }
   };
 
-  const handleCreateUser = () => {
-    // Implementa la lógica de creación de usuario
+  const handleCreateUser = async (formData: any): Promise<User> => {
+    try {
+      const response = await api.post('/users', formData);
+      const token = response.data.access_token;
+      localStorage.setItem('token', token);
+      sessionStorage.setItem('token', token); // If desired
+      const decodedToken: JwtPayload = jwtDecode(token);
+      const newUser: User = {
+        email: decodedToken.email as string,
+        role: decodedToken.role as string,
+        // ...any extra fields...
+      };
+      setUser(newUser);
+      return newUser;
+    } catch (error) {
+      console.error('User creation failed', error);
+      throw error;
+    }
   };
 
   const logout = () => {
-    // Implement logout functionality, e.g., clearing user data and tokens
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    setUser(null);
   };
 
   return (

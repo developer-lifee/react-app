@@ -149,7 +149,7 @@ const FormsPage: React.FC = () => {
 };
 
 export default () => (
-    <PrivateRoute roles={['admin']}>
+    <PrivateRoute roles={['admin', 'subscriber']}>
         <FormsPage />
     </PrivateRoute>
 );

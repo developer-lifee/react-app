@@ -8,8 +8,12 @@ const MyNavbar: React.FC = () => {
   const { user, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    // Elimina el token de autenticación
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    logout(); // Limpia el estado del usuario en el contexto
+    // Redirige al usuario a la página de inicio de sesión
+    navigate('/login');
   };
 
   return (
