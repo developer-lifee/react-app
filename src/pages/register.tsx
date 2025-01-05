@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
+import { jwtDecode } from 'jwt-decode';
+
+interface DecodedToken {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+}
 
 axios.defaults.baseURL = 'https://api.icegeneralcontractors.com/api';
 
@@ -26,7 +33,27 @@ const Register = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false); // Add state for password visibility
+  const [isTokenValid, setIsTokenValid] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode<DecodedToken>(token);
+        setFormData((prev) => ({
+          ...prev,
+          email: decoded.email || '',
+          nombre: decoded.firstName || '',
+          apellidos: decoded.lastName || '',
+        }));
+        setIsTokenValid(true);
+      } catch (error) {
+        console.error('Invalid token:', error);
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -46,8 +73,10 @@ const Register = () => {
     setError(null);
 
     const data = new FormData();
-    data.append('email', formData.email);
-    data.append('password', formData.password);
+    if (!isTokenValid) {
+      data.append('email', formData.email);
+      data.append('password', formData.password);
+    }
     // data.append('role', 'user'); // Removed role assignment from frontend
     data.append('firstName', formData.nombre);
     data.append('middleName', formData.segundoNombre);
@@ -67,7 +96,8 @@ const Register = () => {
 
     try {
       // Enviar los datos al backend, incluyendo el archivo
-      const response = await axios.post('/users', data);
+      const endpoint = isTokenValid ? '/users/complete-registration' : '/users';
+      const response = await axios.post(endpoint, data);
 
       const userId = response.data.id;
       navigate(`/?welcome=true&userId=${userId}`);
@@ -86,6 +116,48 @@ const Register = () => {
               <h2 className="text-center mb-4">Register</h2>
               {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={onSubmit}>
+                {!isTokenValid && (
+                  <>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Email address</Form.Label>
+                      <Form.Control
+                        type="email"
+                        placeholder="Enter email"
+                        name="email"
+                        id="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-4">
+                      <Form.Label>Password</Form.Label>
+                      <div style={{ position: 'relative' }}>
+                        <Form.Control
+                          type={showPassword ? 'text' : 'password'} // Toggle input type
+                          placeholder="Password"
+                          name="password"
+                          id="password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
+                        />
+                        <span
+                          onClick={togglePasswordVisibility}
+                          style={{
+                            position: 'absolute',
+                            right: '10px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle icon */}
+                        </span>
+                      </div>
+                    </Form.Group>
+                  </>
+                )}
                 <Form.Group className="mb-3">
                   <Form.Label>Nombre</Form.Label>
                   <Form.Control type="text" name="nombre" id="nombre" value={formData.nombre} onChange={handleChange} required />
@@ -141,44 +213,6 @@ const Register = () => {
                   </Form.Control>
                 </Form.Group>
                 <Form.Group className="mb-3">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    name="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-4">
-                  <Form.Label>Password</Form.Label>
-                  <div style={{ position: 'relative' }}>
-                    <Form.Control
-                      type={showPassword ? 'text' : 'password'} // Toggle input type
-                      placeholder="Password"
-                      name="password"
-                      id="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      required
-                    />
-                    <span
-                      onClick={togglePasswordVisibility}
-                      style={{
-                        position: 'absolute',
-                        right: '10px',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle icon */}
-                    </span>
-                  </div>
-                </Form.Group>
-                <Form.Group className="mb-3">
                   <Form.Label>Por favor, suba uno de los documentos siguientes</Form.Label>
                   <Form.Control as="select" name="documentoTipo" id="documentoTipo" value={formData.documentoTipo} onChange={handleChange} required>
                     <option value="">Seleccione</option>
@@ -199,7 +233,7 @@ const Register = () => {
                   />
                 </Form.Group>
                 <Button variant="primary" type="submit" className="w-100 mb-3">
-                  Register
+                  {isTokenValid ? 'Complete Registration' : 'Register'}
                 </Button>
               </Form>
             </div>
