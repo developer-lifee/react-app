@@ -6,7 +6,7 @@ import { FaGoogle, FaApple } from 'react-icons/fa'; // Import icons
 import '../styles/login.css';
 
 const Login = () => {
-  const { handleLogin, handleAppleLogin } = useContext(AuthContext);
+  const { handleLogin } = useContext(AuthContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -93,7 +93,13 @@ const Login = () => {
                   </Button>
                 </Col>
                 <Col>
-                  <Button variant="dark" className="w-100 mb-3 d-flex align-items-center justify-content-center" onClick={handleAppleLogin}>
+                  <Button
+                    variant="dark"
+                    className="w-100 mb-3 d-flex align-items-center justify-content-center"
+                    onClick={() => {
+                      window.location.href = 'https://api.icegeneralcontractors.com/api/auth/apple/';
+                    }}
+                  >
                     <FaApple className="me-2" /> Login with Apple
                   </Button>
                 </Col>
