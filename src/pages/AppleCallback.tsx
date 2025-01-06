@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../util/axiosConfig';
 
-const GoogleCallback = () => {
+const AppleCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -10,12 +10,12 @@ const GoogleCallback = () => {
     const token = query.get('token');
 
     if (token) {
-      api.post('/auth/google/callback', { token })
+      api.post('/auth/apple/callback', { token })
         .then(response => {
           const yourAppToken = response.data.access_token;
           localStorage.setItem('token', yourAppToken);
           const decodedToken = parseJwt(yourAppToken);
-          
+
           const userData = {
             email: decodedToken.email,
             role: decodedToken.role,
@@ -29,7 +29,7 @@ const GoogleCallback = () => {
           }
         })
         .catch(error => {
-          console.error('Error during Google authentication:', error);
+          console.error('Error during Apple authentication:', error);
           navigate('/login');
         });
     } else {
@@ -50,4 +50,4 @@ function parseJwt(token: string) {
   return JSON.parse(jsonPayload);
 }
 
-export default GoogleCallback;
+export default AppleCallback;
