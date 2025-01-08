@@ -25,8 +25,7 @@ const Login = () => {
     e.preventDefault();
     setError(null);
     try {
-      const user = await handleLogin(email, password);
-      // Redirect to home page regardless of role
+      await handleLogin(email, password); // Remove user variable declaration
       navigate('/');
     } catch (error) {
       setError('Login failed. Please try again.');
