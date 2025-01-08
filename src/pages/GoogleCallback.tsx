@@ -23,7 +23,7 @@ const GoogleCallback = () => {
           localStorage.setItem('user', JSON.stringify(userData));
 
           if (decodedToken.isRegistered) {
-            navigate('/');
+            navigate('/');  // Changed from /dashboard to /
           } else {
             navigate('/register?token=' + yourAppToken);
           }

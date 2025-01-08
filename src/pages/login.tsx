@@ -17,7 +17,7 @@ const Login = () => {
     const token = urlParams.get('token');
     if (token) {
       localStorage.setItem('token', token);
-      navigate('/dashboard'); // Change to your preferred route
+      navigate('/'); // Changed from /dashboard to /
     }
   }, [navigate]);
 
@@ -26,12 +26,8 @@ const Login = () => {
     setError(null);
     try {
       const user = await handleLogin(email, password);
-      // Redirigir basado en el rol del usuario
-      if (user.role === 'admin') {
-        navigate('/forms');
-      } else {
-        navigate('/quiz');
-      }
+      // Redirect to home page regardless of role
+      navigate('/');
     } catch (error) {
       setError('Login failed. Please try again.');
       console.error('Login failed', error);
