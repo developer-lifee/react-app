@@ -40,6 +40,15 @@ const MyNavbar: React.FC = () => {
               </>
             )}
           </Nav>
+          <Button
+            variant="warning"
+            className="ms-3"
+            href="https://donate.stripe.com/aEU3ds2zd6jlbxCdQQ"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Donar
+          </Button>
           {user ? (
             <Button variant="outline-light" onClick={handleLogout} className="ms-3">
               Logout

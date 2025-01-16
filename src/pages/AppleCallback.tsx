@@ -10,6 +10,7 @@ const AppleCallback = () => {
     const token = query.get('token');
 
     if (token) {
+      console.log('Apple token from query:', token); // For verification
       api.post('/auth/apple/callback', { token })
         .then(response => {
           const yourAppToken = response.data.access_token;
