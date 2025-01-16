@@ -12,6 +12,7 @@ import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute
 import Unauthorized from './pages/Unauthorized';
 import GoogleCallback from './pages/GoogleCallback';
 import AppleCallback from './pages/AppleCallback';
+import Formulario from './pages/formulario'; // Import Formulario component
 import './i18n';
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/unauthorized" element={<Unauthorized />} /> {/* Add unauthorized route */}
           <Route path="/google-callback" element={<GoogleCallback />} />
           <Route path="/apple-callback" element={<AppleCallback />} />
+          <Route path="/api/forms/1/:token" element={<Formulario />} /> {/* Add Formulario route */}
         </Routes>
       </main>
       <Footer />
