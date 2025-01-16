@@ -11,14 +11,14 @@ const Footer = () => {
           </Col>
           <Col md={6} className="text-md-end">
             <p className="mb-1">Follow Us</p>
-            <a href="#" className="me-3">
+            <a href="https://www.facebook.com/share/NwtXwrmVKHdH9E7r/?mibextid=LQQJ4d" target="_blank" rel="noopener noreferrer" className="me-3">
               <i className="fab fa-facebook"></i>
             </a>
-            <a href="#" className="me-3">
+            <a href="https://www.instagram.com/aaipassociation?igsh=MWxsMWM3aTZ0Y3djcg==" target="_blank" rel="noopener noreferrer" className="me-3">
               <i className="fab fa-instagram"></i>
             </a>
-            <a href="#">
-              <i className="fab fa-youtube"></i>
+            <a href="https://x.com/aaipassociation?s=11" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-twitter"></i>
             </a>
           </Col>
         </Row>
