@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; // Removed unused React import
 import { useParams } from 'react-router-dom'; // For capturing URL parameters
 import axios from 'axios';
 
@@ -35,7 +35,7 @@ const Formulario = () => {
   // Submit the answers
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(
+      await axios.post( // Removed the unused response variable
         `https://api.icegeneralcontractors.com/api/answers/new/${id}/${token}`,
         { answers },
         {
