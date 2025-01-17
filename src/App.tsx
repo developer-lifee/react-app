@@ -41,7 +41,7 @@ const App = () => {
           <Route path="/unauthorized" element={<Unauthorized />} /> {/* Add unauthorized route */}
           <Route path="/google-callback" element={<GoogleCallback />} />
           <Route path="/apple-callback" element={<AppleCallback />} />
-          <Route path="/api/forms/1/:token" element={<Formulario />} /> {/* Add Formulario route */}
+          <Route path="/api/forms/:id/:token" element={<Formulario />} /> {/* Replace the route to capture both id and token */}
         </Routes>
       </main>
       <Footer />

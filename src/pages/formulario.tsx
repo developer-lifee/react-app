@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'; // For capturing URL parameters
 import axios from 'axios';
 
 const Formulario = () => {
-  const { token } = useParams<{ token: string }>(); // Capture the token from the URL
+  const { id, token } = useParams<{ id: string; token: string }>(); // Capture the id and token from the URL
   const [formData, setFormData] = useState<any>(null);
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const [loading, setLoading] = useState(true);
@@ -13,7 +13,7 @@ const Formulario = () => {
   useEffect(() => {
     const fetchFormData = async () => {
       try {
-        const response = await axios.get('https://api.icegeneralcontractors.com/api/forms/1/', {
+        const response = await axios.get(`https://api.icegeneralcontractors.com/api/forms/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFormData(response.data);
@@ -25,7 +25,7 @@ const Formulario = () => {
     };
 
     fetchFormData();
-  }, [token]);
+  }, [id, token]);
 
   // Handle input changes
   const handleInputChange = (questionId: number, value: string) => {
@@ -36,15 +36,15 @@ const Formulario = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `https://api.icegeneralcontractors.com/api/answers/new/1/${token}`,
+        `https://api.icegeneralcontractors.com/api/answers/new/${id}/${token}`,
         { answers },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert('Formulario enviado correctamente. Revisa tu correo para descargar el PDF.');
+      alert('Formulario enviado correctamente.');
     } catch (err) {
-      alert('Error al enviar el formulario. Intenta nuevamente.');
+      alert('Error al enviar el formulario.');
     }
   };
 
