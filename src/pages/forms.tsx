@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PrivateRoute from '../components/PrivateRoute';
 import api from '../util/axiosConfig'; // Importa la instancia de Axios configurada
 import { Container, Modal, Spinner, Alert } from 'react-bootstrap';
 import FormCreate from '../components/forms/FormCreate';
@@ -6,6 +7,7 @@ import FormEdit from '../components/forms/FormEdit';
 import FormComplete from '../components/forms/FormComplete';
 import FormDashboard from '../components/forms/FormDashboard';
 import FormView from '../components/forms/FormView';
+import FormSend from '../components/forms/FormSend';
 
 const FormsPage: React.FC = () => {
     const [forms, setForms] = useState<any[]>([]);
@@ -16,6 +18,7 @@ const FormsPage: React.FC = () => {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [showCompleteModal, setShowCompleteModal] = useState<boolean>(false);
     const [showViewModal, setShowViewModal] = useState<boolean>(false);
+    const [showSendModal, setShowSendModal] = useState<boolean>(false);
 
     useEffect(() => {
         fetchForms();
@@ -60,6 +63,15 @@ const FormsPage: React.FC = () => {
         setShowViewModal(true);
     };
 
+    const handleSend = (form: any) => {
+        setSelectedForm(form);
+        setShowSendModal(true);
+    };
+
+    const handleSendSuccess = () => {
+        setShowSendModal(false);
+    };
+
     if (loading) return (
         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
             <Spinner animation="border" variant="primary" />
@@ -81,6 +93,7 @@ const FormsPage: React.FC = () => {
                 onEdit={(form) => { setSelectedForm(form); setShowEditModal(true); }}
                 onComplete={(form) => { setSelectedForm(form); setShowCompleteModal(true); }}
                 onCreate={() => setShowCreateModal(true)}
+                onSend={handleSend}
             />
 
             <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} centered>
@@ -122,8 +135,21 @@ const FormsPage: React.FC = () => {
                     {selectedForm && <FormView formId={selectedForm.id} />}
                 </Modal.Body>
             </Modal>
+
+            <Modal show={showSendModal} onHide={() => setShowSendModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Send Form</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedForm && <FormSend formId={selectedForm.id} onSendComplete={handleSendSuccess} />}
+                </Modal.Body>
+            </Modal>
         </Container>
     );
 };
 
-export default FormsPage;
+export default () => (
+    <PrivateRoute roles={['admin', 'subscriber']}>
+        <FormsPage />
+    </PrivateRoute>
+);

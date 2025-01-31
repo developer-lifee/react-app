@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { AuthContext } from '../context/AuthContext';
@@ -6,18 +6,26 @@ import { FaGoogle, FaApple } from 'react-icons/fa'; // Import icons
 import '../styles/login.css';
 
 const Login = () => {
-  const { handleLogin, handleGoogleLogin, handleAppleLogin } = useContext(AuthContext);
+  const { handleLogin } = useContext(AuthContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate(); // Initialize useNavigate
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (token) {
+      localStorage.setItem('token', token);
+      navigate('/'); // Changed from /dashboard to /
+    }
+  }, [navigate]);
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     try {
-      await handleLogin(email, password);
-      // Redirect based on user role
+      await handleLogin(email, password); // Remove user variable declaration
       navigate('/');
     } catch (error) {
       setError('Login failed. Please try again.');
@@ -69,12 +77,24 @@ const Login = () => {
               </Button>
               <Row>
                 <Col>
-                  <Button variant="danger" className="w-100 mb-3 d-flex align-items-center justify-content-center" onClick={handleGoogleLogin}>
+                  <Button
+                    variant="danger"
+                    className="w-100 mb-3 d-flex align-items-center justify-content-center"
+                    onClick={() => {
+                      window.location.href = 'https://api.icegeneralcontractors.com/api/auth/google/';
+                    }}
+                  >
                     <FaGoogle className="me-2" /> Login with Google
                   </Button>
                 </Col>
                 <Col>
-                  <Button variant="dark" className="w-100 mb-3 d-flex align-items-center justify-content-center" onClick={handleAppleLogin}>
+                  <Button
+                    variant="dark"
+                    className="w-100 mb-3 d-flex align-items-center justify-content-center"
+                    onClick={() => {
+                      window.location.href = 'https://api.icegeneralcontractors.com/api/auth/apple/';
+                    }}
+                  >
                     <FaApple className="me-2" /> Login with Apple
                   </Button>
                 </Col>
@@ -85,6 +105,7 @@ const Login = () => {
       </Container>
     </div>
   );
+
 };
 
 export default Login;

@@ -33,6 +33,20 @@ const FormEdit: React.FC<FormEditProps> = ({ formId, onEditComplete }) => {
     }
   };
 
+  const handleAddQuestion = () => {
+    setForm({
+      ...form,
+      questions: [...form.questions, { questionText: '', questionType: 'text' }],
+    });
+  };
+
+  const handleRemoveQuestion = (index: number) => {
+    setForm({
+      ...form,
+      questions: form.questions.filter((_: any, i: number) => i !== index),
+    });
+  };
+
   if (!form) return <div>Loading...</div>;
 
   return (
@@ -64,6 +78,51 @@ const FormEdit: React.FC<FormEditProps> = ({ formId, onEditComplete }) => {
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Questions</Form.Label>
+          {form.questions.map((question: any, index: number) => (
+            <div key={index} className="mb-3">
+              <Form.Control
+                type="text"
+                placeholder="Question Text"
+                value={question.questionText}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    questions: form.questions.map((q: any, i: number) =>
+                      i === index ? { ...q, questionText: e.target.value } : q
+                    ),
+                  })
+                }
+              />
+              <Form.Select
+                value={question.questionType}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    questions: form.questions.map((q: any, i: number) =>
+                      i === index ? { ...q, questionType: e.target.value } : q
+                    ),
+                  })
+                }
+              >
+                <option value="text">Text</option>
+                <option value="textarea">Textarea</option>
+              </Form.Select>
+              <Button variant="danger" size="sm" className="mt-2" onClick={() => handleRemoveQuestion(index)}>
+                Remove
+              </Button>
+            </div>
+          ))}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleAddQuestion}
+            className="mt-3"
+          >
+            Add Question
+          </Button>
         </Form.Group>
         <Button variant="primary" onClick={handleUpdate}>
           Update Form

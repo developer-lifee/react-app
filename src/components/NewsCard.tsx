@@ -3,7 +3,7 @@ import axios from "axios";
 import { Carousel, Container, Card, Button, Row, Col } from "react-bootstrap";
 
 const API_URL =
-  "https://newsdata.io/api/1/news?apikey=pub_5373485c743e11a05f2b28b653968e3569eb4&q=immigration";
+  "https://newsdata.io/api/1/news?apikey=pub_5373485c743e11a05f2b28b653968e3569eb4&q=inmigración&language=es&country=us"
 
 interface Article {
   title: string;

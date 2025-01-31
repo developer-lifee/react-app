@@ -135,6 +135,7 @@ const PlanCard: React.FC<Plan & { isAnnual: boolean }> = ({
 
 const PlansSection: React.FC = () => {
   const [isAnnual, setIsAnnual] = useState(true);
+  const [showComparison, setShowComparison] = useState(false); // New state
 
   // Definir los planes con herencia de características
   const plans: Plan[] = [
@@ -282,26 +283,37 @@ const PlansSection: React.FC = () => {
             </Carousel.Item>
           ))}
         </Carousel>
-        <Table striped bordered hover className="mt-5">
-          <thead>
-            <tr>
-              <th>Características</th>
-              {plans.map((plan, index) => (
-                <th key={index}>{plan.title}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {allFeatures.map((feature, index) => (
-              <tr key={index}>
-                <td>{feature}</td>
-                {featureChecks.map((checks, planIndex) => (
-                  <td key={planIndex}>{checks[index] ? "✔️" : ""}</td>
+
+        <div className="d-flex justify-content-center mt-5">
+          <Button
+            variant="info"
+            onClick={() => setShowComparison(!showComparison)} // Toggle the state
+          >
+            {showComparison ? 'Ocultar Comparación' : 'Mostrar Comparación'}
+          </Button>
+        </div>
+        {showComparison && (
+          <Table striped bordered hover className="mt-5">
+            <thead>
+              <tr>
+                <th>Características</th>
+                {plans.map((plan, index) => (
+                  <th key={index}>{plan.title}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {allFeatures.map((feature, index) => (
+                <tr key={index}>
+                  <td>{feature}</td>
+                  {featureChecks.map((checks, planIndex) => (
+                    <td key={planIndex}>{checks[index] ? "✔️" : ""}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Container>
     </section>
   );

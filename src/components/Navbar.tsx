@@ -3,13 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
-const MyNavbar = () => {
+const MyNavbar: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    // Elimina el token de autenticación
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    logout(); // Limpia el estado del usuario en el contexto
+    // Redirige al usuario a la página de inicio de sesión
+    navigate('/login');
   };
 
   return (
@@ -36,6 +40,15 @@ const MyNavbar = () => {
               </>
             )}
           </Nav>
+          <Button
+            variant="warning"
+            className="ms-3"
+            href="https://donate.stripe.com/aEU3ds2zd6jlbxCdQQ"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Donar
+          </Button>
           {user ? (
             <Button variant="outline-light" onClick={handleLogout} className="ms-3">
               Logout

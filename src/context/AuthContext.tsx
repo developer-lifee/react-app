@@ -1,30 +1,34 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { login as loginService, googleAuth, appleAuth } from '../services/apiService';
+import api from '../util/axiosConfig'; // Asegúrate de importar la instancia de Axios
+import { jwtDecode, JwtPayload as DefaultJwtPayload } from 'jwt-decode';
+
+interface JwtPayload extends DefaultJwtPayload {
+  email: string;
+  role: string;
+}
 
 interface User {
   email: string;
   role: string;
-  password: string;
+  // Agrega cualquier otra propiedad necesaria
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void; 
-  handleLogin: (email: string, password: string) => Promise<void>;
+  handleLogin: (email: string, password: string) => Promise<User>;
   handleGoogleLogin: () => void;
   handleAppleLogin: () => void;
-  handleCreateUser: () => void;
+  handleCreateUser: (formData: any) => Promise<User>;
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
-  login: async () => {},
-  logout: () => {},
-  handleLogin: async () => {},
+  handleLogin: async () => { return { email: '', role: '' }; },
   handleGoogleLogin: () => {},
   handleAppleLogin: () => {},
-  handleCreateUser: () => {},
+  handleCreateUser: async () => { return { email: '', role: '' }; },
+  logout: () => {},
 });
 
 interface AuthProviderProps {
@@ -44,53 +48,76 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string): Promise<User> => {
     try {
-      const user = await loginService(email, password);
-      // Guardar token y usuario en localStorage
-      localStorage.setItem('user', JSON.stringify(user));
+      const response = await api.post('/auth/login', { email, password });
+      const token = response.data.access_token;
+
+      localStorage.setItem('token', token); // Guarda el token
+      const decodedToken: JwtPayload = jwtDecode(token); // Decodifica el token
+
+      // Mapear JwtPayload a User
+      const user: User = {
+        email: decodedToken.email as string, // Asegúrate de que el campo existe
+        role: decodedToken.role as string,   // Asegúrate de que el campo existe
+        // Agrega otros campos necesarios
+      };
+
       setUser(user);
+      return user;
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('Login failed', error);
+      throw error;
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      // Example flow: request a redirect URL from backend or handle callback
+      const response = await api.get('/auth/google');
+      window.location.href = response.data.url; 
+    } catch (error) {
+      console.error('Google login failed', error);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      const response = await api.get('/auth/apple');
+      window.location.href = response.data.url;
+    } catch (error) {
+      console.error('Apple login failed', error);
+    }
+  };
+
+  const handleCreateUser = async (formData: any): Promise<User> => {
+    try {
+      const response = await api.post('/users', formData);
+      const token = response.data.access_token;
+      localStorage.setItem('token', token);
+      sessionStorage.setItem('token', token); // If desired
+      const decodedToken: JwtPayload = jwtDecode(token);
+      const newUser: User = {
+        email: decodedToken.email as string,
+        role: decodedToken.role as string,
+        // ...any extra fields...
+      };
+      setUser(newUser);
+      return newUser;
+    } catch (error) {
+      console.error('User creation failed', error);
       throw error;
     }
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     setUser(null);
   };
 
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      await login(email, password);
-      // Handle login success (e.g., save token, redirect, etc.)
-    } catch (error) {
-      console.error('Login failed', error);
-      handleError(error);
-    }
-  };
-
-  const handleGoogleLogin = () => {
-    googleAuth();
-  };
-
-  const handleAppleLogin = () => {
-    appleAuth();
-  };
-
-  const handleCreateUser = () => {
-    // Implement user creation logic here
-  };
-
-  const handleError = (error: unknown) => {
-    const err = error as { response?: { data: any }; message: string };
-    console.error('Error details:', err.response ? err.response.data : err.message);
-  };
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, handleLogin, handleGoogleLogin, handleAppleLogin, handleCreateUser }}>
+    <AuthContext.Provider value={{ user, handleLogin, handleGoogleLogin, handleAppleLogin, handleCreateUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
