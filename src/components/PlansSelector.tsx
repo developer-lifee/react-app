@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   Button,
@@ -8,312 +8,315 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Table,
-  Carousel,
+  Badge,
 } from "react-bootstrap";
 import {
-  FaUsers,
-  FaBook,
-  FaLaptop,
-  FaHandshake,
-  FaCertificate,
-  FaDatabase,
-  FaCog,
-  FaVideo,
-  FaGraduationCap,
-  FaChartLine,
+  FaCheck,
+  FaTimes,
 } from "react-icons/fa";
 
 type Plan = {
+  id: string;
   title: string;
-  price: string;
-  annualPrice: string;
+  badge?: string;
+  isPopular?: boolean;
+  priceMonth: string;
+  priceAnnual: string;
+  annualTotal: string;
   savings: string;
-  features: { icon: JSX.Element; description: string }[];
+  features: string[];
 };
 
-const PlanCard: React.FC<Plan & { isAnnual: boolean }> = ({
-  title,
-  price,
-  annualPrice,
-  savings,
-  features,
-  isAnnual,
-}) => {
-  return (
-    <Card
-      className="text-center mb-4 shadow-sm d-flex flex-column position-relative"
-      style={{
-        borderRadius: "15px",
-        height: "100%",
-        backgroundColor: "#fff",
-        minHeight: "580px",
-      }}
-    >
-      {isAnnual && (
-        <div
-          style={{
-            position: "absolute",
-            top: "15px",
-            right: "15px",
-            backgroundColor: "#00d1c1",
-            color: "#fff",
-            padding: "5px 10px",
-            borderRadius: "5px",
-            fontWeight: "bold",
-          }}
-        >
-          Ahorra {savings}
-        </div>
-      )}
-      <Card.Body
-        style={{
-          padding: "25px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-      >
-        <h5
-          style={{
-            color: "#333",
-            marginBottom: "10px",
-            marginTop: "60px",
-            minHeight: "30px",
-          }}
-        >
-          {title}
-        </h5>
-        <Card.Title
-          className="my-2"
-          style={{
-            fontSize: "2rem",
-            fontWeight: "bold",
-            color: "#333",
-            marginBottom: "10px",
-          }}
-        >
-          {isAnnual ? annualPrice : price}
-        </Card.Title>
-        <hr
-          style={{
-            border: "1px solid #e0e0e0",
-            width: "100%",
-            margin: "15px 0",
-            position: "relative",
-            top: "-10px",
-          }}
-        />
-        <ul
-          className="list-unstyled text-start"
-          style={{ paddingLeft: "20px", minHeight: "180px" }}
-        >
-          {features.map((feature, index) => (
-            <li
-              key={index}
-              className="mb-2"
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              {feature.icon}{" "}
-              <span style={{ marginLeft: "10px" }}>{feature.description}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="d-flex justify-content-center mt-4">
-          <Button
-            variant="primary"
-            size="lg"
-            className="align-self-center"
-            style={{ padding: "10px 30px", fontSize: "1.1rem" }}
-          >
-            Elige este plan
-          </Button>
-        </div>
-      </Card.Body>
-    </Card>
-  );
-};
+const PLANS: Plan[] = [
+  {
+    id: "ind-basic",
+    title: "Individual Básico",
+    priceMonth: "$39 USD / mes",
+    priceAnnual: "$33.25 USD / mes",
+    annualTotal: "$399 USD al año",
+    savings: "Ahorra $69 USD",
+    features: [
+      "Acceso a contenido exclusivo",
+      "Descuentos en cursos y certificaciones",
+      "Acceso a la plataforma de intakes (respuestas auto)",
+      "Base de datos de recursos y contratos personalizables",
+      "Capacitación continua y soporte técnico",
+      "Certificación anual de miembro activo",
+      "Descuentos en notarización de documentos",
+      "Descuentos en eventos",
+      "Traducciones a bajo costo",
+    ],
+  },
+  {
+    id: "ind-premium",
+    title: "Individual Premium",
+    badge: "Más Vendido",
+    isPopular: true,
+    priceMonth: "$49 USD / mes",
+    priceAnnual: "$41.58 USD / mes",
+    annualTotal: "$499 USD al año",
+    savings: "Ahorra $89 USD",
+    features: [
+      "Acceso a contenido exclusivo",
+      "Descuentos en cursos y certificaciones",
+      "Acceso a la plataforma de intakes (respuestas auto)",
+      "Base de datos de recursos y contratos personalizables",
+      "Capacitación continua y soporte técnico",
+      "Certificación anual de miembro activo",
+      "Descuentos en notarización de documentos",
+      "Descuentos en eventos",
+      "Traducciones a bajo costo",
+      "Plantillas y guías avanzadas",
+      "Soporte prioritario 24/7",
+    ],
+  },
+  {
+    id: "emp-basic",
+    title: "Empresarial Básico",
+    priceMonth: "$99 USD / mes",
+    priceAnnual: "$83.25 USD / mes",
+    annualTotal: "$999 USD al año",
+    savings: "Ahorra $189 USD",
+    features: [
+      "Acceso a contenido exclusivo",
+      "Descuentos en cursos y certificaciones",
+      "Acceso a la plataforma de intakes (respuestas auto)",
+      "Base de datos de recursos y contratos personalizables",
+      "Capacitación continua y soporte técnico",
+      "Certificación anual de miembro activo",
+      "Descuentos en notarización de documentos",
+      "Descuentos en eventos",
+      "Traducciones a bajo costo",
+      "Plantillas y guías avanzadas",
+      "Soporte prioritario 24/7",
+      "Acceso multiusuario para equipo",
+      "Consultoría personalizada",
+    ],
+  },
+  {
+    id: "emp-premium",
+    title: "Empresarial Premium",
+    badge: "VIP Corporativo",
+    priceMonth: "$149 USD / mes",
+    priceAnnual: "$124.91 USD / mes",
+    annualTotal: "$1,499 USD al año",
+    savings: "Ahorra $289 USD",
+    features: [
+      "Acceso a contenido exclusivo",
+      "Descuentos en cursos y certificaciones",
+      "Acceso a la plataforma de intakes (respuestas auto)",
+      "Base de datos de recursos y contratos personalizables",
+      "Capacitación continua y soporte técnico",
+      "Certificación anual de miembro activo",
+      "Descuentos en notarización de documentos",
+      "Descuentos en eventos",
+      "Traducciones a bajo costo",
+      "Plantillas y guías avanzadas",
+      "Soporte prioritario 24/7",
+      "Acceso multiusuario para equipo",
+      "Consultoría personalizada",
+      "Hasta 10 usuarios incluidos",
+      "Seminarios exclusivos para empresas",
+    ],
+  },
+];
+
+const MATRIX_FEATURES = [
+  "Acceso a contenido exclusivo",
+  "Descuentos en cursos y certificaciones",
+  "Plataforma de intakes (Respuestas auto)",
+  "Base de datos & contratos personalizables",
+  "Capacitación continua y soporte técnico",
+  "Certificación anual de miembro activo",
+  "Descuentos en notarización de documentos",
+  "Descuentos en eventos oficiales",
+  "Traducciones a bajo costo",
+  "Plantillas y guías avanzadas",
+  "Soporte prioritario 24/7",
+  "Acceso multiusuario",
+  "Consultoría personalizada",
+  "Hasta 10 usuarios de equipo",
+  "Seminarios corporativos exclusivos",
+];
 
 const PlansSection: React.FC = () => {
   const [isAnnual, setIsAnnual] = useState(true);
-  const [showComparison, setShowComparison] = useState(false); // New state
-
-  // Definir los planes con herencia de características
-  const plans: Plan[] = [
-    {
-      title: "Plan Individual Básico",
-      price: "$39 USD al mes",
-      annualPrice: "$399 USD al año",
-      savings: "$69",
-      features: [
-        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
-        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
-        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
-        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
-        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
-        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
-        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
-        { icon: <FaChartLine />, description: "Descuentos en eventos" },
-        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
-      ],
-    },
-    {
-      title: "Plan Individual Premium",
-      price: "$49 USD al mes",
-      annualPrice: "$499 USD al año",
-      savings: "$89",
-      features: [
-        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
-        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
-        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
-        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
-        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
-        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
-        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
-        { icon: <FaChartLine />, description: "Descuentos en eventos" },
-        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
-        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
-        { icon: <FaCog />, description: "Soporte prioritario" },
-      ],
-    },
-    {
-      title: "Plan Empresarial Básico",
-      price: "$99 USD al mes",
-      annualPrice: "$999 USD al año",
-      savings: "$189",
-      features: [
-        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
-        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
-        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
-        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
-        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
-        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
-        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
-        { icon: <FaChartLine />, description: "Descuentos en eventos" },
-        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
-        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
-        { icon: <FaCog />, description: "Soporte prioritario" },
-        { icon: <FaUsers />, description: "Acceso multiusuario para varios miembros del equipo" },
-        { icon: <FaHandshake />, description: "Consultoría personalizada" },
-      ],
-    },
-    {
-      title: "Plan Empresarial Premium",
-      price: "$149 USD al mes",
-      annualPrice: "$1,499 USD al año",
-      savings: "$289",
-      features: [
-        { icon: <FaBook />, description: "Acceso a contenido exclusivo" },
-        { icon: <FaGraduationCap />, description: "Descuentos en cursos y certificaciones" },
-        { icon: <FaCog />, description: "Acceso a la plataforma de intakes, que genera respuestas automáticas" },
-        { icon: <FaDatabase />, description: "Base de datos de recursos y contratos personalizables" },
-        { icon: <FaLaptop />, description: "Capacitación continua y soporte técnico" },
-        { icon: <FaCertificate />, description: "Certificación anual de miembro activo" },
-        { icon: <FaHandshake />, description: "Descuentos en notarización de documentos" },
-        { icon: <FaChartLine />, description: "Descuentos en eventos" },
-        { icon: <FaVideo />, description: "Traducciones a bajo costo" },
-        { icon: <FaDatabase />, description: "Plantillas y guías avanzadas" },
-        { icon: <FaCog />, description: "Soporte prioritario" },
-        { icon: <FaUsers />, description: "Acceso multiusuario para varios miembros del equipo" },
-        { icon: <FaHandshake />, description: "Consultoría personalizada" },
-        { icon: <FaUsers />, description: "Hasta 10 usuarios" },
-        { icon: <FaVideo />, description: "Seminarios exclusivos para empresas" },
-      ],
-    },
-  ];
-
-  const allFeatures = [
-    "Acceso a contenido exclusivo",
-    "Descuentos en cursos y certificaciones",
-    "Acceso a la plataforma de intakes, que genera respuestas automáticas",
-    "Base de datos de recursos y contratos personalizables",
-    "Capacitación continua y soporte técnico",
-    "Certificación anual de miembro activo",
-    "Descuentos en notarización de documentos",
-    "Descuentos en eventos",
-    "Traducciones a bajo costo",
-    "Plantillas y guías avanzadas",
-    "Soporte prioritario",
-    "Acceso multiusuario para varios miembros del equipo",
-    "Consultoría personalizada",
-    "Hasta 10 usuarios",
-    "Seminarios exclusivos para empresas",
-  ];
-
-  const featureChecks = plans.map((plan) =>
-    allFeatures.map((feature) =>
-      plan.features.some((f) => f.description === feature)
-    )
-  );
 
   return (
-    <section className="py-5 bg-light">
+    <section className="py-5 bg-light" id="planes">
       <Container>
-        <h2 className="mb-5 text-center">Planes de Membresía</h2>
-        <div className="d-flex justify-content-center mb-4">
-          <ToggleButtonGroup
-            type="radio"
-            name="options"
-            defaultValue={2} // Cambiar el valor por defecto a 2 (Anual)
-            onChange={(value) => setIsAnnual(value === 2)}
-          >
-            <ToggleButton
-              id="tbg-radio-1"
-              value={1}
-              variant={isAnnual ? "outline-primary" : "outline-secondary"}
-            >
-              Mensual
-            </ToggleButton>
-            <ToggleButton
-              id="tbg-radio-2"
-              value={2}
-              variant={!isAnnual ? "outline-primary" : "outline-secondary"}
-            >
-              Anual
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </div>
-        <Carousel interval={null} indicators={true}>
-          {plans.map((plan, index) => (
-            <Carousel.Item key={index}>
-              <Row className="justify-content-center">
-                <Col xs={12}>
-                  <PlanCard {...plan} isAnnual={isAnnual} />
-                </Col>
-              </Row>
-            </Carousel.Item>
-          ))}
-        </Carousel>
+        {/* Header Section */}
+        <div className="text-center mb-5">
+          <Badge bg="primary" className="px-3 py-2 text-uppercase mb-2">
+            Transparencia & Valor
+          </Badge>
+          <h2 className="display-5 font-weight-bold text-dark">
+            Planes de Membresía AAIP
+          </h2>
+          <p className="text-muted lead max-w-2xl mx-auto">
+            Elige el plan ideal para impulsar tu práctica migratoria individual o empresarial.
+          </p>
 
-        <div className="d-flex justify-content-center mt-5">
-          <Button
-            variant="info"
-            onClick={() => setShowComparison(!showComparison)} // Toggle the state
-          >
-            {showComparison ? 'Ocultar Comparación' : 'Mostrar Comparación'}
-          </Button>
+          {/* Toggle Billing Switch */}
+          <div className="d-flex justify-content-center items-center gap-3 mt-4">
+            <ToggleButtonGroup
+              type="radio"
+              name="billing-options"
+              value={isAnnual ? 2 : 1}
+              onChange={(val) => setIsAnnual(val === 2)}
+              className="shadow-sm rounded-pill p-1 bg-white border"
+            >
+              <ToggleButton
+                id="tbg-monthly"
+                value={1}
+                variant={!isAnnual ? "primary" : "light"}
+                className="rounded-pill px-4 font-weight-bold"
+              >
+                Mensual
+              </ToggleButton>
+              <ToggleButton
+                id="tbg-annual"
+                value={2}
+                variant={isAnnual ? "primary" : "light"}
+                className="rounded-pill px-4 font-weight-bold"
+              >
+                Anual <Badge bg="success" className="ms-1">Ahorro Extra</Badge>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
         </div>
-        {showComparison && (
-          <Table striped bordered hover className="mt-5">
-            <thead>
-              <tr>
-                <th>Características</th>
-                {plans.map((plan, index) => (
-                  <th key={index}>{plan.title}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {allFeatures.map((feature, index) => (
-                <tr key={index}>
-                  <td>{feature}</td>
-                  {featureChecks.map((checks, planIndex) => (
-                    <td key={planIndex}>{checks[index] ? "✔️" : ""}</td>
-                  ))}
+
+        {/* 4-Column Side-by-Side Cards Grid */}
+        <Row className="g-4 mb-5 items-stretch">
+          {PLANS.map((plan) => (
+            <Col key={plan.id} xs={12} md={6} lg={3} className="d-flex">
+              <Card
+                className={`w-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative d-flex flex-column justify-content-between transition-all ${
+                  plan.isPopular ? "border-primary ring-2 ring-primary shadow-lg" : ""
+                }`}
+                style={{
+                  border: plan.isPopular ? "2px solid #0d6efd" : "1px solid #e0e0e0",
+                  transform: plan.isPopular ? "scale(1.02)" : "none",
+                }}
+              >
+                {plan.badge && (
+                  <div
+                    className="position-absolute top-0 end-0 bg-primary text-white font-weight-bold px-3 py-1 text-xs rounded-bottom-start shadow-sm"
+                    style={{ fontSize: "0.75rem", textTransform: "uppercase" }}
+                  >
+                    {plan.badge}
+                  </div>
+                )}
+
+                <Card.Body className="p-4 d-flex flex-column justify-content-between">
+                  <div>
+                    <h4 className="font-weight-bold text-dark mb-3 mt-2">
+                      {plan.title}
+                    </h4>
+
+                    <div className="mb-3">
+                      <span className="display-6 font-weight-extrabold text-primary">
+                        {isAnnual ? plan.priceAnnual : plan.priceMonth}
+                      </span>
+                      {isAnnual && (
+                        <div className="text-muted text-xs mt-1">
+                          Facturado como {plan.annualTotal} ({plan.savings})
+                        </div>
+                      )}
+                    </div>
+
+                    <hr className="my-3" />
+
+                    <ul className="list-unstyled space-y-2 mb-4 text-start text-sm">
+                      {plan.features.map((feat, fIdx) => (
+                        <li key={fIdx} className="d-flex items-center gap-2 mb-2 text-muted" style={{ fontSize: "0.88rem" }}>
+                          <FaCheck className="text-success shrink-0" />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <Button
+                    variant={plan.isPopular ? "primary" : "outline-primary"}
+                    size="lg"
+                    className="w-100 rounded-pill font-weight-bold py-2 mt-3"
+                    onClick={() => window.location.href = '/#/register'}
+                  >
+                    Seleccionar Plan
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+
+        {/* Amazon-Style Comparative Features Matrix Table */}
+        <div className="mt-5 pt-4 border-top">
+          <div className="text-center mb-4">
+            <h3 className="fw-bold text-dark">Matriz Comparativa de Características</h3>
+            <p className="text-muted">Compara de un vistazo qué incluye cada uno de los 4 planes de membresía</p>
+          </div>
+
+          <div className="table-responsive bg-white rounded-4 shadow-sm border p-3">
+            <Table hover className="mb-0 text-center align-middle">
+              <thead className="bg-light">
+                <tr>
+                  <th className="text-start py-3 ps-4" style={{ width: "35%" }}>
+                    Características / Beneficios
+                  </th>
+                  <th className="py-3" style={{ width: "16%" }}>Individual Básico</th>
+                  <th className="py-3 bg-primary bg-opacity-10 text-primary fw-bold" style={{ width: "16%" }}>
+                    Individual Premium ⭐
+                  </th>
+                  <th className="py-3" style={{ width: "16%" }}>Empresarial Básico</th>
+                  <th className="py-3" style={{ width: "16%" }}>Empresarial Premium 👑</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
+              </thead>
+              <tbody>
+                {MATRIX_FEATURES.map((feature, idx) => (
+                  <tr key={idx}>
+                    <td className="text-start fw-semibold ps-4 text-secondary" style={{ fontSize: "0.9rem" }}>
+                      {feature}
+                    </td>
+
+                    {/* Check Individual Básico */}
+                    <td>
+                      {idx < 9 ? (
+                        <FaCheck className="text-success fs-5" />
+                      ) : (
+                        <FaTimes className="text-muted opacity-25" />
+                      )}
+                    </td>
+
+                    {/* Check Individual Premium */}
+                    <td className="bg-primary bg-opacity-10">
+                      {idx < 11 ? (
+                        <FaCheck className="text-primary fw-bold fs-5" />
+                      ) : (
+                        <FaTimes className="text-muted opacity-25" />
+                      )}
+                    </td>
+
+                    {/* Check Empresarial Básico */}
+                    <td>
+                      {idx < 13 ? (
+                        <FaCheck className="text-success fs-5" />
+                      ) : (
+                        <FaTimes className="text-muted opacity-25" />
+                      )}
+                    </td>
+
+                    {/* Check Empresarial Premium */}
+                    <td>
+                      <FaCheck className="text-success fw-bold fs-5" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        </div>
       </Container>
     </section>
   );
